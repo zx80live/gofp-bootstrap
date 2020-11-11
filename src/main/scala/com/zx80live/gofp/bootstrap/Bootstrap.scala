@@ -17,9 +17,9 @@ object Bootstrap extends App {
 
 
   def toFile(filename: String,
-            pack: String = "fp",
-            imports: Seq[String] = Nil,
-             content: Seq[String] = Nil):Unit = {
+             pack: String = "fp",
+             imports: Seq[String] = Nil,
+             content: Seq[String] = Nil): Unit = {
     val writer = new BufferedWriter(new FileWriter(new File(root + "/" + filename)))
 
     try {
@@ -49,10 +49,14 @@ object Bootstrap extends App {
   )
   toFile("ffunctor_map.go", content = Functors.functorMaps)
   toFile("flist.go", imports = Seq("reflect"), content = List.lists ++ List.listsNil ++ List.listsEmptyNonEmpty)
+  toFile("flist_make.go", content = List.listsMake)
   toFile("flist_head.go", content = List.listsHead)
   toFile("flist_tail.go", content = List.listsTail)
   toFile("flist_copy.go", content = List.listsCopy)
   toFile("flist_cons.go", content = List.listsCons)
+  //  toFile("flist_foreach.go", content = List.listsForeach) //TODO need optional
+  //  toFile("flist_reverse.go", content = List.listsReverse) //TODO need optional
+  //  toFile("flist__mapHead.go", content = List.lists_mapHead) //TODO need optional
 }
 
 
