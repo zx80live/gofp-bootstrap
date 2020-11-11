@@ -98,6 +98,7 @@ object Lists {
        |""".stripMargin
   }
 
+  //TODO optimize
   val listsFilter: Seq[String] = GoTypes.allTypes.map { t =>
     s"""
        |func (l ${toName(t)}) Filter(p ${Predicates.toName(t)}) ${toName(t)} {
@@ -107,6 +108,23 @@ object Lists {
        |    if p(*xs.head) {
        |      acc = acc.Cons(*xs.head)
        |    }
+       |    xs = xs.tail
+       |  }
+       |  return acc.Reverse()
+       |}""".stripMargin
+  }
+
+  //TODO optimize
+  val listsMap: Seq[String] = for {
+    t1 <- GoTypes.allTypes
+    t2 <- GoTypes.allTypes
+  } yield {
+    s"""
+       |func (l ${toName(t1)}) Map${GoTypes.toName(t2)}(f ${Functors.toName(t1, t2)}) ${toName(t2)} {
+       |  acc := ${toNilName(t2)}
+       |  xs := &l
+       |  for xs.IsNotEmpty() {
+       |    acc = acc.Cons(f(*xs.head))
        |    xs = xs.tail
        |  }
        |  return acc.Reverse()
