@@ -43,6 +43,19 @@ object List {
       |}""".stripMargin
   }
 
+  val listsCons: Seq[String] = GoTypes.allTypes.map { t =>
+    s"""
+      |func (l ${toName(t)}) Cons(e $t) ${toName(t)} {
+      |	tail := l.Copy()
+      |	xs := ${toName(t)}{
+      |		head:    e,
+      |		tail:    &tail,
+      |		functor: ${Functors.toEmptyFunctorName(t)},
+      |	}
+      |	return xs
+      |}""".stripMargin
+  }
+
   val listsHead: Seq[String] = GoTypes.allTypes.map { t =>
     s"""
       |func (l ${toName(t)}) Head() $t { return l.head }""".stripMargin

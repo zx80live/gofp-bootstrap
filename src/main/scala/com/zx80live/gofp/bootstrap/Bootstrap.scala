@@ -52,6 +52,7 @@ object Bootstrap extends App {
   toFile("flist_head.go", content = List.listsHead)
   toFile("flist_tail.go", content = List.listsTail)
   toFile("flist_copy.go", content = List.listsCopy)
+  toFile("flist_cons.go", content = List.listsCons)
 }
 
 
