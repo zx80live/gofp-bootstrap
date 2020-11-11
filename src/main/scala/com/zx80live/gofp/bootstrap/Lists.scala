@@ -97,4 +97,19 @@ object Lists {
        |}
        |""".stripMargin
   }
+
+  val listsFilter: Seq[String] = GoTypes.allTypes.map { t =>
+    s"""
+       |func (l ${toName(t)}) Filter(p ${Predicates.toName(t)}) ${toName(t)} {
+       |  acc := ${toNilName(t)}
+       |  xs := &l
+       |  for xs.IsNotEmpty() {
+       |    if p(*xs.head) {
+       |      acc = acc.Cons(*xs.head)
+       |    }
+       |    xs = xs.tail
+       |  }
+       |  return acc.Reverse()
+       |}""".stripMargin
+  }
 }

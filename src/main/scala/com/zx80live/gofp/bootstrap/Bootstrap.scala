@@ -57,6 +57,7 @@ object Bootstrap extends App {
   toFile("flist_cons.go", content = Lists.listsCons)
   toFile("flist_foreach.go", content = Lists.listsForeach)
   toFile("flist_reverse.go", content = Lists.listsReverse)
+  toFile("flist_filter.go", imports = Seq("fmt"), content = Lists.listsFilter)
 
   toFile("ftuple.go", content = Tuples.tuples)
 }
