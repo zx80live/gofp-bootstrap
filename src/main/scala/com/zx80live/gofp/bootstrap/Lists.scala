@@ -10,7 +10,6 @@ object Lists {
        |type ${toName(goType)} struct {
        |	head    *$goType
        |	tail    *${toName(goType)}
-       |	functor ${Functors.toName(goType, goType)}
        |}
        |""".stripMargin
 
@@ -18,7 +17,7 @@ object Lists {
 
   val listsNil: Seq[String] = GoTypes.allTypes.map { t =>
     s"""
-       |var ${toNilName(t)} ${Lists.toName(t)} = ${Lists.toName(t)} {nil, nil, ${Functors.toEmptyFunctorName(t)}}""".stripMargin
+       |var ${toNilName(t)} ${Lists.toName(t)} = ${Lists.toName(t)} {nil, nil}""".stripMargin
   }
 
   val listsMake: Seq[String] = GoTypes.allTypes.map { t =>
@@ -48,7 +47,6 @@ object Lists {
        |		return ${toName(t)}{
        |			head:    l.head,
        |			tail:    &tail,
-       |			functor: ${Functors.toEmptyFunctorName(t)},
        |		}
        |	}
        |}""".stripMargin
@@ -62,7 +60,6 @@ object Lists {
          |	xs := ${toName(t)}{
          |		head:    &e,
          |		tail:    &tail,
-         |		functor: ${Functors.toEmptyFunctorName(t)},
          |	}
          |	return xs
          |}""".stripMargin
@@ -82,46 +79,21 @@ object Lists {
   val listsForeach: Seq[String] = GoTypes.allTypes.map { t =>
     s"""
        |func (l ${toName(t)}) Foreach(f func($t)) {
-       |	if l.head != nil {
-       |		processed := l.functor(l.head)
-       |		if processed != nil {
-       |			f(processed)
-       |		}
-       |	}
-       |
-       |	if l.tail != nil {
-       |		l.tail.mapHead(l.functor).Foreach(f)
-       |	}
+       |	if l.IsNotEmpty() {
+       |    f(*l.head)
+       |    l.tail.Foreach(f)
+       |  }
        |}""".stripMargin
   }
 
   val listsReverse: Seq[String] = GoTypes.allTypes.map { t =>
     s"""
        |func (l ${toName(t)}) Reverse() ${toName(t)} {
-       |	xs := Nil
+       |	xs := ${toNilName(t)}
        |	l.Foreach(func(e $t) {
        |		xs = xs.Cons(e)
        |	})
        |	return xs
-       |}
-       |""".stripMargin
-  }
-
-  val lists_mapHead: Seq[String] = GoTypes.allTypes.map { t =>
-    s"""
-       |func (l ${toName(t)}) mapHead(f ${Functors.toName(t, t)}) ${toName(t)} {
-       |	return ${toName(t)}{
-       |		head: l.head,
-       |		tail: l.tail,
-       |		functor: func(e $t) $t {
-       |			processed := l.functor(e)
-       |			if processed == nil {
-       |				return nil
-       |			} else {
-       |				return f(processed)
-       |			}
-       |		},
-       |	}
        |}
        |""".stripMargin
   }

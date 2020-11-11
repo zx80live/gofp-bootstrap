@@ -55,9 +55,8 @@ object Bootstrap extends App {
   toFile("flist_tail.go", content = Lists.listsTail)
   toFile("flist_copy.go", content = Lists.listsCopy)
   toFile("flist_cons.go", content = Lists.listsCons)
-  //  toFile("flist_foreach.go", content = List.listsForeach) //TODO need optional
-  //  toFile("flist_reverse.go", content = List.listsReverse) //TODO need optional
-  //  toFile("flist__mapHead.go", content = List.lists_mapHead) //TODO need optional
+  toFile("flist_foreach.go", content = Lists.listsForeach)
+  toFile("flist_reverse.go", content = Lists.listsReverse)
 
   toFile("ftuple.go", content = Tuples.tuples)
 }
