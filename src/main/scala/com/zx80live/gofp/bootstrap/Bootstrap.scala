@@ -48,15 +48,18 @@ object Bootstrap extends App {
     Functors.functorTypeDeclarations ++ Functors.emptyFunctors
   )
   toFile("ffunctor_map.go", content = Functors.functorMaps)
-  toFile("flist.go", imports = Seq("reflect"), content = List.lists ++ List.listsNil ++ List.listsEmptyNonEmpty)
-  toFile("flist_make.go", content = List.listsMake)
-  toFile("flist_head.go", content = List.listsHead)
-  toFile("flist_tail.go", content = List.listsTail)
-  toFile("flist_copy.go", content = List.listsCopy)
-  toFile("flist_cons.go", content = List.listsCons)
+  toFile("flist.go", content = Lists.lists ++ Lists.listsNil)
+  toFile("flist_isempty.go", content = Lists.listsEmptyNonEmpty)
+  toFile("flist_make.go", content = Lists.listsMake)
+  toFile("flist_head.go", content = Lists.listsHead)
+  toFile("flist_tail.go", content = Lists.listsTail)
+  toFile("flist_copy.go", content = Lists.listsCopy)
+  toFile("flist_cons.go", content = Lists.listsCons)
   //  toFile("flist_foreach.go", content = List.listsForeach) //TODO need optional
   //  toFile("flist_reverse.go", content = List.listsReverse) //TODO need optional
   //  toFile("flist__mapHead.go", content = List.lists_mapHead) //TODO need optional
+
+  toFile("ftuple.go", content = Tuples.tuples)
 }
 
 
