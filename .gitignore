@@ -1,2 +1,7 @@
+/.git_
 *.class
 *.log
+/.idea
+/.bsp
+/target
+/project/target
