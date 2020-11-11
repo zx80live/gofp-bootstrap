@@ -3,7 +3,9 @@ package com.zx80live.gofp.bootstrap
 object Functors {
   def toName(t1: String, t2: String): String = s"Functor${GoTypes.toName(t1)}${GoTypes.toName(t2)}"
 
-  def functorTypeDeclaration(t1: String, t2: String): String = s"type ${toName(t1, t2)} func(e $t1) $t2"
+  def functorTypeDeclaration(t1: String, t2: String): String =
+    s"""
+       |type ${toName(t1, t2)} func(e $t1) $t2""".stripMargin
 
   val functorTypeDeclarations: Seq[String] = for {
     t1 <- GoTypes.allTypes
@@ -42,5 +44,10 @@ object Functors {
   } yield {
     s"""
        |func (f1 $f1) Map${GoTypes.toName(out2)}(f2 $f2) ${toName(in1, out2)} { return func(e $in1) $out2 { return f2(f1(e)) } }""".stripMargin
+  }
+
+  val emptyFunctors: Seq[String] = GoTypes.allTypes.map { t =>
+    s"""
+      |func Empty${toName(t, t)}(e $t) $t { return e }""".stripMargin
   }
 }

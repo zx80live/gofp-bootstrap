@@ -4,7 +4,8 @@ object Equals {
   def toName(goType: String): String = s"Equal${GoTypes.toName(goType)}"
 
   val baseEquals: Seq[String] = GoTypes.baseTypes.map { goType =>
-    s"""func ${toName(goType)}(a, b $goType) bool { return a == b }"""
+    s"""
+       |func ${toName(goType)}(a, b $goType) bool { return a == b }""".stripMargin
   }
 
   val arraysEquals: Seq[String] = GoTypes.arrayTypes.map { goType =>

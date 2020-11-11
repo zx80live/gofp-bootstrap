@@ -38,26 +38,16 @@ object Bootstrap extends App {
   }
 
 
-
-
-  //  fileHeader("fpredicate")
-  //  Predicates.predicateTypeDeclarations foreach println
-
-  //    fileHeader("fequal")
-  //    Equals.allEquals foreach println
-
-  //    fileHeader("fpredicate_eq")
-  //    Predicates.predicateEq foreach println
-
-  //    fileHeader("fmkstring", imports = Seq("fmt"))
-  //    MkStrings.arraysMkString foreach println
-
-  //  fileHeader("ftostring", imports = Seq("fmt"))
-  //  ToStrings.allToStrings foreach println
-
-//  fileHeader("ffunctor")
-//  Functors.functorTypeDeclarations foreach println
+  toFile("fpredicate.go", content = Predicates.predicateTypeDeclarations)
+  toFile("fequal.go", content = Equals.allEquals)
+  toFile("fpredicate_eq.go", content = Predicates.predicateEq)
+  toFile("fmkstring.go", imports = Seq("fmt"), content = MkStrings.arraysMkString)
+  toFile("ftostring.go", imports = Seq("fmt"), content = ToStrings.allToStrings)
+  toFile("ffunctor.go", content =
+    Functors.functorTypeDeclarations ++ Functors.emptyFunctors
+  )
   toFile("ffunctor_map.go", content = Functors.functorMaps)
+  toFile("flist.go", content = List.lists)
 }
 
 
