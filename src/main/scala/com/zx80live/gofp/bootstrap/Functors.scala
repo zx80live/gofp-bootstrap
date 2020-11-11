@@ -9,4 +9,38 @@ object Functors {
     t1 <- GoTypes.allTypes
     t2 <- GoTypes.allTypes
   } yield functorTypeDeclaration(t1, t2)
+
+  type FunctorName = String
+  type In = String
+  type Out = String
+
+  val functors: Seq[(FunctorName, In, Out)] = {
+    val supportedTypes = Seq(
+      GoTypes.GoBool,
+      GoTypes.GoString,
+      GoTypes.GoInt,
+      GoTypes.GoInt64,
+      GoTypes.GoUInt,
+      GoTypes.GoUInt64,
+      GoTypes.GoByte,
+      GoTypes.GoRune,
+      GoTypes.GoFloat32,
+      GoTypes.GoFloat64,
+      GoTypes.GoInterface,
+    )
+
+    for {
+      t1 <- GoTypes.baseTypes.filter(t => supportedTypes.contains(t))
+      t2 <- GoTypes.baseTypes.filter(t => supportedTypes.contains(t))
+    } yield (toName(t1, t2), t1, t2)
+  }
+
+  val functorMaps: Seq[String] = for {
+    (f1, in1, out1) <- functors
+    (f2, in2, out2) <- functors
+    if out1 == in2
+  } yield {
+    s"""
+       |func (f1 $f1) Map${GoTypes.toName(out2)}(f2 $f2) ${toName(in1, out2)} { return func(e $in1) $out2 { return f2(f1(e)) } }""".stripMargin
+  }
 }
