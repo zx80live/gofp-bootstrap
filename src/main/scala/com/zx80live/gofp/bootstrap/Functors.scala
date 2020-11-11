@@ -2,6 +2,7 @@ package com.zx80live.gofp.bootstrap
 
 object Functors {
   def toName(t1: String, t2: String): String = s"Functor${GoTypes.toName(t1)}${GoTypes.toName(t2)}"
+  def toEmptyFunctorName(t1: String): String = s"EmptyFunctor${GoTypes.toName(t1)}"
 
   def functorTypeDeclaration(t1: String, t2: String): String =
     s"""
@@ -48,6 +49,6 @@ object Functors {
 
   val emptyFunctors: Seq[String] = GoTypes.allTypes.map { t =>
     s"""
-      |func Empty${toName(t, t)}(e $t) $t { return e }""".stripMargin
+      |var ${toEmptyFunctorName(t)} ${toName(t, t)} = func(e $t) $t { return e }""".stripMargin
   }
 }

@@ -3,6 +3,7 @@ package com.zx80live.gofp.bootstrap
 import java.io._
 
 object Bootstrap extends App {
+  val root = "/home/work/gofp/fp/"
 
   def fileHeader(name: String, pack: String = "fp", imports: Seq[String] = Nil) =
     println(
@@ -19,7 +20,7 @@ object Bootstrap extends App {
             pack: String = "fp",
             imports: Seq[String] = Nil,
              content: Seq[String] = Nil):Unit = {
-    val writer = new BufferedWriter(new FileWriter(new File(filename)))
+    val writer = new BufferedWriter(new FileWriter(new File(root + "/" + filename)))
 
     try {
       writer.write(
@@ -47,7 +48,10 @@ object Bootstrap extends App {
     Functors.functorTypeDeclarations ++ Functors.emptyFunctors
   )
   toFile("ffunctor_map.go", content = Functors.functorMaps)
-  toFile("flist.go", content = List.lists)
+  toFile("flist.go", imports = Seq("reflect"), content = List.lists ++ List.listsNil ++ List.listsEmptyNonEmpty)
+  toFile("flist_head.go", content = List.listsHead)
+  toFile("flist_tail.go", content = List.listsTail)
+  toFile("flist_copy.go", content = List.listsCopy)
 }
 
 
