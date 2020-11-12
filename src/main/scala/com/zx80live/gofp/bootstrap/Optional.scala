@@ -5,6 +5,8 @@ object Optional {
 
   def toNoneName(t: String): String = s"None${GoTypes.toName(t)}"
 
+  def toConsName(t: String): String = if (t == GoTypes.GoAny) "AnyOpt" else GoTypes.toName(t)
+
   val optionalDeclarations: Seq[String] = GoTypes.allTypes.map { t =>
     s"""
        |type ${toName(t)} struct { value *$t }""".stripMargin
@@ -16,10 +18,8 @@ object Optional {
   }
 
   val optionalCons: Seq[String] = GoTypes.allTypes.map { t =>
-    val name = if (t == GoTypes.GoAny) "AnyOpt" else GoTypes.toName(t)
-
     s"""
-       |func $name(e $t) ${toName(t)} { return ${toName(t)} { &e } }
+       |func ${toConsName(t)}(e $t) ${toName(t)} { return ${toName(t)} { &e } }
        |""".stripMargin
   }
 
@@ -51,5 +51,19 @@ object Optional {
        |  }
        |}
        |""".stripMargin
+  }
+
+  val optionalMap: Seq[String] = for {
+    t1 <- GoTypes.allTypes
+    t2 <- GoTypes.allTypes
+  } yield {
+    s"""
+       |func (o ${toName(t1)}) Map${GoTypes.toName(t2)}(f ${Functors.toName(t1, t2)}) ${toName(t2)} {
+       |  if o.IsDefined() {
+       |    return ${toConsName(t2)}(f(*o.value))
+       |  } else {
+       |    return ${toNoneName(t2)}
+       |  }
+       |}""".stripMargin
   }
 }
