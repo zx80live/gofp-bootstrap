@@ -20,7 +20,7 @@ object GoTypes {
   val GoFloat64 = "float64"
   val GoComplex64 = "complex64"
   val GoComplex128 = "complex128"
-  val GoInterface = "Any"
+  val GoAny = "Any"
 
   def array(gotype: String): String = s"[]$gotype"
 
@@ -45,7 +45,7 @@ object GoTypes {
     GoComplex128,
   )
   val stringTypes: Seq[String] = Seq(GoString)
-  val otherTypes: Seq[String] = Seq(GoInterface)
+  val otherTypes: Seq[String] = Seq(GoAny)
 
   val baseTypes: Seq[String] = boolTypes ++ numericTypes ++ stringTypes ++ otherTypes
   val arrayTypes: Seq[String] = baseTypes.map(t => s"[]$t")

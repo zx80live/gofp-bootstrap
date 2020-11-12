@@ -29,7 +29,7 @@ object Functors {
       GoTypes.GoRune,
       GoTypes.GoFloat32,
       GoTypes.GoFloat64,
-      GoTypes.GoInterface,
+      GoTypes.GoAny,
     )
 
     for {

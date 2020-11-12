@@ -62,6 +62,8 @@ object Bootstrap extends App {
   toFile("flist_map.go", content = Lists.listsMap)
 
   toFile("ftuple.go", content = Tuples.tuples)
+  toFile("foptional.go", content = Optional.optionalDeclarations ++ Optional.optionalNones ++ Optional.optionalCons)
+  toFile("foptional_tostring.go", imports = Seq("fmt"), content = Optional.optionalToString)
 }
 
 
