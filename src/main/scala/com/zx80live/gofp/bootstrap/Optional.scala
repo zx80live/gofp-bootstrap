@@ -40,4 +40,16 @@ object Optional {
        |func (o ${toName(t)}) IsEmpty() bool { return o == ${toNoneName(t)} }
        |""".stripMargin
   }
+
+  val optionalFilter: Seq[String] = GoTypes.allTypes.map { t =>
+    s"""
+       |func (o ${toName(t)}) Filter(p ${Predicates.toName(t)}) ${toName(t)} {
+       |  if o.IsDefined() && p(*o.value) {
+       |    return o
+       |  } else {
+       |    return ${toNoneName(t)}
+       |  }
+       |}
+       |""".stripMargin
+  }
 }
