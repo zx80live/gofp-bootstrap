@@ -64,6 +64,8 @@ object Bootstrap extends App {
   toFile("ftuple.go", content = Tuples.tuples)
   toFile("foptional.go", content = Optional.optionalDeclarations ++ Optional.optionalNones ++ Optional.optionalCons)
   toFile("foptional_tostring.go", imports = Seq("fmt"), content = Optional.optionalToString)
+  toFile("foptional_isdefined.go", content = Optional.optionalIsDefined)
+  toFile("foptional_isempty.go", content = Optional.optionalIsEmpty)
 }
 
 

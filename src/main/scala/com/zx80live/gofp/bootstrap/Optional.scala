@@ -28,4 +28,16 @@ object Optional {
        |func (o ${toName(t)}) ToString() string { if o == ${toNoneName(t)} { return "None" } else { return fmt.Sprintf("Some(%v)", ${ToStrings.toName(t)}(*o.value)) } }
        |""".stripMargin
   }
+
+  val optionalIsDefined: Seq[String] = GoTypes.allTypes.map { t =>
+    s"""
+       |func (o ${toName(t)}) IsDefined() bool { return o != ${toNoneName(t)} }
+       |""".stripMargin
+  }
+
+  val optionalIsEmpty: Seq[String] = GoTypes.allTypes.map { t =>
+    s"""
+       |func (o ${toName(t)}) IsEmpty() bool { return o == ${toNoneName(t)} }
+       |""".stripMargin
+  }
 }
