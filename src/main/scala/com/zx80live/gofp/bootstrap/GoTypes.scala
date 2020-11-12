@@ -20,7 +20,7 @@ object GoTypes {
   val GoFloat64 = "float64"
   val GoComplex64 = "complex64"
   val GoComplex128 = "complex128"
-  val GoInterface = "interface{}"
+  val GoInterface = "Any"
 
   def array(gotype: String): String = s"[]$gotype"
 
