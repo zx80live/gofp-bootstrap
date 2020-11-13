@@ -1,7 +1,10 @@
 package com.zx80live.gofp.bootstrap
 
 object Lists {
-  def toName(goType: String): String = s"List${GoTypes.toName(goType)}"
+  val types : Seq[String] = GoTypes.allTypes
+  val names : Seq[String] = types map toName
+
+  def toName(goType: String): String = s"${GoTypes.toName(goType)}List"
 
   def toNilName(goType: String): String = s"Nil${GoTypes.toName(goType)}"
 
@@ -13,14 +16,14 @@ object Lists {
        |}
        |""".stripMargin
 
-  val lists: Seq[String] = GoTypes.allTypes map listDeclaration
+  val lists: Seq[String] = types map listDeclaration
 
-  val listsNil: Seq[String] = GoTypes.allTypes.map { t =>
+  val listsNil: Seq[String] = types.map { t =>
     s"""
        |var ${toNilName(t)} ${Lists.toName(t)} = ${Lists.toName(t)} {nil, nil}""".stripMargin
   }
 
-  val listsMake: Seq[String] = GoTypes.allTypes.map { t =>
+  val listsMake: Seq[String] = types.map { t =>
     s"""
        |func Make${toName(t)}(elements ...$t) ${toName(t)} {
        |	l := ${toNilName(t)}
@@ -31,13 +34,13 @@ object Lists {
        |}""".stripMargin
   }
 
-  val listsEmptyNonEmpty: Seq[String] = GoTypes.allTypes.map { t =>
+  val listsEmptyNonEmpty: Seq[String] = types.map { t =>
     s"""
        |func (l ${toName(t)}) IsEmpty() bool { return l.head == nil && l.tail == nil }
        |func (l ${toName(t)}) IsNotEmpty() bool { return !l.IsEmpty() }""".stripMargin
   }
 
-  val listsCopy: Seq[String] = GoTypes.allTypes.map { t =>
+  val listsCopy: Seq[String] = types.map { t =>
     s"""
        |func (l ${toName(t)}) Copy() ${toName(t)} {
        |	if l.IsEmpty() {
@@ -53,7 +56,7 @@ object Lists {
   }
 
   val listsCons: Seq[String] = {
-    GoTypes.allTypes.map { t =>
+    types.map { t =>
       s"""
          |func (l ${toName(t)}) Cons(e $t) ${toName(t)} {
          |	tail := l.Copy()
@@ -66,17 +69,17 @@ object Lists {
     }
   }
 
-  val listsHead: Seq[String] = GoTypes.allTypes.map { t =>
+  val listsHead: Seq[String] = types.map { t =>
     s"""
        |func (l ${toName(t)}) Head() $t { return *l.head }""".stripMargin
   }
 
-  val listsTail: Seq[String] = GoTypes.allTypes.map { t =>
+  val listsTail: Seq[String] = types.map { t =>
     s"""
        |func (l ${toName(t)}) Tail() ${toName(t)} { return l.tail.Copy() }""".stripMargin
   }
 
-  val listsForeach: Seq[String] = GoTypes.allTypes.map { t =>
+  val listsForeach: Seq[String] = types.map { t =>
     s"""
        |func (l ${toName(t)}) Foreach(f func($t)) {
        |	if l.IsNotEmpty() {
@@ -86,7 +89,7 @@ object Lists {
        |}""".stripMargin
   }
 
-  val listsReverse: Seq[String] = GoTypes.allTypes.map { t =>
+  val listsReverse: Seq[String] = types.map { t =>
     s"""
        |func (l ${toName(t)}) Reverse() ${toName(t)} {
        |	xs := ${toNilName(t)}
@@ -99,7 +102,7 @@ object Lists {
   }
 
   //TODO optimize
-  val listsFilter: Seq[String] = GoTypes.allTypes.map { t =>
+  val listsFilter: Seq[String] = types.map { t =>
     s"""
        |func (l ${toName(t)}) Filter(p ${Predicates.toName(t)}) ${toName(t)} {
        |  acc := ${toNilName(t)}
@@ -116,8 +119,8 @@ object Lists {
 
   //TODO optimize
   val listsMap: Seq[String] = for {
-    t1 <- GoTypes.allTypes
-    t2 <- GoTypes.allTypes
+    t1 <- types
+    t2 <- types
   } yield {
     s"""
        |func (l ${toName(t1)}) Map${GoTypes.toName(t2)}(f ${Functors.toName(t1, t2)}) ${toName(t2)} {

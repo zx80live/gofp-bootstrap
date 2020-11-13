@@ -1,47 +1,50 @@
 package com.zx80live.gofp.bootstrap
 
 object Optional {
+  val types : Seq[String] = GoTypes.allTypes
+  val names : Seq[String] = types map toName
+
   def toName(t: String): String = s"Option${GoTypes.toName(t)}"
 
   def toNoneName(t: String): String = s"None${GoTypes.toName(t)}"
 
   def toConsName(t: String): String = if (t == GoTypes.GoAny) "AnyOpt" else GoTypes.toName(t)
 
-  val optionalDeclarations: Seq[String] = GoTypes.allTypes.map { t =>
+  val optionalDeclarations: Seq[String] = types.map { t =>
     s"""
        |type ${toName(t)} struct { value *$t }""".stripMargin
   }
 
-  val optionalNones: Seq[String] = GoTypes.allTypes.map { t =>
+  val optionalNones: Seq[String] = types.map { t =>
     s"""
        |var None${GoTypes.toName(t)} ${toName(t)} = ${toName(t)} { nil } """.stripMargin
   }
 
-  val optionalCons: Seq[String] = GoTypes.allTypes.map { t =>
+  val optionalCons: Seq[String] = types.map { t =>
     s"""
        |func ${toConsName(t)}(e $t) ${toName(t)} { return ${toName(t)} { &e } }
        |""".stripMargin
   }
 
-  val optionalToString: Seq[String] = GoTypes.allTypes.map { t =>
+  val optionalToString: Seq[String] = types.map { t =>
     s"""
        |func (o ${toName(t)}) ToString() string { if o == ${toNoneName(t)} { return "None" } else { return fmt.Sprintf("Some(%v)", ${ToStrings.toName(t)}(*o.value)) } }
        |""".stripMargin
   }
 
-  val optionalIsDefined: Seq[String] = GoTypes.allTypes.map { t =>
+  val optionalIsDefined: Seq[String] = types.map { t =>
     s"""
        |func (o ${toName(t)}) IsDefined() bool { return o != ${toNoneName(t)} }
        |""".stripMargin
   }
 
-  val optionalIsEmpty: Seq[String] = GoTypes.allTypes.map { t =>
+  val optionalIsEmpty: Seq[String] = types.map { t =>
     s"""
        |func (o ${toName(t)}) IsEmpty() bool { return o == ${toNoneName(t)} }
        |""".stripMargin
   }
 
-  val optionalFilter: Seq[String] = GoTypes.allTypes.map { t =>
+  val optionalFilter: Seq[String] = types.map { t =>
     s"""
        |func (o ${toName(t)}) Filter(p ${Predicates.toName(t)}) ${toName(t)} {
        |  if o.IsDefined() && p(*o.value) {
@@ -54,8 +57,8 @@ object Optional {
   }
 
   val optionalMap: Seq[String] = for {
-    t1 <- GoTypes.allTypes
-    t2 <- GoTypes.allTypes
+    t1 <- types
+    t2 <- types
   } yield {
     s"""
        |func (o ${toName(t1)}) Map${GoTypes.toName(t2)}(f ${Functors.toName(t1, t2)}) ${toName(t2)} {

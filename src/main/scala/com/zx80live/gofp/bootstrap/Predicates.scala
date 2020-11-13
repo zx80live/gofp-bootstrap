@@ -2,7 +2,7 @@ package com.zx80live.gofp.bootstrap
 
 object Predicates {
 
-  def toName(goType: String): String = s"Predicate${GoTypes.toName(goType)}"
+  def toName(goType: String): String = s"${GoTypes.toName(goType)}Predicate"
 
   def predicateTypeDeclaration(goType: String): String = {
     s"""

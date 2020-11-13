@@ -1,7 +1,7 @@
 package com.zx80live.gofp.bootstrap
 
 object Functors {
-  def toName(t1: String, t2: String): String = s"Functor${GoTypes.toName(t1)}${GoTypes.toName(t2)}"
+  def toName(t1: String, t2: String): String = s"${GoTypes.toName(t1)}${GoTypes.toName(t2)}Functor"
   def toEmptyFunctorName(t1: String): String = s"EmptyFunctor${GoTypes.toName(t1)}"
 
   def functorTypeDeclaration(t1: String, t2: String): String =
