@@ -147,4 +147,10 @@ object Lists {
        |}
        |""".stripMargin
   }
+
+  val listsEquals: Seq[String] = types.map { t =>
+    s"""
+       |func (l1 ${toName(t)}) Equals(l2 ${toName(t)}) bool { return ${Equals.toName(toName(t))}(l1, l2) }
+       |""".stripMargin
+  }
 }
