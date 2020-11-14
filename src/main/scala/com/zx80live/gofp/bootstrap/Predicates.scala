@@ -1,6 +1,7 @@
 package com.zx80live.gofp.bootstrap
 
 object Predicates {
+  val types : Seq[String] = GoTypes.allTypes
 
   def toName(goType: String): String = s"${GoTypes.toName(goType)}Predicate"
 
@@ -9,9 +10,9 @@ object Predicates {
        |type ${toName(goType)} func(e $goType) bool""".stripMargin
   }
 
-  val predicateTypeDeclarations: Seq[String] = GoTypes.allTypes.map(predicateTypeDeclaration)
+  val predicateTypeDeclarations: Seq[String] = types.map(predicateTypeDeclaration)
 
-  val predicateEq: Seq[String] = GoTypes.allTypes.map { goType =>
+  val predicateEq: Seq[String] = types.map { goType =>
     val pt = toName(goType)
     s"""
        |func Eq$pt(e $goType) $pt {
@@ -19,25 +20,25 @@ object Predicates {
        |}""".stripMargin
   }
 
-  val predicateAnd: Seq[String] = GoTypes.allTypes.map { t =>
+  val predicateAnd: Seq[String] = types.map { t =>
     s"""
        |func (p1 ${toName(t)}) And(p2 ${toName(t)}) ${toName(t)} { return func(e $t) bool { return p1(e) && p2(e) } }
        |""".stripMargin
   }
 
-  val predicateOr: Seq[String] = GoTypes.allTypes.map { t =>
+  val predicateOr: Seq[String] = types.map { t =>
     s"""
        |func (p1 ${toName(t)}) Or(p2 ${toName(t)}) ${toName(t)} { return func(e $t) bool { return p1(e) || p2(e) } }
        |""".stripMargin
   }
 
-  val predicateXor: Seq[String] = GoTypes.allTypes.map { t =>
+  val predicateXor: Seq[String] = types.map { t =>
     s"""
        |func (p1 ${toName(t)}) Xor(p2 ${toName(t)}) ${toName(t)} { return func(e $t) bool { x := p1(e); y := p2(e); return (x || y) && !(x && y) } }
        |""".stripMargin
   }
 
-  val predicateNeg: Seq[String] = GoTypes.allTypes.map { t =>
+  val predicateNeg: Seq[String] = types.map { t =>
     s"""
        |func (p ${toName(t)}) Neg() ${toName(t)} { return func(e $t) bool { return !p(e) } }
        |""".stripMargin
