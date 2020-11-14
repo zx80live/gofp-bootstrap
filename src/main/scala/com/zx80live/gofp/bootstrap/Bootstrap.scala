@@ -32,7 +32,7 @@ object Bootstrap extends App {
   toFile("fequal.go", content = Equals.allEquals)
   toFile("fpredicate_eq.go", content = Predicates.predicateEq)
   toFile("fpredicate_logic.go", content = Predicates.predicateAnd ++  Predicates.predicateOr ++  Predicates.predicateXor ++  Predicates.predicateNeg)
-  toFile("fmkstring.go", imports = Seq("fmt"), content = MkStrings.arraysMkString ++ MkStrings.nestedArraysMkString)
+  toFile("fmkstring.go", imports = Seq("fmt"), content = MkStrings.arraysMkString ++ MkStrings.nestedArraysMkString ++ MkStrings.listMkString)
   toFile("ftostring.go", imports = Seq("fmt"), content = ToStrings.allToStrings)
   toFile("ftransformer.go", content =
     Transformers.transformerTypeDeclarations ++ Transformers.emptyTransformers
@@ -52,6 +52,7 @@ object Bootstrap extends App {
   toFile("flist_size.go", content = Lists.listsSize)
   toFile("flist_equals.go", content = Lists.listsEquals)
   toFile("flist_toarray.go", content = Lists.toArrays)
+  toFile("flist_mkstring.go", content = Lists.mkStrings)
 
   toFile("ftuple.go", content = Tuples.tuples)
   toFile("foptional.go", content = Optional.optionalDeclarations ++ Optional.optionalNones ++ Optional.optionalCons)

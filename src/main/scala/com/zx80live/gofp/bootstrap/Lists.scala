@@ -168,4 +168,10 @@ object Lists {
        |}
        |""".stripMargin
   }
+
+  val mkStrings : Seq[String] = types.map { t =>
+    s"""
+       |func (l ${toName(t)}) MkString(left, sep, right string) string { return ${MkStrings.toName(toName(t))}(l, left, sep, right) }
+       |""".stripMargin
+  }
 }

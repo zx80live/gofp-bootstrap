@@ -34,4 +34,9 @@ object MkStrings {
        |}
        |""".stripMargin
   }
+
+  val listMkString: Seq[String] = Lists.names.map { case (t, tList) =>
+    s"""
+       |func ${toName(tList)}(l $tList, left, sep, right string) string { return ${toName(t)}Arr(l.ToArray(), left, sep, right) }""".stripMargin
+  }
 }
