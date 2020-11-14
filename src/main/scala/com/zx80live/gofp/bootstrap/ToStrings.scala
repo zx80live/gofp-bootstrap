@@ -21,5 +21,10 @@ object ToStrings {
        |""".stripMargin
   }
 
-  val allToStrings: Seq[String] = baseToStrings ++ arraysToStrings ++ optionToStrings
+  val listToStrings: Seq[String]= Lists.names.map { case (t, tList) =>
+  s"""
+       |func ${toName(tList)}(l $tList) string { return ${MkStrings.toName(tList)}(l, "List(", ",", ")") }""".stripMargin
+  }
+
+  val allToStrings: Seq[String] = baseToStrings ++ arraysToStrings ++ optionToStrings ++ listToStrings
 }
