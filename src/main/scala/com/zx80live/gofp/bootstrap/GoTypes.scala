@@ -49,11 +49,13 @@ object GoTypes {
 
   val baseTypes: Seq[String] = boolTypes ++ numericTypes ++ stringTypes ++ otherTypes
   val arrayTypes: Seq[String] = baseTypes.map(t => s"[]$t")
+  val nestedArrayTypes: Seq[String] = arrayTypes.map(t => s"[]$t")
   val allTypes: Seq[String] = baseTypes ++ arrayTypes
 
   def toName(t: String): String = {
-    def replaceBrackets(str: String) = if (str.contains("[]")) {
-      str.replaceAll("\\[\\]", "") + "Arr"
+    def replaceBrackets(str: String): String = if (str.contains("[]")) {
+      val tmp = str.replaceFirst("\\[\\]", "") + "Arr"
+      replaceBrackets(tmp)
     } else {
       str
     }
