@@ -1,7 +1,7 @@
 package com.zx80live.gofp.bootstrap
 
 object Lists {
-  val types : Seq[String] = GoTypes.allTypes
+  val types : Seq[String] = GoTypes.types
   val names: Seq[(String, String)] = types.map(t => (t, toName(t)))
 
   def toName(goType: String): String = s"${GoTypes.toName(goType)}List"

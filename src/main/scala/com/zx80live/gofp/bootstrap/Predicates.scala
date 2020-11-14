@@ -1,7 +1,7 @@
 package com.zx80live.gofp.bootstrap
 
 object Predicates {
-  val types : Seq[String] = GoTypes.allTypes
+  val types : Seq[String] = GoTypes.types
 
   def toName(goType: String): String = s"${GoTypes.toName(goType)}Predicate"
 

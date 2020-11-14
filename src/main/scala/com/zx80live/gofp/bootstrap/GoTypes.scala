@@ -1,5 +1,7 @@
 package com.zx80live.gofp.bootstrap
 
+import scala.annotation.tailrec
+
 object GoTypes {
   val GoBool = "bool"
   val GoString = "string"
@@ -22,7 +24,7 @@ object GoTypes {
   val GoComplex128 = "complex128"
   val GoAny = "Any"
 
-  def array(gotype: String): String = s"[]$gotype"
+  def array(t: String): String = s"[]$t"
 
   val boolTypes: Seq[String] = Seq(GoBool)
   val numericTypes: Seq[String] = Seq(
@@ -48,11 +50,14 @@ object GoTypes {
   val otherTypes: Seq[String] = Seq(GoAny)
 
   val baseTypes: Seq[String] = boolTypes ++ numericTypes ++ stringTypes ++ otherTypes
-  val arrayTypes: Seq[String] = baseTypes.map(t => s"[]$t")
-  val nestedArrayTypes: Seq[String] = arrayTypes.map(t => s"[]$t")
-  val allTypes: Seq[String] = baseTypes ++ arrayTypes
+  val arrayTypes: Seq[String] = baseTypes.map(array)
+  val nestedArrayTypes: Seq[String] = arrayTypes.map(array)
+
+  val types: Seq[String] = baseTypes ++ arrayTypes
+  val names: Seq[(String, String)] = types.map(t => (t, toName(t)))
 
   def toName(t: String): String = {
+    @tailrec
     def replaceBrackets(str: String): String = if (str.contains("[]")) {
       val tmp = str.replaceFirst("\\[\\]", "") + "Arr"
       replaceBrackets(tmp)

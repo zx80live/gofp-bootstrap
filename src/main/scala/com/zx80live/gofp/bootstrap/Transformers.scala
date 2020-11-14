@@ -9,8 +9,8 @@ object Transformers {
        |type ${toName(t1, t2)} func(e $t1) $t2""".stripMargin
 
   val transformerTypeDeclarations: Seq[String] = for {
-    t1 <- GoTypes.allTypes
-    t2 <- GoTypes.allTypes
+    t1 <- GoTypes.types
+    t2 <- GoTypes.types
   } yield transformerTypeDeclaration(t1, t2)
 
   type TransformerName = String
@@ -47,7 +47,7 @@ object Transformers {
        |func (f1 $f1) Map${GoTypes.toName(out2)}(f2 $f2) ${toName(in1, out2)} { return func(e $in1) $out2 { return f2(f1(e)) } }""".stripMargin
   }
 
-  val emptyTransformers: Seq[String] = GoTypes.allTypes.map { t =>
+  val emptyTransformers: Seq[String] = GoTypes.types.map { t =>
     s"""
       |var ${toEmptyTransformerName(t)} ${toName(t, t)} = func(e $t) $t { return e }""".stripMargin
   }
