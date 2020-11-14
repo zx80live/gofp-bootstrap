@@ -5,10 +5,10 @@ object MkStrings {
 
   val arraysMkString: Seq[String] = GoTypes.arrayTypes.map { goType =>
     s"""
-      |func ${toName(goType)}(arr $goType, left, delim, right string) string {
+      |func ${toName(goType)}(arr $goType, left, sep, right string) string {
       |	 content := ""
       |	 for _, e := range arr {
-      |	   content = fmt.Sprintf("%v%v,", content, e)
+      |	   content = fmt.Sprintf("%v%v%v", content, e, sep)
       |	 }
       |	 l := len(content)
       |	 if l > 0 {
