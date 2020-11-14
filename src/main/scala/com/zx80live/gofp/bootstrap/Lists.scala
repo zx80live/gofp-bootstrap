@@ -153,4 +153,19 @@ object Lists {
        |func (l1 ${toName(t)}) Equals(l2 ${toName(t)}) bool { return ${Equals.toName(toName(t))}(l1, l2) }
        |""".stripMargin
   }
+
+  val toArrays: Seq[String] = names.map { case (t, tList) =>
+    s"""
+       |func (l $tList) ToArray() []$t {
+       |  len := l.Size()
+       |  arr := make([]$t, len)
+       |  i := 0
+       |  l.Foreach(func (e $t) {
+       |    arr[i] = e
+       |    i ++
+       |  })
+       |  return arr
+       |}
+       |""".stripMargin
+  }
 }

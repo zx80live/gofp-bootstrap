@@ -51,10 +51,11 @@ object Bootstrap extends App {
   toFile("flist_map.go", content = Lists.listsMap)
   toFile("flist_size.go", content = Lists.listsSize)
   toFile("flist_equals.go", content = Lists.listsEquals)
+  toFile("flist_toarray.go", content = Lists.toArrays)
 
   toFile("ftuple.go", content = Tuples.tuples)
   toFile("foptional.go", content = Optional.optionalDeclarations ++ Optional.optionalNones ++ Optional.optionalCons)
-  toFile("foptional_tostring.go", imports = Seq("fmt"), content = Optional.optionalToString)
+  toFile("foptional_tostring.go", content = Optional.optionalToString)
   toFile("foptional_isdefined.go", content = Optional.optionalIsDefined)
   toFile("foptional_isempty.go", content = Optional.optionalIsEmpty)
   toFile("foptional_filter.go", content = Optional.optionalFilter)
