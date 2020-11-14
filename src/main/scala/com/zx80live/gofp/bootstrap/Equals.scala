@@ -42,5 +42,22 @@ object Equals {
        |""".stripMargin
   }
 
-  val allEquals: Seq[String] = baseEquals ++ arraysEquals ++ optionalEquals
+  val listEquals: Seq[String] = Lists.names.map { case (t, tList) =>
+    s"""
+       |func ${toName(tList)}(a, b $tList) bool {
+       |  if a.Size() != b.Size() { return false }
+       |
+       |  xs1 := a
+       |  xs2 := b
+       |  for xs1.IsNotEmpty() {
+       |    if !${Equals.toName(t)}(*xs1.head, *xs2.head) { return false }
+       |    xs1 = *xs1.tail
+       |    xs2 = *xs2.tail
+       |  }
+       |  return true
+       |}
+       |""".stripMargin
+  }
+
+  val allEquals: Seq[String] = baseEquals ++ arraysEquals ++ optionalEquals ++ listEquals
 }
