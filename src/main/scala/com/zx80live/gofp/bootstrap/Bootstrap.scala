@@ -53,6 +53,7 @@ object Bootstrap extends App {
   toFile("flist_equals.go", content = Lists.listsEquals)
   toFile("flist_toarray.go", content = Lists.toArrays)
   toFile("flist_mkstring.go", content = Lists.mkStrings)
+  toFile("flist_tostring.go", content = Lists.toStrings)
 
   toFile("ftuple.go", content = Tuples.tuples)
   toFile("foptional.go", content = Optional.optionalDeclarations ++ Optional.optionalNones ++ Optional.optionalCons)

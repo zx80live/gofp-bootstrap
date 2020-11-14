@@ -165,13 +165,16 @@ object Lists {
        |    i ++
        |  })
        |  return arr
-       |}
-       |""".stripMargin
+       |}""".stripMargin
   }
 
   val mkStrings : Seq[String] = types.map { t =>
     s"""
-       |func (l ${toName(t)}) MkString(left, sep, right string) string { return ${MkStrings.toName(toName(t))}(l, left, sep, right) }
-       |""".stripMargin
+       |func (l ${toName(t)}) MkString(left, sep, right string) string { return ${MkStrings.toName(toName(t))}(l, left, sep, right) }""".stripMargin
+  }
+
+  val toStrings: Seq[String] = types.map { t =>
+    s"""
+       |func (l ${toName(t)}) ToString() string { return ${ToStrings.toName(toName(t))}(l) }""".stripMargin
   }
 }
