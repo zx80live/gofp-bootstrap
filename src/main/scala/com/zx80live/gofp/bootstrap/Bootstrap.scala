@@ -57,6 +57,7 @@ object Bootstrap extends App {
   toFile("foptional_isempty.go", content = Optional.optionalIsEmpty)
   toFile("foptional_filter.go", content = Optional.optionalFilter)
   toFile("foptional_map.go", content = Optional.optionalMap)
+  toFile("foptional_equals.go", content = Optional.optionalEquals)
 }
 
 

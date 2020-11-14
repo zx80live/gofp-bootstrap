@@ -69,4 +69,10 @@ object Optional {
        |  }
        |}""".stripMargin
   }
+
+  val optionalEquals: Seq[String] = types.map {t =>
+    s"""
+       |func (e1 ${toName(t)}) Equals(e2 ${toName(t)}) bool { return ${Equals.toName(toName(t))}(e1, e2) }
+       |""".stripMargin
+  }
 }
