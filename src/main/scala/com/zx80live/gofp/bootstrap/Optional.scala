@@ -61,7 +61,7 @@ object Optional {
     t2 <- types
   } yield {
     s"""
-       |func (o ${toName(t1)}) Map${GoTypes.toName(t2)}(f ${Functors.toName(t1, t2)}) ${toName(t2)} {
+       |func (o ${toName(t1)}) Map${GoTypes.toName(t2)}(f ${Transformers.toName(t1, t2)}) ${toName(t2)} {
        |  if o.IsDefined() {
        |    return ${toConsName(t2)}(f(*o.value))
        |  } else {

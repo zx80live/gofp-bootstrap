@@ -123,7 +123,7 @@ object Lists {
     t2 <- types
   } yield {
     s"""
-       |func (l ${toName(t1)}) Map${GoTypes.toName(t2)}(f ${Functors.toName(t1, t2)}) ${toName(t2)} {
+       |func (l ${toName(t1)}) Map${GoTypes.toName(t2)}(f ${Transformers.toName(t1, t2)}) ${toName(t2)} {
        |  acc := ${toNilName(t2)}
        |  xs := &l
        |  for xs.IsNotEmpty() {

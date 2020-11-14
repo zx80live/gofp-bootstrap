@@ -34,10 +34,10 @@ object Bootstrap extends App {
   toFile("fpredicate_logic.go", content = Predicates.predicateAnd ++  Predicates.predicateOr ++  Predicates.predicateXor ++  Predicates.predicateNeg)
   toFile("fmkstring.go", imports = Seq("fmt"), content = MkStrings.arraysMkString)
   toFile("ftostring.go", imports = Seq("fmt"), content = ToStrings.allToStrings)
-  toFile("ffunctor.go", content =
-    Functors.functorTypeDeclarations ++ Functors.emptyFunctors
+  toFile("ftransformer.go", content =
+    Transformers.transformerTypeDeclarations ++ Transformers.emptyTransformers
   )
-  toFile("ffunctor_map.go", content = Functors.functorMaps)
+  toFile("ftransformer_map.go", content = Transformers.transformerMaps)
   toFile("flist.go", content = Lists.lists ++ Lists.listsNil)
   toFile("flist_isempty.go", content = Lists.listsEmptyNonEmpty)
   toFile("flist_make.go", content = Lists.listsMake)
