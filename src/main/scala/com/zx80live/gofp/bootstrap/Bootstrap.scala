@@ -49,6 +49,7 @@ object Bootstrap extends App {
   toFile("flist_reverse.go", content = Lists.listsReverse)
   toFile("flist_filter.go", content = Lists.listsFilter)
   toFile("flist_map.go", content = Lists.listsMap)
+  toFile("flist_size.go", content = Lists.listsSize)
 
   toFile("ftuple.go", content = Tuples.tuples)
   toFile("foptional.go", content = Optional.optionalDeclarations ++ Optional.optionalNones ++ Optional.optionalCons)

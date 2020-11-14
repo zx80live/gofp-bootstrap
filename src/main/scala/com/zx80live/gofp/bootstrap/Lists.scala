@@ -2,7 +2,7 @@ package com.zx80live.gofp.bootstrap
 
 object Lists {
   val types : Seq[String] = GoTypes.allTypes
-  val names : Seq[String] = types map toName
+  val names: Seq[(String, String)] = types.map(t => (t, toName(t)))
 
   def toName(goType: String): String = s"${GoTypes.toName(goType)}List"
 
@@ -132,5 +132,19 @@ object Lists {
        |  }
        |  return acc.Reverse()
        |}""".stripMargin
+  }
+
+  val listsSize: Seq[String] = types.map { t =>
+    s"""
+       |func (l ${toName(t)}) Size() int {
+       |  count := 0
+       |  xs := l
+       |  for xs.IsNotEmpty() {
+       |    count ++
+       |    xs = *xs.tail
+       |  }
+       |  return count
+       |}
+       |""".stripMargin
   }
 }
