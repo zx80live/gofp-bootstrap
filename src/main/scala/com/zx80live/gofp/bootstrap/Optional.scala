@@ -2,7 +2,7 @@ package com.zx80live.gofp.bootstrap
 
 object Optional {
   val types : Seq[String] = GoTypes.allTypes
-  val names : Seq[String] = types map toName
+  val names: Seq[(String, String)] = types.map (t => (t, toName(t)))
 
   def toName(t: String): String = s"Option${GoTypes.toName(t)}"
 

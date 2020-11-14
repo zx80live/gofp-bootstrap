@@ -24,5 +24,23 @@ object Equals {
        |""".stripMargin
   }
 
-  val allEquals: Seq[String] = baseEquals ++ arraysEquals
+  val optionalEquals: Seq[String] = Optional.names.map { case (t, optT) =>
+    s"""
+       |func ${toName(optT)}(a, b $optT) bool {
+       |  if a.IsDefined() {
+       |    if b.IsDefined() {
+       |      return ${Equals.toName(t)}(*a.value, *b.value)
+       |    } else {
+       |      return false
+       |    }
+       |  } else if b.IsDefined() {
+       |    return false
+       |  } else {
+       |    return true
+       |  }
+       |}
+       |""".stripMargin
+  }
+
+  val allEquals: Seq[String] = baseEquals ++ arraysEquals ++ optionalEquals
 }
