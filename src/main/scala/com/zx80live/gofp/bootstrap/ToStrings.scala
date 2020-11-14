@@ -13,5 +13,13 @@ object ToStrings {
        |func ${toName(goType)}(e $goType) string { return ${MkStrings.toName(goType)}(e, "[", ",", "]")}""".stripMargin
   }
 
-  val allToStrings: Seq[String] = baseToStrings ++ arraysToStrings
+  val optionToStrings: Seq[String] = Optional.names.map { case (t, tOpt) =>
+    s"""
+       |func ${toName(tOpt)}(e $tOpt) string {
+       |  if e.IsDefined() { return fmt.Sprintf("Some(%v)", ${toName(t)}(*e.value)) } else { return "None" }
+       |}
+       |""".stripMargin
+  }
+
+  val allToStrings: Seq[String] = baseToStrings ++ arraysToStrings ++ optionToStrings
 }

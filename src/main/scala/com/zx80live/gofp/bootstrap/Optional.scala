@@ -28,7 +28,7 @@ object Optional {
 
   val optionalToString: Seq[String] = types.map { t =>
     s"""
-       |func (o ${toName(t)}) ToString() string { if o == ${toNoneName(t)} { return "None" } else { return fmt.Sprintf("Some(%v)", ${ToStrings.toName(t)}(*o.value)) } }
+       |func (o ${toName(t)}) ToString() string { return ${ToStrings.toName(toName(t))}(o) }
        |""".stripMargin
   }
 
