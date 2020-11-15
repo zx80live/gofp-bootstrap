@@ -1,11 +1,33 @@
 package com.zx80live.gofp.bootstrap.refactored
 
 trait Type {
+  def underlined: Type
   def raw: String
-  def view: String
-  def declare: String = s"// declare does not supported for $raw"
+  def alias: String = raw
+  def view: String = alias
+  def declare: String = ""
+  def consView: String = ""
+  def core: Type = underlined match {
+    case SuperType => this
+    case _ => underlined.core
+  }
 
-  override def toString: String = s"$raw \t $view \t $declare"
+  override def toString: String =
+    s"""
+       |raw:        $raw
+       |underlined: ${underlined.raw}
+       |core:       ${core.raw}
+       |alias:      $alias
+       |view:       $view        // func ${view}ToString() string
+       |consView:   $consView    ${if(consView.nonEmpty) " \t\t\t // func " + consView + "(...) " + raw else ""}
+       |declare:    $declare
+       |""".stripMargin
+}
+
+case object SuperType extends Type {
+  override def underlined: Type = this
+
+  override def raw: String = "<super>"
 }
 
 /*
@@ -23,6 +45,9 @@ trait Type {
    func IntEquals(a, b int) bool
  */
 case class BaseType(value: String) extends Type {
+
+  override def underlined: Type = SuperType
+
   override def raw: String = value
 
   override def view: String = raw.capitalize
@@ -57,9 +82,12 @@ case class BaseType(value: String) extends Type {
 case class ArrayType(underlined: Type) extends Type {
   override def raw: String = s"[]${underlined.raw}"
 
-  override def view: String = s"${underlined.view}Arr"
+  override def alias: String = underlined match {
+    case _: BaseType => s"${underlined.view}Arr"
+    case _ => s"${underlined.alias}Arr"
+  }
 
-  override def declare: String = s"type $view $raw"
+  override def declare: String = s"type $alias $raw"
 }
 
 /*
@@ -93,6 +121,11 @@ case class OptionType(underlined: Type) extends Type {
   override def view: String = raw
 
   override def declare: String = s"type $raw struct { value *${underlined.raw} }"
+
+  override def consView: String = underlined match {
+    case _: BaseType => s"${underlined.view}"
+    case _: OptionType => s"${underlined.consView}${underlined.core.view}"
+  }
 }
 
 case class ListType(underlined: Type) extends Type {

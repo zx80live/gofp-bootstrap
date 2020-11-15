@@ -13,11 +13,12 @@ object Types {
   def main(args: Array[String]): Unit = {
     baseTypes foreach println
     println()
-    arrayTypes foreach  println
-    println()
+////    arrayTypes foreach  println
+////    println()
     optionTypes foreach println
-    println()
-    listTypes foreach println
+////    println()
+////    listTypes foreach println
+
   }
 
   //  val GoBool = "bool"
