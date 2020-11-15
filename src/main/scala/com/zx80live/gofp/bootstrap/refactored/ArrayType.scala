@@ -1,0 +1,43 @@
+package com.zx80live.gofp.bootstrap.refactored
+
+/*
+ raw:
+   []int
+   [][]int
+   []OptionInt
+
+ declare:
+   type IntArr []int
+   type IntArrArr [][]int
+   type OptionIntArr []OptionInt
+
+ cons:
+   var a IntArr = []int { 1,2,3 }
+   var a IntArrArr = [][]int { []int{1,2,3}, []int{4,5,6} }
+   var a OptionIntArr = []OptionInt { Int(1), Int(2), Int(3) }
+
+ usage:
+   func <view>ToString
+   func IntArrToString(e []int) string
+   func IntArrArrToString(e [][]int) string
+   func OptionIntArrToString(e []OptionInt)
+
+   func IntArrEquals(a, b []int) bool
+   func IntArrArrEquals(a, b [][]int) bool
+   func OptionIntArrEquals(a, b []OptionInt) bool
+*/
+case class ArrayType(underlined: Type) extends Type {
+  override def raw: String = s"[]${underlined.raw}"
+
+  override def alias: String = underlined match {
+    case _: BaseType => s"${underlined.view}Arr"
+    case _ => s"${underlined.alias}Arr"
+  }
+
+  override def declare: String = s"type $alias $raw"
+}
+
+object ArrayType {
+  val underlinedTypes: Seq[Type] = BaseType.types ++ BaseType.types.map(ArrayType.apply) ++ BaseType.types.map(OptionType.apply)
+  val types: Seq[Type] = underlinedTypes.map(ArrayType.apply)
+}
