@@ -16,8 +16,8 @@ object Types {
 ////    arrayTypes foreach  println
 ////    println()
     optionTypes foreach println
-////    println()
-////    listTypes foreach println
+    println()
+    listTypes foreach println
 
   }
 

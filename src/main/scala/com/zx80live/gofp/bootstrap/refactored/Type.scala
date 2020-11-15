@@ -139,5 +139,7 @@ case class ListType(underlined: Type) extends Type {
        |  head *${underlined.raw}
        |  tail *${raw}
        |}""".stripMargin
+
+  override def consView: String = s"Make$raw"
 }
 
