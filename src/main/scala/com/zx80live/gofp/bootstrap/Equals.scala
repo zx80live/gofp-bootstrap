@@ -1,5 +1,6 @@
 package com.zx80live.gofp.bootstrap
 
+@deprecated("use com.zx80live.gofp.bootstrap.refactored")
 object Equals {
   def toName(goType: String): String = s"Equal${GoTypes.toName(goType)}"
 

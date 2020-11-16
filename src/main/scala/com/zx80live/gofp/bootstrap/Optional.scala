@@ -1,5 +1,6 @@
 package com.zx80live.gofp.bootstrap
 
+@deprecated("use com.zx80live.gofp.bootstrap.refactored")
 object Optional {
   val types : Seq[String] = GoTypes.types
   val names: Seq[(String, String)] = types.map (t => (t, toName(t)))

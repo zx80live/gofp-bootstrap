@@ -1,5 +1,6 @@
 package com.zx80live.gofp.bootstrap
 
+@deprecated("use com.zx80live.gofp.bootstrap.refactored")
 object Tuples {
   def toName(size: Int): String = s"Tuple$size"
 

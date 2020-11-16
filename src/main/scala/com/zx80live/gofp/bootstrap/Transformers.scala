@@ -1,5 +1,6 @@
 package com.zx80live.gofp.bootstrap
 
+@deprecated("use com.zx80live.gofp.bootstrap.refactored")
 object Transformers {
   def toName(t1: String, t2: String): String = s"${GoTypes.toName(t1)}${GoTypes.toName(t2)}Transformer"
   def toEmptyTransformerName(t1: String): String = s"EmptyTransformer${GoTypes.toName(t1)}"

@@ -2,6 +2,7 @@ package com.zx80live.gofp.bootstrap
 
 import scala.annotation.tailrec
 
+@deprecated("use com.zx80live.gofp.bootstrap.refactored")
 object GoTypes {
   val GoBool = "bool"
   val GoString = "string"

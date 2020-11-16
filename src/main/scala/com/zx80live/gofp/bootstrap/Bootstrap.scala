@@ -2,6 +2,7 @@ package com.zx80live.gofp.bootstrap
 
 import java.io._
 
+@deprecated("use com.zx80live.gofp.bootstrap.refactored")
 object Bootstrap extends App {
   val root = "/home/work/gofp/fp/"
 

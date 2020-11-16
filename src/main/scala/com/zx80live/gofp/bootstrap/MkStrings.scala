@@ -1,5 +1,6 @@
 package com.zx80live.gofp.bootstrap
 
+@deprecated("use com.zx80live.gofp.bootstrap.refactored")
 object MkStrings {
   def toName(goType: String): String = s"MkString${GoTypes.toName(goType)}"
 
