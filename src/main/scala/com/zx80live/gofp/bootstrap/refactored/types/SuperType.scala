@@ -1,4 +1,4 @@
-package com.zx80live.gofp.bootstrap.refactored
+package com.zx80live.gofp.bootstrap.refactored.types
 
 case object SuperType extends Type {
   override def underlined: Type = this

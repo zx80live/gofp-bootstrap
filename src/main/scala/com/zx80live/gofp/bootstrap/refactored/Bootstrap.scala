@@ -1,16 +1,15 @@
 package com.zx80live.gofp.bootstrap.refactored
 
+import com.zx80live.gofp.bootstrap.refactored.functions.FuncEquals
+import com.zx80live.gofp.bootstrap.refactored.types.OptionType
+
+
 object Bootstrap extends App {
+  import IoUtils._
 
-  BaseType.types foreach println
-  println("--------------------------------------------")
+  toFile("bootstrap_equal.go", content = FuncEquals.functions)
 
-  OptionType.types foreach println
-  println("--------------------------------------------")
-
-  ArrayType.types foreach println
-  println("--------------------------------------------")
-
-  ListType.types foreach println
-  println("--------------------------------------------")
+  toFile("bootstrap_option.go", content = OptionType.declarations ++ OptionType.nones)
+  toFile("bootstrap_option_isdefined.go", content = OptionType.functionsIsDefined)
+  toFile("bootstrap_option_equals.go", content = OptionType.functionsEquals)
 }

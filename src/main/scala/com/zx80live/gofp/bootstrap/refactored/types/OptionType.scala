@@ -1,4 +1,6 @@
-package com.zx80live.gofp.bootstrap.refactored
+package com.zx80live.gofp.bootstrap.refactored.types
+
+import com.zx80live.gofp.bootstrap.refactored.functions.FuncEquals
 
 /*
  raw:
@@ -30,15 +32,37 @@ case class OptionType(underlined: Type) extends Type {
 
   override def view: String = raw
 
-  override def declare: String = s"type $raw struct { value *${underlined.raw} }"
+  override def declaration: String =
+    s"""
+       |type $raw struct { value *${underlined.raw} }""".stripMargin
 
   override def consView: String = underlined match {
     case _: BaseType => s"${underlined.view}"
     case _: OptionType => s"${underlined.consView}${underlined.core.view}"
   }
+
+  def noneName: String = s"None$view"
+
+  def noneDeclaration: String =
+    s"""
+       |var $noneName $raw = $raw { nil }""".stripMargin
+
+  def funcIsDefined: String =
+    s"""
+       |func (o $raw) IsDefined() bool { return o == $noneName }
+       |""".stripMargin
+
+  def funcEquals: String =
+    s"""
+       |func (o1 $raw) Equals(o2 $raw) bool { return ${FuncEquals.name(this)}(o1, o2) }
+       |""".stripMargin
 }
 
 object OptionType {
   val underlinedTypes: Seq[Type] = BaseType.types ++ BaseType.types.map(OptionType.apply)
-  val types : Seq[Type] = underlinedTypes.map(OptionType.apply)
+  val types: Seq[OptionType] = underlinedTypes.map(OptionType.apply)
+  val declarations: Seq[String] = types.map(_.declaration)
+  val nones: Seq[String] = types.map(_.noneDeclaration)
+  val functionsIsDefined: Seq[String] = types.map(_.funcIsDefined)
+  val functionsEquals: Seq[String] = types.map(_.funcEquals)
 }

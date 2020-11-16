@@ -1,4 +1,4 @@
-package com.zx80live.gofp.bootstrap.refactored
+package com.zx80live.gofp.bootstrap.refactored.types
 
 /*
  raw:

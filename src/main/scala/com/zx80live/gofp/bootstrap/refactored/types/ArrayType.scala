@@ -1,4 +1,4 @@
-package com.zx80live.gofp.bootstrap.refactored
+package com.zx80live.gofp.bootstrap.refactored.types
 
 /*
  raw:
@@ -34,7 +34,7 @@ case class ArrayType(underlined: Type) extends Type {
     case _ => s"${underlined.alias}Arr"
   }
 
-  override def declare: String = s"type $alias $raw"
+  override def declaration: String = s"type $alias $raw"
 }
 
 object ArrayType {

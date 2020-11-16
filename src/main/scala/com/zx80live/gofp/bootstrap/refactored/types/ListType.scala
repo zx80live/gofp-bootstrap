@@ -1,11 +1,11 @@
-package com.zx80live.gofp.bootstrap.refactored
+package com.zx80live.gofp.bootstrap.refactored.types
 
 case class ListType(underlined: Type) extends Type {
   override def raw: String = s"${underlined.view}List"
 
   override def view: String = raw
 
-  override def declare: String =
+  override def declaration: String =
     s"""
        |type $raw struct {
        |  head *${underlined.raw}

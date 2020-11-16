@@ -1,4 +1,4 @@
-package com.zx80live.gofp.bootstrap.refactored
+package com.zx80live.gofp.bootstrap.refactored.types
 
 trait Type {
   def underlined: Type
@@ -9,7 +9,7 @@ trait Type {
 
   def view: String = alias
 
-  def declare: String = ""
+  def declaration: String = ""
 
   def consView: String = ""
 
@@ -26,7 +26,7 @@ trait Type {
        |alias:      $alias
        |view:       $view        // func ${view}ToString() string
        |consView:   $consView    ${if (consView.nonEmpty) " \t\t\t // func " + consView + "(...) " + raw else ""}
-       |declare:    $declare
+       |declare:    $declaration
        |""".stripMargin
 }
 

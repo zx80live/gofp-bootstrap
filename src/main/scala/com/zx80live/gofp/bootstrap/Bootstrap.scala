@@ -30,6 +30,7 @@ object Bootstrap extends App {
 
   toFile("fpredicate.go", content = Predicates.predicateTypeDeclarations)
   toFile("fequal.go", content = Equals.allEquals)
+  toFile("fequal.go", content = Equals.allEquals)
   toFile("fpredicate_eq.go", content = Predicates.predicateEq)
   toFile("fpredicate_logic.go", content = Predicates.predicateAnd ++  Predicates.predicateOr ++  Predicates.predicateXor ++  Predicates.predicateNeg)
   toFile("fmkstring.go", imports = Seq("fmt"), content = MkStrings.arraysMkString ++ MkStrings.nestedArraysMkString ++ MkStrings.listMkString)
