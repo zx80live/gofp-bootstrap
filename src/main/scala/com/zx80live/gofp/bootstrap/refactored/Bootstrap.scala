@@ -17,6 +17,10 @@ object Bootstrap extends App {
 
   toFile("bootstrap_predicate.go", content = Predicate.declarations)
   toFile("bootstrap_predicate_empty.go", content = Predicate.emptyDeclarations)
+  toFile("bootstrap_predicate_and.go", content = Predicate.functionsAnd)
+  toFile("bootstrap_predicate_or.go", content = Predicate.functionsOr)
+  toFile("bootstrap_predicate_xor.go", content = Predicate.functionsXor)
+  toFile("bootstrap_predicate_neg.go", content = Predicate.functionsNeg)
 
   toFile("bootstrap_option.go", content = OptionType.declarations ++ OptionType.noneDeclarations)
   toFile("bootstrap_option_cons.go", content = OptionType.functionsCons)
