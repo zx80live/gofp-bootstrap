@@ -33,6 +33,7 @@ object Bootstrap extends App {
   toFile("bootstrap_option_foreach.go", content = OptionType.functionsForeach)
   toFile("bootstrap_option_filter.go", content = OptionType.functionsFilter)
   toFile("bootstrap_option_map.go", content = OptionType.functionsMap)
+  toFile("bootstrap_option_flatmap.go", content = OptionType.functionsFlatMap)
   toFile("bootstrap_option_tostring.go", content = OptionType.functionsToString)
 
   toFile("bootstrap_list.go", content = ListType.declarations ++ ListType.nilDeclarations)

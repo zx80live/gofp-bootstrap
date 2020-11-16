@@ -41,7 +41,7 @@ case class OptionType(underlined: Type) extends MonadType {
        |type $raw struct { value *${underlined.raw} }""".stripMargin
 
   override def consView: String = underlined match {
-    case t: BaseType if t ==BaseType.GoAny => s"AnyOpt"
+    case t: BaseType if t == BaseType.GoAny => s"AnyOpt"
     case _: BaseType => s"${underlined.view}"
     case _: OptionType => s"${underlined.consView}${underlined.core.view}"
     case _ => s"${underlined.view}Opt"
@@ -75,17 +75,25 @@ case class OptionType(underlined: Type) extends MonadType {
 object OptionType {
   // TODO reduce option types
   def underlinedTypes: Seq[Type] = BaseType.types ++ ArrayType.types ++ BaseType.types.map(ListType.apply)
+
   def types: Seq[OptionType] = (underlinedTypes ++ underlinedTypes.map(OptionType.apply)).map(OptionType.apply)
 
   def declarations: Seq[String] = types.map(_.declaration)
+
   def noneDeclarations: Seq[String] = types.map(_.noneDeclaration)
 
   def functionsCons: Seq[String] = types.map(_.funcCons)
+
   def functionsIsDefined: Seq[String] = types.map(_.funcIsDefined)
+
   def functionsIsEmpty: Seq[String] = types.map(_.funcIsEmpty)
+
   def functionsEquals: Seq[String] = types.map(_.funcEquals)
+
   def functionsForeach: Seq[String] = types.map(_.funcForeach)
+
   def functionsFilter: Seq[String] = types.map(_.funcFilter)
+
   def functionsMap: Seq[String] = for {
     o <- types
     t <- Transformer.types
@@ -93,4 +101,13 @@ object OptionType {
   } yield o.funcMap(t.out)
 
   def functionsToString: Seq[String] = types.map(_.funcToString)
+
+  def functionsFlatMap: Seq[String] = {
+    val inTypes = (BaseType.types ++ BaseType.types.map(OptionType.apply) ++ BaseType.types.map(ArrayType.apply) ++ BaseType.types.map(ListType.apply)).map(OptionType.apply)
+    val outTypes = (BaseType.types).map(OptionType.apply)
+    for {
+      o1 <- inTypes
+      o2 <- outTypes
+    } yield o1.funcFlatMap(o2)
+  }
 }
