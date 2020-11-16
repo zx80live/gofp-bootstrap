@@ -113,4 +113,12 @@ object ListType {
   def functionsCopy: Seq[String] = types.map(_.funcCopy)
   def functionsFilter: Seq[String] = types.map(_.funcFilter)
   def functionsSize: Seq[String] = types.map(_.funcSize)
+  def functionsMap: Seq[String] = for {
+    o <- types
+    t <- Transformer.types
+    if o.underlined == t.in
+  } yield o.funcMap(t.out)
+
+  def functionsToString: Seq[String] = types.map(_.funcToString)
+  def functionsEquals: Seq[String] = types.map(_.funcEquals)
 }

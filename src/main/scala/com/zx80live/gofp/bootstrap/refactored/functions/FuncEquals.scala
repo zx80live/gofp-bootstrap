@@ -1,6 +1,6 @@
 package com.zx80live.gofp.bootstrap.refactored.functions
 
-import com.zx80live.gofp.bootstrap.refactored.types.{ArrayType, BaseType, OptionType, Type}
+import com.zx80live.gofp.bootstrap.refactored.types.{ArrayType, BaseType, ListType, OptionType, Type}
 
 object FuncEquals {
   def name(t: Type): String = s"${t.view}Equals"
@@ -8,9 +8,6 @@ object FuncEquals {
   def contract(t: Type): String = s"func ${name(t)}(a, b ${t.raw}) bool"
 
   def body(t: Type): String = t match {
-    case _: BaseType =>
-      s"""
-         |return a == b""".stripMargin
     case _: OptionType =>
       s"""
          |  if a.IsDefined() {
@@ -32,6 +29,9 @@ object FuncEquals {
          |  }
          |  return true
          |""".stripMargin
+    case _ =>
+      s"""
+         |return a == b""".stripMargin
   }
 
   def func(t: Type): String =
@@ -40,5 +40,5 @@ object FuncEquals {
        |  ${body(t)}
        |}""".stripMargin
 
-  def functions: Seq[String] = (BaseType.types ++ OptionType.types ++ ArrayType.types).map(func)
+  def functions: Seq[String] = (BaseType.types ++ OptionType.types ++ ArrayType.types ++ ListType.types).map(func)
 }

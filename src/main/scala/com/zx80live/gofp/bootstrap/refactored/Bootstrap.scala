@@ -33,6 +33,7 @@ object Bootstrap extends App {
   toFile("bootstrap_option_foreach.go", content = OptionType.functionsForeach)
   toFile("bootstrap_option_filter.go", content = OptionType.functionsFilter)
   toFile("bootstrap_option_map.go", content = OptionType.functionsMap)
+  toFile("bootstrap_option_tostring.go", content = OptionType.functionsToString)
 
   toFile("bootstrap_list.go", content = ListType.declarations ++ ListType.nilDeclarations)
   toFile("bootstrap_list_prepend.go", content = ListType.functionsPrepend)
@@ -43,5 +44,8 @@ object Bootstrap extends App {
   toFile("bootstrap_list_reverse.go", content = ListType.functionsReverse)
   toFile("bootstrap_list_copy.go", content = ListType.functionsCopy)
   toFile("bootstrap_list_filter.go", content = ListType.functionsFilter)
+  toFile("bootstrap_list_map.go", content = ListType.functionsMap)
   toFile("bootstrap_list_size.go", content = ListType.functionsSize)
+  toFile("bootstrap_list_tostring.go", content = ListType.functionsToString)
+  toFile("bootstrap_list_equals.go", content = ListType.functionsEquals)
 }

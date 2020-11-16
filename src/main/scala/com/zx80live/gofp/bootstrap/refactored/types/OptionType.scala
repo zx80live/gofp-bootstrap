@@ -67,11 +67,6 @@ case class OptionType(underlined: Type) extends MonadType {
        |func (o $raw) IsEmpty() bool { return !o.IsDefined() }
        |""".stripMargin
 
-  def funcEquals: String =
-    s"""
-       |func (o1 $raw) Equals(o2 $raw) bool { return ${FuncEquals.name(this)}(o1, o2) }
-       |""".stripMargin
-
   override def funcForeach: String =
     s"""
        |func (o $raw) Foreach(f func(${underlined.raw})) { if o.IsDefined() { f(*o.value) } }""".stripMargin
@@ -96,4 +91,6 @@ object OptionType {
     t <- Transformer.types
     if o.underlined == t.in
   } yield o.funcMap(t.out)
+
+  def functionsToString: Seq[String] = types.map(_.funcToString)
 }
