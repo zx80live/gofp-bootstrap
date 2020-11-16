@@ -30,6 +30,10 @@ import com.zx80live.gofp.bootstrap.refactored.functions.FuncEquals
 case class OptionType(underlined: Type) extends MonadType {
   override def raw: String = s"${underlined.view}Option"
 
+  override def rawFrom(t: Type): String = s"${t.view}Option"
+
+  override def nilNameFrom(t: Type): String = s"None${t.view}"
+
   override def view: String = raw
 
   override def declaration: String =
@@ -40,6 +44,7 @@ case class OptionType(underlined: Type) extends MonadType {
     case t: BaseType if t ==BaseType.GoAny => s"AnyOpt"
     case _: BaseType => s"${underlined.view}"
     case _: OptionType => s"${underlined.consView}${underlined.core.view}"
+    case _ => s"${underlined.view}Opt"
   }
 
   def noneName: String = s"None$view"
@@ -73,8 +78,10 @@ case class OptionType(underlined: Type) extends MonadType {
 }
 
 object OptionType {
-  def underlinedTypes: Seq[Type] = BaseType.types ++ BaseType.types.map(OptionType.apply)
-  def types: Seq[OptionType] = underlinedTypes.map(OptionType.apply)
+  // TODO reduce option types
+  def underlinedTypes: Seq[Type] = BaseType.types ++ ArrayType.types ++ BaseType.types.map(ListType.apply)
+  def types: Seq[OptionType] = (underlinedTypes ++ underlinedTypes.map(OptionType.apply)).map(OptionType.apply)
+
   def declarations: Seq[String] = types.map(_.declaration)
   def noneDeclarations: Seq[String] = types.map(_.noneDeclaration)
 

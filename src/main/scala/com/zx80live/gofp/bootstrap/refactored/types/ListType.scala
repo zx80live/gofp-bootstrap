@@ -3,6 +3,10 @@ package com.zx80live.gofp.bootstrap.refactored.types
 case class ListType(underlined: Type) extends MonadType {
   override def raw: String = s"${underlined.view}List"
 
+  override def rawFrom(t: Type): String = s"${t.view}List"
+
+  override def nilNameFrom(t: Type): String = s"Nil${t.view}List"
+
   override def view: String = raw
 
   override def declaration: String =
@@ -91,9 +95,10 @@ case class ListType(underlined: Type) extends MonadType {
 }
 
 object ListType {
-  def underlinedTypes: Seq[Type] = OptionType.underlinedTypes ++ OptionType.underlinedTypes.map(ListType.apply)
+  def underlinedTypes: Seq[Type] = BaseType.types ++ OptionType.types ++ ArrayType.types
 
-  def types: Seq[ListType] = underlinedTypes.map(ListType.apply)
+  //TODO reduce list types
+  def types: Seq[ListType] = (underlinedTypes ++ underlinedTypes.map(ListType.apply)).map(ListType.apply)
 
   def declarations: Seq[String] = types.map(_.declaration)
 

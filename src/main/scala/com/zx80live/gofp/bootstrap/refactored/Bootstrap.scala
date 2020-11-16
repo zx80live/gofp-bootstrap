@@ -1,16 +1,19 @@
 package com.zx80live.gofp.bootstrap.refactored
 
-import com.zx80live.gofp.bootstrap.refactored.functions.{FuncEquals, FuncFilter, FuncMkString, FuncToString}
+import com.zx80live.gofp.bootstrap.refactored.functions.{FuncEquals, FuncFilter, FuncMap, FuncMkString, FuncToString}
 import com.zx80live.gofp.bootstrap.refactored.types.{ListType, OptionType, Predicate, Transformer}
 
 
 object Bootstrap extends App {
   import IoUtils._
 
-  toFile("bootstrap_equal.go", content = FuncEquals.functions)
-  toFile("bootstrap_tostring.go", imports = Seq("fmt"), content = FuncToString.functions)
-  toFile("bootstrap_mkstring.go", imports = Seq("fmt"), content = FuncMkString.functions)
-  toFile("bootstrap_filter.go", content = FuncFilter.functions)
+  toFile("bootstrap_fequal.go", content = FuncEquals.functions)
+  toFile("bootstrap_ftostring.go", imports = Seq("fmt"), content = FuncToString.functions)
+  toFile("bootstrap_fmkstring.go", imports = Seq("fmt"), content = FuncMkString.functions)
+  toFile("bootstrap_ffilter.go", content = FuncFilter.functions)
+  toFile("bootstrap_fmap_option.go", content = FuncMap.functionsOption)
+  toFile("bootstrap_fmap_array.go", content = FuncMap.functionsArray)
+  toFile("bootstrap_fmap_list.go", content = FuncMap.functionsList)
 
   toFile("bootstrap_transformer.go", content = Transformer.declarations)
   toFile("bootstrap_transformer_empty.go", content = Transformer.emptyDeclarations)

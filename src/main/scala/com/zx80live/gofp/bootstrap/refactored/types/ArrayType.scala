@@ -29,6 +29,10 @@ package com.zx80live.gofp.bootstrap.refactored.types
 case class ArrayType(underlined: Type) extends TraversableType {
   override def raw: String = s"[]${underlined.raw}"
 
+  override def rawFrom(t: Type): String = s"[]${t.raw}"
+
+  override def nilNameFrom(t: Type): String = rawFrom(t)
+
   override def alias: String = underlined match {
     case _: BaseType => s"${underlined.view}Arr"
     case _ => s"${underlined.alias}Arr"
