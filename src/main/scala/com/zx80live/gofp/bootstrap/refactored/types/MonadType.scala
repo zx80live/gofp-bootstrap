@@ -1,7 +1,6 @@
 package com.zx80live.gofp.bootstrap.refactored.types
 
-trait MonadType {
-  this: Type =>
+trait MonadType extends TraversableType {
 
   def funcCons: String
 

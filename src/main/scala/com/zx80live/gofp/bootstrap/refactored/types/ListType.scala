@@ -1,6 +1,6 @@
 package com.zx80live.gofp.bootstrap.refactored.types
 
-case class ListType(underlined: Type) extends TraversableType with MonadType {
+case class ListType(underlined: Type) extends MonadType {
   override def raw: String = s"${underlined.view}List"
 
   override def view: String = raw

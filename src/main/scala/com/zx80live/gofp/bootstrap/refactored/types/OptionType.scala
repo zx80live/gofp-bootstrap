@@ -27,7 +27,7 @@ import com.zx80live.gofp.bootstrap.refactored.functions.FuncEquals
    func (e IntOption) FlatMapIntOption(f IntToIntOption) OptionInt
 
  */
-case class OptionType(underlined: Type) extends Type with MonadType {
+case class OptionType(underlined: Type) extends MonadType {
   override def raw: String = s"${underlined.view}Option"
 
   override def view: String = raw
