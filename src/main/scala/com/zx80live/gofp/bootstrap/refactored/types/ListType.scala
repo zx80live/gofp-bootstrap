@@ -75,6 +75,19 @@ case class ListType(underlined: Type) extends MonadType {
        |  }
        |  return acc.Reverse()
        |}""".stripMargin
+
+  def funcSize: String =
+    s"""
+       |func (l $raw) Size() int {
+       |  count := 0
+       |  xs := l
+       |  for xs.NonEmpty() {
+       |    count ++
+       |    xs = *xs.tail
+       |  }
+       |  return count
+       |}
+       |""".stripMargin
 }
 
 object ListType {
@@ -94,4 +107,5 @@ object ListType {
   def functionsReverse: Seq[String] = types.map(_.funcReverse)
   def functionsCopy: Seq[String] = types.map(_.funcCopy)
   def functionsFilter: Seq[String] = types.map(_.funcFilter)
+  def functionsSize: Seq[String] = types.map(_.funcSize)
 }

@@ -37,6 +37,7 @@ case class OptionType(underlined: Type) extends MonadType {
        |type $raw struct { value *${underlined.raw} }""".stripMargin
 
   override def consView: String = underlined match {
+    case t: BaseType if t ==BaseType.GoAny => s"AnyOpt"
     case _: BaseType => s"${underlined.view}"
     case _: OptionType => s"${underlined.consView}${underlined.core.view}"
   }
