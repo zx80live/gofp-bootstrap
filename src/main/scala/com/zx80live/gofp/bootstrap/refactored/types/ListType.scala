@@ -92,6 +92,20 @@ case class ListType(underlined: Type) extends MonadType {
        |  return count
        |}
        |""".stripMargin
+
+  def funcToArray: String =
+    s"""
+       |func (l $raw) ToArray() []${underlined.raw} {
+       |  acc := make([]${underlined.raw}, l.Size())
+       |  xs := l
+       |  i := 0
+       |  for xs.NonEmpty() {
+       |    acc[i] = *xs.head
+       |    xs = *xs.tail
+       |  }
+       |  return acc
+       |}
+       |""".stripMargin
 }
 
 object ListType {
@@ -121,4 +135,5 @@ object ListType {
 
   def functionsToString: Seq[String] = types.map(_.funcToString)
   def functionsEquals: Seq[String] = types.map(_.funcEquals)
+  def functionsToArray: Seq[String] = types.map(_.funcToArray)
 }

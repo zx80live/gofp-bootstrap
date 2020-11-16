@@ -48,4 +48,5 @@ object Bootstrap extends App {
   toFile("bootstrap_list_size.go", content = ListType.functionsSize)
   toFile("bootstrap_list_tostring.go", content = ListType.functionsToString)
   toFile("bootstrap_list_equals.go", content = ListType.functionsEquals)
+  toFile("bootstrap_list_toarray.go", content = ListType.functionsToArray)
 }
