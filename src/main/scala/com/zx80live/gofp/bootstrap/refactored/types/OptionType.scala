@@ -91,4 +91,9 @@ object OptionType {
   def functionsEquals: Seq[String] = types.map(_.funcEquals)
   def functionsForeach: Seq[String] = types.map(_.funcForeach)
   def functionsFilter: Seq[String] = types.map(_.funcFilter)
+  def functionsMap: Seq[String] = for {
+    o <- types
+    t <- Transformer.types
+    if o.underlined == t.in
+  } yield o.funcMap(t.out)
 }
