@@ -1,7 +1,7 @@
 package com.zx80live.gofp.bootstrap.refactored.types
 
 case class Transformer(in: Type, out: Type) {
-  def raw: String = s"Map${in.view}${out.view}"
+  def raw: String = s"${in.view}${out.view}Transformer"
 
   def name: String = raw
 
@@ -9,7 +9,7 @@ case class Transformer(in: Type, out: Type) {
     s"""
        |type $name func(in ${in.raw}) ${out.raw}""".stripMargin
 
-  def emptyName: String = s"EmptyMap${in.view}"
+  def emptyName: String = s"${in.view}EmptyTransformer"
 
   def emptyDeclaration: String =
     s"""
