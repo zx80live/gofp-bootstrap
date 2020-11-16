@@ -51,6 +51,30 @@ case class ListType(underlined: Type) extends MonadType {
        |    xs = *xs.tail
        |  }
        |}""".stripMargin
+
+  def funcReverse: String =
+    s"""
+       |func (l $raw) Reverse() $raw {
+       |  acc := $nilName
+       |  xs := l
+       |  for xs.NonEmpty() {
+       |    acc = acc.Cons(*xs.head)
+       |    xs = *xs.tail
+       |  }
+       |  return acc
+       |}""".stripMargin
+
+  def funcCopy: String =
+    s"""
+       |func (l $raw) Copy() $raw {
+       |  acc := $nilName
+       |  xs := l
+       |  for xs.NonEmpty() {
+       |    acc = acc.Cons(*xs.head)
+       |    xs = *xs.tail
+       |  }
+       |  return acc.Reverse()
+       |}""".stripMargin
 }
 
 object ListType {
@@ -67,4 +91,6 @@ object ListType {
   val functionsIsEmpty: Seq[String] = types.map(_.funcIsEmpty)
   val functionsNonEmpty: Seq[String] = types.map(_.funcNonEmpty)
   val functionsForeach: Seq[String] = types.map(_.funcForeach)
+  val functionsReverse: Seq[String] = types.map(_.funcReverse)
+  val functionsCopy: Seq[String] = types.map(_.funcCopy)
 }
