@@ -1,7 +1,7 @@
 package com.zx80live.gofp.bootstrap.refactored
 
 import com.zx80live.gofp.bootstrap.refactored.functions.{FuncEquals, FuncMkString, FuncToString}
-import com.zx80live.gofp.bootstrap.refactored.types.{ListType, OptionType, Transformer}
+import com.zx80live.gofp.bootstrap.refactored.types.{ListType, OptionType, Predicate, Transformer}
 
 
 object Bootstrap extends App {
@@ -13,6 +13,9 @@ object Bootstrap extends App {
 
   toFile("bootstrap_transformer.go", content = Transformer.declarations)
   toFile("bootstrap_transformer_empty.go", content = Transformer.emptyDeclarations)
+
+  toFile("bootstrap_predicate.go", content = Predicate.declarations)
+  toFile("bootstrap_predicate_empty.go", content = Predicate.emptyDeclarations)
 
   toFile("bootstrap_option.go", content = OptionType.declarations ++ OptionType.noneDeclarations)
   toFile("bootstrap_option_cons.go", content = OptionType.functionsCons)
