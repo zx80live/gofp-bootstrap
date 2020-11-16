@@ -47,6 +47,10 @@ case class OptionType(underlined: Type) extends MonadType {
     s"""
        |var $noneName $raw = $raw { nil }""".stripMargin
 
+  override def funcCons: String =
+    s"""
+       |func $consView(e ${underlined.raw}) $raw { return $raw { &e } }""".stripMargin
+
   def funcIsDefined: String =
     s"""
        |func (o $raw) IsDefined() bool { return o == $noneName }
@@ -68,6 +72,8 @@ object OptionType {
   val types: Seq[OptionType] = underlinedTypes.map(OptionType.apply)
   val declarations: Seq[String] = types.map(_.declaration)
   val noneDeclarations: Seq[String] = types.map(_.noneDeclaration)
+
+  val functionsCons: Seq[String] = types.map(_.funcCons)
   val functionsIsDefined: Seq[String] = types.map(_.funcIsDefined)
   val functionsIsEmpty: Seq[String] = types.map(_.funcIsEmpty)
   val functionsEquals: Seq[String] = types.map(_.funcEquals)

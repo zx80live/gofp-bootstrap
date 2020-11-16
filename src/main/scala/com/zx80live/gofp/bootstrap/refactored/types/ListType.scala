@@ -20,6 +20,20 @@ case class ListType(underlined: Type) extends MonadType {
     s"""
        |var $nilName $raw = $raw { nil, nil }""".stripMargin
 
+  def funcPrepend: String =
+    s"""
+       |func (l $raw) Cons(e ${underlined.raw}) $raw { return $raw { &e, &l } }""".stripMargin
+
+  override def funcCons: String =
+    s"""
+       |func $consView(elements ...${underlined.raw}) $raw {
+       |  xs := $nilName
+       |  for _, e := range elements {
+       |    xs = xs.Cons(e)
+       |  }
+       |  return xs
+       |}""".stripMargin
+
   def funcIsEmpty: String =
     s"""
        |func (l $raw) IsEmpty() bool { return l == $nilName }""".stripMargin
@@ -38,6 +52,8 @@ object ListType {
 
   val nilDeclarations: Seq[String] = types.map(_.nilDeclaration)
 
+  val functionsPrepend: Seq[String] = types.map(_.funcPrepend)
+  val functionsCons: Seq[String] = types.map(_.funcCons)
   val functionsIsEmpty: Seq[String] = types.map(_.funcIsEmpty)
   val functionsNonEmpty: Seq[String] = types.map(_.funcNonEmpty)
 }
