@@ -35,7 +35,7 @@ case class ListType(underlined: Type) extends MonadType {
        |  for _, e := range elements {
        |    xs = xs.Cons(e)
        |  }
-       |  return xs
+       |  return xs.Reverse()
        |}""".stripMargin
 
   def funcIsEmpty: String =
