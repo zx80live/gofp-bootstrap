@@ -93,4 +93,5 @@ object ListType {
   def functionsForeach: Seq[String] = types.map(_.funcForeach)
   def functionsReverse: Seq[String] = types.map(_.funcReverse)
   def functionsCopy: Seq[String] = types.map(_.funcCopy)
+  def functionsFilter: Seq[String] = types.map(_.funcFilter)
 }

@@ -24,6 +24,7 @@ object Bootstrap extends App {
   toFile("bootstrap_option_isempty.go", content = OptionType.functionsIsEmpty)
   toFile("bootstrap_option_equals.go", content = OptionType.functionsEquals)
   toFile("bootstrap_option_foreach.go", content = OptionType.functionsForeach)
+  toFile("bootstrap_option_filter.go", content = OptionType.functionsFilter)
 
   toFile("bootstrap_list.go", content = ListType.declarations ++ ListType.nilDeclarations)
   toFile("bootstrap_list_prepend.go", content = ListType.functionsPrepend)
@@ -33,4 +34,5 @@ object Bootstrap extends App {
   toFile("bootstrap_list_foreach.go", content = ListType.functionsForeach)
   toFile("bootstrap_list_reverse.go", content = ListType.functionsReverse)
   toFile("bootstrap_list_copy.go", content = ListType.functionsCopy)
+  toFile("bootstrap_list_filter.go", content = ListType.functionsFilter)
 }

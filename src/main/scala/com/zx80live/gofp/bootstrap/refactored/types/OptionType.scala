@@ -82,4 +82,5 @@ object OptionType {
   def functionsIsEmpty: Seq[String] = types.map(_.funcIsEmpty)
   def functionsEquals: Seq[String] = types.map(_.funcEquals)
   def functionsForeach: Seq[String] = types.map(_.funcForeach)
+  def functionsFilter: Seq[String] = types.map(_.funcFilter)
 }
