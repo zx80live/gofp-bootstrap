@@ -82,30 +82,11 @@ case class ListType(underlined: Type) extends MonadType {
 
   def funcSize: String =
     s"""
-       |func (l $raw) Size() int {
-       |  count := 0
-       |  xs := l
-       |  for xs.NonEmpty() {
-       |    count ++
-       |    xs = *xs.tail
-       |  }
-       |  return count
-       |}
-       |""".stripMargin
+       |func (l $raw) Size() int { count := 0; xs := l; for xs.NonEmpty() { count ++; xs = *xs.tail }; return count }""".stripMargin
 
   def funcToArray: String =
     s"""
-       |func (l $raw) ToArray() []${underlined.raw} {
-       |  acc := make([]${underlined.raw}, l.Size())
-       |  xs := l
-       |  i := 0
-       |  for xs.NonEmpty() {
-       |    acc[i] = *xs.head
-       |    xs = *xs.tail
-       |  }
-       |  return acc
-       |}
-       |""".stripMargin
+       |func (l $raw) ToArray() []${underlined.raw} { acc := make([]${underlined.raw}, l.Size()); xs := l; i := 0; for xs.NonEmpty() { acc[i] = *xs.head; xs = *xs.tail }; return acc }""".stripMargin
 }
 
 object ListType {
