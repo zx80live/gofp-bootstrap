@@ -1,13 +1,16 @@
 package com.zx80live.gofp.bootstrap.refactored
 
 import com.zx80live.gofp.bootstrap.refactored.functions.FuncEquals
-import com.zx80live.gofp.bootstrap.refactored.types.{ListType, OptionType}
+import com.zx80live.gofp.bootstrap.refactored.types.{ListType, OptionType, Transformer}
 
 
 object Bootstrap extends App {
   import IoUtils._
 
   toFile("bootstrap_equal.go", content = FuncEquals.functions)
+
+  toFile("bootstrap_transformer.go", content = Transformer.declarations)
+  toFile("bootstrap_transformer_empty.go", content = Transformer.emptyDeclarations)
 
   toFile("bootstrap_option.go", content = OptionType.declarations ++ OptionType.noneDeclarations)
   toFile("bootstrap_option_isdefined.go", content = OptionType.functionsIsDefined)
