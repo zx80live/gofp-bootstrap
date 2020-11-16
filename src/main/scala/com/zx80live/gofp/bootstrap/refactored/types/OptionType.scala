@@ -27,7 +27,7 @@ import com.zx80live.gofp.bootstrap.refactored.functions.FuncEquals
    func (e IntOption) FlatMapIntOption(f IntToIntOption) OptionInt
 
  */
-case class OptionType(underlined: Type) extends Type {
+case class OptionType(underlined: Type) extends MonadType {
   override def raw: String = s"${underlined.view}Option"
 
   override def view: String = raw
@@ -52,6 +52,11 @@ case class OptionType(underlined: Type) extends Type {
        |func (o $raw) IsDefined() bool { return o == $noneName }
        |""".stripMargin
 
+  def funcIsEmpty: String =
+    s"""
+       |func (o $raw) IsEmpty() bool { return !o.IsDefined() }
+       |""".stripMargin
+
   def funcEquals: String =
     s"""
        |func (o1 $raw) Equals(o2 $raw) bool { return ${FuncEquals.name(this)}(o1, o2) }
@@ -62,7 +67,8 @@ object OptionType {
   val underlinedTypes: Seq[Type] = BaseType.types ++ BaseType.types.map(OptionType.apply)
   val types: Seq[OptionType] = underlinedTypes.map(OptionType.apply)
   val declarations: Seq[String] = types.map(_.declaration)
-  val nones: Seq[String] = types.map(_.noneDeclaration)
+  val noneDeclarations: Seq[String] = types.map(_.noneDeclaration)
   val functionsIsDefined: Seq[String] = types.map(_.funcIsDefined)
+  val functionsIsEmpty: Seq[String] = types.map(_.funcIsEmpty)
   val functionsEquals: Seq[String] = types.map(_.funcEquals)
 }
