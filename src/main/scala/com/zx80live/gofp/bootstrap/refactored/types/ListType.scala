@@ -41,6 +41,16 @@ case class ListType(underlined: Type) extends MonadType {
   def funcNonEmpty: String =
     s"""
        |func (l $raw) NonEmpty() bool { return !l.IsEmpty() }""".stripMargin
+
+  override def funcForeach: String =
+    s"""
+       |func (l $raw) Foreach(f func(${underlined.raw})) {
+       |  xs := l
+       |  for xs.NonEmpty() {
+       |    f(*xs.head)
+       |    xs = *xs.tail
+       |  }
+       |}""".stripMargin
 }
 
 object ListType {
@@ -56,4 +66,5 @@ object ListType {
   val functionsCons: Seq[String] = types.map(_.funcCons)
   val functionsIsEmpty: Seq[String] = types.map(_.funcIsEmpty)
   val functionsNonEmpty: Seq[String] = types.map(_.funcNonEmpty)
+  val functionsForeach: Seq[String] = types.map(_.funcForeach)
 }

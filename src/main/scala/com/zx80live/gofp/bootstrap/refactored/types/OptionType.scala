@@ -65,6 +65,10 @@ case class OptionType(underlined: Type) extends MonadType {
     s"""
        |func (o1 $raw) Equals(o2 $raw) bool { return ${FuncEquals.name(this)}(o1, o2) }
        |""".stripMargin
+
+  override def funcForeach: String =
+    s"""
+       |func (o $raw) Foreach(f func(${underlined.raw})) { if o.IsDefined() { f(*o.value) } }""".stripMargin
 }
 
 object OptionType {
@@ -77,4 +81,5 @@ object OptionType {
   val functionsIsDefined: Seq[String] = types.map(_.funcIsDefined)
   val functionsIsEmpty: Seq[String] = types.map(_.funcIsEmpty)
   val functionsEquals: Seq[String] = types.map(_.funcEquals)
+  val functionsForeach: Seq[String] = types.map(_.funcForeach)
 }

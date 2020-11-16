@@ -1,7 +1,7 @@
 package com.zx80live.gofp.bootstrap.refactored.types
 
 case class Transformer(in: Type, out: Type) {
-  def raw: String = s"${in.view}${out.view}Transformer"
+  def raw: String = Transformer.name(in, out)
 
   def name: String = raw
 
@@ -17,6 +17,8 @@ case class Transformer(in: Type, out: Type) {
 }
 
 object Transformer {
+  def name(in: Type, out: Type): String = s"${in.view}${out.view}Transformer"
+
   val emptyDeclarations: Seq[String] = (BaseType.types ++ OptionType.types ++ ArrayType.types ++ ListType.types).map(t => Transformer(t, t).emptyDeclaration)
 
   val types: Seq[Transformer] = for {

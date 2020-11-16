@@ -6,4 +6,6 @@ trait MonadType extends Type {
 //  def funcMap(t: Type): String
 
   def funcCons: String
+
+  def funcForeach: String
 }

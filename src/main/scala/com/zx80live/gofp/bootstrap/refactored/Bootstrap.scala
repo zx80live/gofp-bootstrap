@@ -17,10 +17,12 @@ object Bootstrap extends App {
   toFile("bootstrap_option_isdefined.go", content = OptionType.functionsIsDefined)
   toFile("bootstrap_option_isempty.go", content = OptionType.functionsIsEmpty)
   toFile("bootstrap_option_equals.go", content = OptionType.functionsEquals)
+  toFile("bootstrap_option_foreach.go", content = OptionType.functionsForeach)
 
   toFile("bootstrap_list.go", content = ListType.declarations ++ ListType.nilDeclarations)
   toFile("bootstrap_list_prepend.go", content = ListType.functionsPrepend)
   toFile("bootstrap_list_cons.go", content = ListType.functionsCons)
   toFile("bootstrap_list_isempty.go", content = ListType.functionsIsEmpty)
   toFile("bootstrap_list_nonempty.go", content = ListType.functionsNonEmpty)
+  toFile("bootstrap_list_foreach.go", content = ListType.functionsForeach)
 }
