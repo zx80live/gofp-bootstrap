@@ -59,12 +59,12 @@ case class OptionType(underlined: Type) extends MonadType {
 
   def funcIsDefined: String =
     s"""
-       |func (o $raw) IsDefined() bool { return o == $noneName }
+       |func (o $raw) IsDefined() bool { return o != $noneName }
        |""".stripMargin
 
   def funcIsEmpty: String =
     s"""
-       |func (o $raw) IsEmpty() bool { return !o.IsDefined() }
+       |func (o $raw) IsEmpty() bool { return o == $noneName }
        |""".stripMargin
 
   override def funcForeach: String =
