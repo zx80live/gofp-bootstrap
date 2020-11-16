@@ -93,7 +93,7 @@ object ListType {
   def underlinedTypes: Seq[Type] = BaseType.types ++ OptionType.types ++ ArrayType.types
 
   //TODO reduce list types
-  def types: Seq[ListType] = (underlinedTypes ++ underlinedTypes.map(ListType.apply)).map(ListType.apply)
+  def types: Seq[ListType] = (BaseType.types ++ OptionType.types ++ ArrayType.types ++ BaseType.types.map(ListType.apply)).map(ListType.apply)
 
   def declarations: Seq[String] = types.map(_.declaration)
 
@@ -117,4 +117,13 @@ object ListType {
   def functionsToString: Seq[String] = types.map(_.funcToString)
   def functionsEquals: Seq[String] = types.map(_.funcEquals)
   def functionsToArray: Seq[String] = types.map(_.funcToArray)
+
+  def functionsFlatMap: Seq[String] = {
+    val inTypes = (BaseType.types ++ BaseType.types.map(OptionType.apply) ++ BaseType.types.map(ArrayType.apply) ++ BaseType.types.map(ListType.apply)).map(ListType.apply)
+    val outTypes = (BaseType.types).map(ListType.apply)
+    for {
+      o1 <- inTypes
+      o2 <- outTypes
+    } yield o1.funcFlatMap(o2)
+  }
 }
