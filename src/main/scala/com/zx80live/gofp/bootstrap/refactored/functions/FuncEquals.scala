@@ -5,16 +5,14 @@ import com.zx80live.gofp.bootstrap.refactored.types.{ArrayType, BaseType, Option
 object FuncEquals {
   def name(t: Type): String = s"${t.view}Equals"
 
-  def declaration(t: Type): String = s"func ${name(t)}(a, b ${t.raw}) bool"
+  def contract(t: Type): String = s"func ${name(t)}(a, b ${t.raw}) bool"
 
-  def func(t: Type): String = t match {
+  def body(t: Type): String = t match {
     case _: BaseType =>
       s"""
-         |${declaration(t)} { return a == b }
-         |""".stripMargin
+         |return a == b""".stripMargin
     case _: OptionType =>
       s"""
-         |${declaration(t)} {
          |  if a.IsDefined() {
          |    if b.IsDefined() {
          |      return ${name(t.underlined)}(*a.value, *b.value)
@@ -22,12 +20,10 @@ object FuncEquals {
          |  } else if b.IsDefined() {
          |    return false
          |  } else { return true }
-         |}
          |""".stripMargin
 
     case _: ArrayType =>
       s"""
-         |${declaration(t)} {
          |  len1 := len(a)
          |  if len1 != len(b) { return false }
          |
@@ -35,9 +31,14 @@ object FuncEquals {
          |    if !${name(t.underlined)}(a[i], b[i]) { return false }
          |  }
          |  return true
-         |}
          |""".stripMargin
   }
 
-  val functions: Seq[String] = (BaseType.types ++ OptionType.types ++ ArrayType.types).map(func)
+  def func(t: Type): String =
+    s"""
+       |${contract(t)} {
+       |  ${body(t)}
+       |}""".stripMargin
+
+  def functions: Seq[String] = (BaseType.types ++ OptionType.types ++ ArrayType.types).map(func)
 }

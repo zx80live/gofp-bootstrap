@@ -26,7 +26,7 @@ package com.zx80live.gofp.bootstrap.refactored.types
    func IntArrArrEquals(a, b [][]int) bool
    func OptionIntArrEquals(a, b []OptionInt) bool
 */
-case class ArrayType(underlined: Type) extends Type {
+case class ArrayType(underlined: Type) extends TraversableType {
   override def raw: String = s"[]${underlined.raw}"
 
   override def alias: String = underlined match {
@@ -38,6 +38,6 @@ case class ArrayType(underlined: Type) extends Type {
 }
 
 object ArrayType {
-  val underlinedTypes: Seq[Type] = BaseType.types ++ BaseType.types.map(ArrayType.apply) ++ BaseType.types.map(OptionType.apply)
-  val types: Seq[Type] = underlinedTypes.map(ArrayType.apply)
+  def underlinedTypes: Seq[Type] = BaseType.types ++ BaseType.types.map(ArrayType.apply) ++ BaseType.types.map(OptionType.apply)
+  def types: Seq[ArrayType] = underlinedTypes.map(ArrayType.apply)
 }

@@ -1,6 +1,6 @@
 package com.zx80live.gofp.bootstrap.refactored
 
-import com.zx80live.gofp.bootstrap.refactored.functions.FuncEquals
+import com.zx80live.gofp.bootstrap.refactored.functions.{FuncEquals, FuncMkString, FuncToString}
 import com.zx80live.gofp.bootstrap.refactored.types.{ListType, OptionType, Transformer}
 
 
@@ -8,6 +8,8 @@ object Bootstrap extends App {
   import IoUtils._
 
   toFile("bootstrap_equal.go", content = FuncEquals.functions)
+  toFile("bootstrap_tostring.go", imports = Seq("fmt"), content = FuncToString.functions)
+  toFile("bootstrap_mkstring.go", imports = Seq("fmt"), content = FuncMkString.functions)
 
   toFile("bootstrap_transformer.go", content = Transformer.declarations)
   toFile("bootstrap_transformer_empty.go", content = Transformer.emptyDeclarations)

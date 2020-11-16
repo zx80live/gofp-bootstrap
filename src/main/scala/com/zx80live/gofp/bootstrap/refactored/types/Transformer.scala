@@ -19,16 +19,16 @@ case class Transformer(in: Type, out: Type) {
 object Transformer {
   def name(in: Type, out: Type): String = s"${in.view}${out.view}Transformer"
 
-  val emptyDeclarations: Seq[String] = (BaseType.types ++ OptionType.types ++ ArrayType.types ++ ListType.types).map(t => Transformer(t, t).emptyDeclaration)
+  def emptyDeclarations: Seq[String] = (BaseType.types ++ OptionType.types ++ ArrayType.types ++ ListType.types).map(t => Transformer(t, t).emptyDeclaration)
 
-  val types: Seq[Transformer] = for {
+  def types: Seq[Transformer] = for {
     in <- inTypes
     out <- outTypes
   } yield Transformer(in, out)
 
-  val declarations: Seq[String] = types.map(_.declaration)
+  def declarations: Seq[String] = types.map(_.declaration)
 
-  private def allowedTypes: Seq[BaseType] =
+  private def allowedTypes: Seq[Type] =
     BaseType.types
 //    Seq(
 //      BaseType.GoBool,
@@ -44,7 +44,7 @@ object Transformer {
 //      BaseType.GoAny
 //    )
 
-  private def inTypes: Seq[Type] = allowedTypes ++ allowedTypes.map(OptionType.apply) ++ allowedTypes.map(ListType.apply)
+  private def inTypes: Seq[Type] = allowedTypes ++ allowedTypes.map(OptionType.apply) ++ allowedTypes.map(ArrayType.apply) ++ allowedTypes.map(ListType.apply)
 
   private def outTypes: Seq[Type] = inTypes
 }

@@ -1,6 +1,6 @@
 package com.zx80live.gofp.bootstrap.refactored.types
 
-case class ListType(underlined: Type) extends MonadType {
+case class ListType(underlined: Type) extends TraversableType with MonadType {
   override def raw: String = s"${underlined.view}List"
 
   override def view: String = raw
@@ -78,19 +78,19 @@ case class ListType(underlined: Type) extends MonadType {
 }
 
 object ListType {
-  val underlinedTypes: Seq[Type] = OptionType.underlinedTypes ++ OptionType.underlinedTypes.map(ListType.apply)
+  def underlinedTypes: Seq[Type] = OptionType.underlinedTypes ++ OptionType.underlinedTypes.map(ListType.apply)
 
-  val types: Seq[ListType] = underlinedTypes.map(ListType.apply)
+  def types: Seq[ListType] = underlinedTypes.map(ListType.apply)
 
-  val declarations: Seq[String] = types.map(_.declaration)
+  def declarations: Seq[String] = types.map(_.declaration)
 
-  val nilDeclarations: Seq[String] = types.map(_.nilDeclaration)
+  def nilDeclarations: Seq[String] = types.map(_.nilDeclaration)
 
-  val functionsPrepend: Seq[String] = types.map(_.funcPrepend)
-  val functionsCons: Seq[String] = types.map(_.funcCons)
-  val functionsIsEmpty: Seq[String] = types.map(_.funcIsEmpty)
-  val functionsNonEmpty: Seq[String] = types.map(_.funcNonEmpty)
-  val functionsForeach: Seq[String] = types.map(_.funcForeach)
-  val functionsReverse: Seq[String] = types.map(_.funcReverse)
-  val functionsCopy: Seq[String] = types.map(_.funcCopy)
+  def functionsPrepend: Seq[String] = types.map(_.funcPrepend)
+  def functionsCons: Seq[String] = types.map(_.funcCons)
+  def functionsIsEmpty: Seq[String] = types.map(_.funcIsEmpty)
+  def functionsNonEmpty: Seq[String] = types.map(_.funcNonEmpty)
+  def functionsForeach: Seq[String] = types.map(_.funcForeach)
+  def functionsReverse: Seq[String] = types.map(_.funcReverse)
+  def functionsCopy: Seq[String] = types.map(_.funcCopy)
 }

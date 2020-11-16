@@ -45,7 +45,7 @@ object BaseType {
   val GoComplex128: BaseType = BaseType("complex128")
   val GoAny: BaseType = BaseType("Any")
 
-  val types: Seq[BaseType] = Seq(
+  def types: Seq[BaseType] = Seq(
     GoBool,
     GoString,
     GoInt,
