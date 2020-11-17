@@ -53,6 +53,14 @@ case class ListType(underlined: Type) extends MonadType {
     } else ""
   }
 
+  def funcHead: String =
+    s"""
+       |func (l $raw) Head() ${underlined.raw} { return *l.head }""".stripMargin
+
+  def funcTail: String =
+    s"""
+       |func (l $raw) Tail() $raw { return l.tail.Copy() }""".stripMargin
+
   override def funcForeach: String =
     s"""
        |func (l $raw) Foreach(f func(${underlined.raw})) {
@@ -110,7 +118,9 @@ object ListType {
   def functionsCons: Seq[String] = types.map(_.funcCons)
   def functionsIsEmpty: Seq[String] = types.map(_.funcIsEmpty)
   def functionsNonEmpty: Seq[String] = types.map(_.funcNonEmpty)
+  def functionsHead: Seq[String] = types.map(_.funcHead)
   def functionsHeadOption: Seq[String] = types.map(_.funcHeadOption)
+  def functionsTail: Seq[String] = types.map(_.funcTail)
   def functionsForeach: Seq[String] = types.map(_.funcForeach)
   def functionsReverse: Seq[String] = types.map(_.funcReverse)
   def functionsCopy: Seq[String] = types.map(_.funcCopy)
