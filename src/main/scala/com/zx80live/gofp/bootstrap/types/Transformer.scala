@@ -1,4 +1,4 @@
-package com.zx80live.gofp.bootstrap.refactored.types
+package com.zx80live.gofp.bootstrap.types
 
 case class Transformer(in: Type, out: Type) {
   def raw: String = Transformer.name(in, out)

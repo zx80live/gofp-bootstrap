@@ -1,6 +1,6 @@
-package com.zx80live.gofp.bootstrap.refactored.types
+package com.zx80live.gofp.bootstrap.types
 
-import com.zx80live.gofp.bootstrap.refactored.functions.{FuncFilter, FuncMap}
+import com.zx80live.gofp.bootstrap.functions.{FuncFilter, FuncMap}
 
 trait MonadType extends TraversableType {
 

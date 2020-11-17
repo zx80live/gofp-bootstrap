@@ -1,4 +1,4 @@
-package com.zx80live.gofp.bootstrap.refactored.types
+package com.zx80live.gofp.bootstrap.types
 
 trait Type {
   def underlined: Type

@@ -1,4 +1,4 @@
-package com.zx80live.gofp.bootstrap.refactored.types
+package com.zx80live.gofp.bootstrap.types
 
 case class Predicate(t: Type) {
   def name: String = Predicate.name(t)

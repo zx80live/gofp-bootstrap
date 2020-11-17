@@ -1,6 +1,6 @@
-package com.zx80live.gofp.bootstrap.refactored.types
+package com.zx80live.gofp.bootstrap.types
 
-import com.zx80live.gofp.bootstrap.refactored.functions.{FuncEquals, FuncToString}
+import com.zx80live.gofp.bootstrap.functions.{FuncEquals, FuncToString}
 
 trait TraversableType extends Type {
   def rawFrom(t: Type): String

@@ -1,6 +1,6 @@
-package com.zx80live.gofp.bootstrap.refactored.functions
+package com.zx80live.gofp.bootstrap.functions
 
-import com.zx80live.gofp.bootstrap.refactored.types.{ArrayType, BaseType, ListType, OptionType, TraversableType, Type}
+import com.zx80live.gofp.bootstrap.types.{ArrayType, BaseType, ListType, OptionType, TraversableType, Type}
 
 object FuncToString {
 

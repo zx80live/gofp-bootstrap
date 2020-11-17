@@ -1,6 +1,6 @@
-package com.zx80live.gofp.bootstrap.refactored.functions
+package com.zx80live.gofp.bootstrap.functions
 
-import com.zx80live.gofp.bootstrap.refactored.types._
+import com.zx80live.gofp.bootstrap.types._
 
 object FuncMap {
 

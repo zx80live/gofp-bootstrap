@@ -1,4 +1,4 @@
-package com.zx80live.gofp.bootstrap.refactored.types
+package com.zx80live.gofp.bootstrap.types
 
 case class ListType(underlined: Type) extends MonadType {
   override def raw: String = s"${underlined.view}List"

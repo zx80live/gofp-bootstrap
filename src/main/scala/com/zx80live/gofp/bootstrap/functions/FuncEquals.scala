@@ -1,6 +1,6 @@
-package com.zx80live.gofp.bootstrap.refactored.functions
+package com.zx80live.gofp.bootstrap.functions
 
-import com.zx80live.gofp.bootstrap.refactored.types.{ArrayType, BaseType, ListType, OptionType, Type}
+import com.zx80live.gofp.bootstrap.types.{ArrayType, BaseType, ListType, OptionType, Type}
 
 object FuncEquals {
   def name(t: Type): String = s"${t.view}Equals"
