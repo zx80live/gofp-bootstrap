@@ -46,6 +46,13 @@ case class ListType(underlined: Type) extends MonadType {
     s"""
        |func (l $raw) NonEmpty() bool { return !l.IsEmpty() }""".stripMargin
 
+  def funcHeadOption: String = {
+    if(nestedLevel < 5) {
+      s"""
+         |func (l $raw) HeadOption() ${OptionType(underlined).raw} { if l.NonEmpty() { return ${OptionType(underlined).consView}(*l.head) } else { return ${OptionType(underlined).noneName} } }""".stripMargin
+    } else ""
+  }
+
   override def funcForeach: String =
     s"""
        |func (l $raw) Foreach(f func(${underlined.raw})) {
@@ -103,6 +110,7 @@ object ListType {
   def functionsCons: Seq[String] = types.map(_.funcCons)
   def functionsIsEmpty: Seq[String] = types.map(_.funcIsEmpty)
   def functionsNonEmpty: Seq[String] = types.map(_.funcNonEmpty)
+  def functionsHeadOption: Seq[String] = types.map(_.funcHeadOption)
   def functionsForeach: Seq[String] = types.map(_.funcForeach)
   def functionsReverse: Seq[String] = types.map(_.funcReverse)
   def functionsCopy: Seq[String] = types.map(_.funcCopy)

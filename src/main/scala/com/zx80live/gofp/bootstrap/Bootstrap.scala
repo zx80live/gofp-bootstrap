@@ -41,6 +41,7 @@ object Bootstrap extends App {
   toFile("bootstrap_list_cons.go", content = ListType.functionsCons)
   toFile("bootstrap_list_isempty.go", content = ListType.functionsIsEmpty)
   toFile("bootstrap_list_nonempty.go", content = ListType.functionsNonEmpty)
+  toFile("bootstrap_list_headoption.go", content = ListType.functionsHeadOption)
   toFile("bootstrap_list_foreach.go", content = ListType.functionsForeach)
   toFile("bootstrap_list_reverse.go", content = ListType.functionsReverse)
   toFile("bootstrap_list_copy.go", content = ListType.functionsCopy)

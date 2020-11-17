@@ -76,7 +76,7 @@ object OptionType {
   // TODO reduce option types
   def underlinedTypes: Seq[Type] = BaseType.types ++ ArrayType.types ++ BaseType.types.map(ListType.apply)
 
-  def types: Seq[OptionType] = (underlinedTypes ++ underlinedTypes.map(OptionType.apply)).map(OptionType.apply)
+  def types: Seq[OptionType] = (underlinedTypes ++ underlinedTypes.map(OptionType.apply) ++ underlinedTypes.map(OptionType.apply).map(OptionType.apply)).map(OptionType.apply)
 
   def declarations: Seq[String] = types.map(_.declaration)
 
