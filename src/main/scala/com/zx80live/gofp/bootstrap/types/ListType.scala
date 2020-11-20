@@ -137,8 +137,31 @@ object ListType {
   def functionsToArray: Seq[String] = types.map(_.funcToArray)
 
   def functionsFlatMap: Seq[String] = {
-    val inTypes = (BaseType.types ++ BaseType.types.map(OptionType.apply) ++ BaseType.types.map(ArrayType.apply) ++ BaseType.types.map(ListType.apply)).map(ListType.apply)
-    val outTypes = (BaseType.types).map(ListType.apply)
+    val baseTypes = Seq(
+      BaseType.GoBool,
+      BaseType.GoAny,
+      BaseType.GoByte,
+      BaseType.GoInt,
+      BaseType.GoInt32,
+      BaseType.GoInt64,
+      BaseType.GoUInt,
+      BaseType.GoUInt64,
+      BaseType.GoUIntPtr,
+      BaseType.GoFloat32,
+      BaseType.GoFloat64,
+      BaseType.GoRune,
+      BaseType.GoString
+    )
+
+    val inTypes = (baseTypes ++ baseTypes.map(ArrayType.apply) ++ baseTypes.map(ListType.apply) ++ baseTypes.map(OptionType.apply)).map(ListType.apply)
+    val outTypes = inTypes
+
+    _functionsFlatMap(
+      inTypes = inTypes,
+      outTypes = outTypes)
+  }
+
+  private def _functionsFlatMap(inTypes: Seq[MonadType], outTypes: Seq[MonadType]) = {
     for {
       o1 <- inTypes
       o2 <- outTypes
