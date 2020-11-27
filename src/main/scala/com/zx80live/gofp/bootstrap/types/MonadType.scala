@@ -3,6 +3,9 @@ package com.zx80live.gofp.bootstrap.types
 import scala.annotation.tailrec
 
 trait MonadType extends Type {
+
+  def setUnderlined(t: Type): MonadType
+
   def underlined: Type
 
   def emptyName: String

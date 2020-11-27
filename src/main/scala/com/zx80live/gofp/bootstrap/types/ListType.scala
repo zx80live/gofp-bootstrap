@@ -176,6 +176,8 @@ case class ListType(override val underlined: Type) extends MonadType {
   override def funcToString: String =
     s"""
        |func (l $raw) ToString() string { return l.MkString("List(", ",", ")") }""".stripMargin
+
+  override def setUnderlined(t: Type): MonadType = ListType(t)
 }
 
 object ListType {

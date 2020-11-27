@@ -104,6 +104,8 @@ case class ArrayType(override val underlined: Type) extends MonadType {
        |}""".stripMargin
 
   override def funcToString: String = ""
+
+  override def setUnderlined(t: Type): MonadType = ArrayType(t)
 }
 
 object ArrayType {
