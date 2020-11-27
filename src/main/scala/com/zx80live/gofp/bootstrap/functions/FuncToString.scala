@@ -1,6 +1,6 @@
 package com.zx80live.gofp.bootstrap.functions
 
-import com.zx80live.gofp.bootstrap.types.{ArrayType, BaseType, ListType, OptionType, TraversableType, Type}
+import com.zx80live.gofp.bootstrap.types._
 
 object FuncToString {
 
@@ -9,15 +9,11 @@ object FuncToString {
   def contract(t: Type): String = s"func ${name(t)}(o ${t.raw}) string"
 
   def body(t: Type): String = t match {
-    case t: ArrayType =>
-      s"""  return ${FuncMkString.name(t)}(o, "[", ",", "]")"""
-    case t: ListType =>
-      s"""  return ${FuncMkString.name(t)}(o, "List(", ",", ")")"""
-    case t: OptionType =>
+    case _: BaseType  => s""" return fmt.Sprintf("%v", o) """
+    case a: ArrayType =>
       s"""
-         |  if o.IsDefined() { return fmt.Sprintf("%v%v%v", "Some(", ${name(t.underlined)}(*o.value), ")")
-         |  } else { return "None" }""".stripMargin
-    case _  => s"""  return fmt.Sprintf("%v", o)"""
+         |return ${a.view}MkString(o, "[", ",", "]")""".stripMargin
+    case _ => s""" return o.ToString() """
   }
 
   def func(t: Type): String =

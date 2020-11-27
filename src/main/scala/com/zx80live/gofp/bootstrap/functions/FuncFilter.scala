@@ -1,15 +1,16 @@
 package com.zx80live.gofp.bootstrap.functions
 
-import com.zx80live.gofp.bootstrap.types.{ArrayType, ListType, OptionType, Predicate, TraversableType}
+import com.zx80live.gofp.bootstrap.types._
 
+@deprecated
 object FuncFilter {
 
-  def name(t: TraversableType): String = s"Filter${t.view}"
+  def name(t: MonadType): String = s"Filter${t.view}"
 
-  def contract(t: TraversableType): String = s"func ${name(t)}(l ${t.raw}, p ${Predicate.name(t.underlined)}) ${t.raw}"
+  def contract(t: MonadType): String = s"func ${name(t)}(l ${t.raw}, p ${Predicate.name(t.underlined)}) ${t.raw}"
 
-  def body(t: TraversableType): String = t match {
-    case a : ArrayType =>
+  def body(t: MonadType): String = t match {
+    case _ : ArrayType =>
       s"""
          |  acc := make(${t.raw}, len(l))
          |  i := 0
@@ -22,7 +23,7 @@ object FuncFilter {
          |  return acc""".stripMargin
     case l : ListType =>
       s"""
-         |  acc := ${l.nilName}
+         |  acc := ${l.emptyName}
          |  xs := l
          |  for xs.NonEmpty() {
          |    if p(*xs.head) {
@@ -36,12 +37,12 @@ object FuncFilter {
          |  if l.IsDefined() {
          |    if p(*l.value) {
          |      return ${o.consView}(*l.value)
-         |    } else { return ${o.noneName} }
-         |  } else { return ${o.noneName} }""".stripMargin
+         |    } else { return ${o.emptyName} }
+         |  } else { return ${o.emptyName} }""".stripMargin
     case _ => s"""  panic("Filter() is not supported for ${t.raw}")"""
   }
 
-  def func(t: TraversableType): String =
+  def func(t: MonadType): String =
     s"""
        |${contract(t)} {
        |  ${body(t)}

@@ -1,19 +1,21 @@
 package com.zx80live.gofp.bootstrap
 
 import com.zx80live.gofp.bootstrap.functions._
-import com.zx80live.gofp.bootstrap.types.{ListType, OptionType, Predicate, Transformer}
+import com.zx80live.gofp.bootstrap.types.{BaseType, ListType, OptionType, Predicate, ArrayType, Transformer}
 
 
 object Bootstrap extends App {
+
   import IoUtils._
 
-  toFile("bootstrap_fequal.go", content = FuncEquals.functions)
-  toFile("bootstrap_ftostring.go", imports = Seq("fmt"), content = FuncToString.functions)
-  toFile("bootstrap_fmkstring.go", imports = Seq("fmt"), content = FuncMkString.functions)
-  toFile("bootstrap_ffilter.go", content = FuncFilter.functions)
-  toFile("bootstrap_fmap_option.go", content = FuncMap.functionsOption)
-  toFile("bootstrap_fmap_array.go", content = FuncMap.functionsArray)
-  toFile("bootstrap_fmap_list.go", content = FuncMap.functionsList)
+  toFile("bootstrap_func_equal.go", content = FuncEquals.functions)
+  toFile("bootstrap_func_tostring.go", imports = Seq("fmt"), content = FuncToString.functions)
+
+  //  toFile("bootstrap_fmkstring.go", imports = Seq("fmt"), content = FuncMkString.functions)
+  //  toFile("bootstrap_ffilter.go", content = FuncFilter.functions)
+  //  toFile("bootstrap_fmap_option.go", content = FuncMap.functionsOption)
+  //  toFile("bootstrap_fmap_array.go", content = FuncMap.functionsArray)
+  //  toFile("bootstrap_fmap_list.go", content = FuncMap.functionsList)
 
   toFile("bootstrap_transformer.go", content = Transformer.declarations)
   toFile("bootstrap_transformer_empty.go", content = Transformer.emptyDeclarations)
@@ -25,7 +27,7 @@ object Bootstrap extends App {
   toFile("bootstrap_predicate_xor.go", content = Predicate.functionsXor)
   toFile("bootstrap_predicate_neg.go", content = Predicate.functionsNeg)
 
-  toFile("bootstrap_option.go", content = OptionType.declarations ++ OptionType.noneDeclarations)
+  toFile("bootstrap_option.go", content = OptionType.declarations ++ OptionType.emptyDeclarations)
   toFile("bootstrap_option_cons.go", content = OptionType.functionsCons)
   toFile("bootstrap_option_isdefined.go", content = OptionType.functionsIsDefined)
   toFile("bootstrap_option_isempty.go", content = OptionType.functionsIsEmpty)
@@ -33,10 +35,10 @@ object Bootstrap extends App {
   toFile("bootstrap_option_foreach.go", content = OptionType.functionsForeach)
   toFile("bootstrap_option_filter.go", content = OptionType.functionsFilter)
   toFile("bootstrap_option_map.go", content = OptionType.functionsMap)
-  toFile("bootstrap_option_flatmap.go", content = OptionType.functionsFlatMap)
-  toFile("bootstrap_option_tostring.go", content = OptionType.functionsToString)
+  //  toFile("bootstrap_option_flatmap.go", content = OptionType.functionsFlatMap)
+  toFile("bootstrap_option_tostring.go", imports = Seq("fmt"), content = OptionType.functionsToString)
 
-  toFile("bootstrap_list.go", content = ListType.declarations ++ ListType.nilDeclarations)
+  toFile("bootstrap_list.go", content = ListType.declarations ++ ListType.emptyDeclarations)
   toFile("bootstrap_list_prepend.go", content = ListType.functionsPrepend)
   toFile("bootstrap_list_cons.go", content = ListType.functionsCons)
   toFile("bootstrap_list_isempty.go", content = ListType.functionsIsEmpty)
@@ -49,9 +51,20 @@ object Bootstrap extends App {
   toFile("bootstrap_list_copy.go", content = ListType.functionsCopy)
   toFile("bootstrap_list_filter.go", content = ListType.functionsFilter)
   toFile("bootstrap_list_map.go", content = ListType.functionsMap)
-  toFile("bootstrap_list_flatmap.go", content = ListType.functionsFlatMap)
+  //  toFile("bootstrap_list_flatmap.go", content = ListType.functionsFlatMap)
   toFile("bootstrap_list_size.go", content = ListType.functionsSize)
-  toFile("bootstrap_list_tostring.go", content = ListType.functionsToString)
+  toFile("bootstrap_list_tostring.go", imports = Seq("fmt"), content = ListType.functionsToString)
   toFile("bootstrap_list_equals.go", content = ListType.functionsEquals)
   toFile("bootstrap_list_toarray.go", content = ListType.functionsToArray)
+
+  toFile("bootstrap_array_drop.go", content = ArrayType.functionsDrop)
+  toFile("bootstrap_array_filter.go", content = ArrayType.functionsFilter)
+  toFile("bootstrap_array_foreach.go", content = ArrayType.functionsForeach)
+  toFile("bootstrap_array_head.go", content = ArrayType.functionsHead)
+  toFile("bootstrap_array_headoption.go", content = ArrayType.functionsHeadOption)
+  toFile("bootstrap_array_map.go", content = ArrayType.functionsMap)
+  toFile("bootstrap_array_size.go", content = ArrayType.functionsSize)
+  toFile("bootstrap_array_tail.go", content = ArrayType.functionsTail)
+  toFile("bootstrap_array_tolist.go", content = ArrayType.functionsToList)
+  toFile("bootstrap_array_mkstring.go", imports = Seq("fmt"), content = ArrayType.functionsMkString)
 }

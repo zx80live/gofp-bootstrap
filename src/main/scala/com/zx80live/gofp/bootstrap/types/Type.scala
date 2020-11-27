@@ -1,41 +1,33 @@
 package com.zx80live.gofp.bootstrap.types
 
-trait Type {
-  def underlined: Type
+import com.zx80live.gofp.bootstrap.functions.{FuncEquals, FuncToString}
 
+trait Type {
+
+  // int, []int, IntOption, IntList
   def raw: String
 
-  def alias: String = raw
+  // type <IntArray> = []int
+  def alias: String
 
-  def view: String = alias
+  // Int, IntArray, IntOption, IntList
+  def view: String
 
-  def declaration: String = ""
+  // type IntOption struct {}
+  def declaration: String
 
-  def consView: String = ""
+  def funcEquals: String
 
-  def core: Type = underlined match {
-    case SuperType => this
-    case _ => underlined.core
-  }
-
-  def nestedLevel: Int = {
-    def loop(t: Type, level: Int): Int = t match {
-      case SuperType => level
-      case _ => loop(t.underlined, level + 1)
-    }
-    loop(this, 0)
-  }
+  def funcToString: String
 
   override def toString: String =
     s"""
-       |raw:         $raw
-       |underlined:  ${underlined.raw}
-       |core:        ${core.raw}
-       |nestedLevel: ${nestedLevel}
-       |alias:       $alias
-       |view:        $view        // func ${view}ToString() string
-       |consView:    $consView    ${if (consView.nonEmpty) " \t\t\t // func " + consView + "(...) " + raw else ""}
-       |declare:     $declaration
+       |raw:          $raw
+       |alias:        $alias
+       |view:         $view
+       |declaration:  $declaration
+       |funcEquals:   $funcEquals
+       |funcToString: $funcToString
        |""".stripMargin
 }
 

@@ -8,16 +8,18 @@ object FuncEquals {
   def contract(t: Type): String = s"func ${name(t)}(a, b ${t.raw}) bool"
 
   def body(t: Type): String = t match {
-    case _: OptionType =>
-      s""" if a.IsDefined() { if b.IsDefined() { return ${name(t.underlined)}(*a.value, *b.value) } else { return false } } else if b.IsDefined() { return false } else { return true }"""
-
-    case _: ArrayType =>
-      s""" len1 := len(a); if len1 != len(b) { return false }; for i := 0; i < len1; i ++ { if !${name(t.underlined)}(a[i], b[i]) { return false } }; return true"""
-
-    case _: ListType =>
-      s""" if a.Size() != b.Size() { return false }; xs1 := a; xs2 := b; for xs1.NonEmpty() { if !${FuncEquals.name(t.underlined)}(*xs1.head, *xs2.head) { return false }; xs1 = *xs1.tail; xs2 = *xs2.tail }; return true"""
+    case _: BaseType =>
+      s""" return a == b """
+    case a: ArrayType =>
+      s"""
+         |  len1 := len(a)
+         |  if len1 != len(b) { return false }
+         |  for i, e := range a {
+         |    if ${FuncEquals.name(a.underlined)}(e, b[i]) { return false }
+         |  }
+         |  return true""".stripMargin
     case _ =>
-      s""" return a == b"""
+      s""" return a.Equals(b) """
   }
 
   def func(t: Type): String =

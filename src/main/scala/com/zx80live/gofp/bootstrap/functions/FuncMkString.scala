@@ -1,15 +1,16 @@
 package com.zx80live.gofp.bootstrap.functions
 
-import com.zx80live.gofp.bootstrap.types.{ArrayType, ListType, TraversableType, Type}
+import com.zx80live.gofp.bootstrap.types.{ArrayType, ListType, MonadType, Type}
 
+@deprecated
 object FuncMkString {
 
-  def name(t: TraversableType): String = s"MkString${t.view}"
+  def name(t: MonadType): String = s"MkString${t.view}"
 
-  def contract(t: TraversableType): String = s"func ${name(t)}(o ${t.raw}, start, sep, end string) string"
+  def contract(t: MonadType): String = s"func ${name(t)}(o ${t.raw}, start, sep, end string) string"
 
-  def body(t: TraversableType): String = t match {
-    case _: ArrayType =>
+  def body(t: MonadType): String = t match {
+    case a: ArrayType =>
       s"""
          |	 content := ""
          |	 for _, e := range o {
@@ -37,7 +38,7 @@ object FuncMkString {
          |""".stripMargin
   }
 
-  def func(t: TraversableType): String =
+  def func(t: MonadType): String =
     s"""
        |${contract(t)} {
        |  ${body(t)}

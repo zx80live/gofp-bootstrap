@@ -1,47 +1,142 @@
 package com.zx80live.gofp.bootstrap.types
 
-/*
- raw:
-   []int
-   [][]int
-   []OptionInt
+import com.zx80live.gofp.bootstrap.functions.FuncEquals
 
- declare:
-   type IntArr []int
-   type IntArrArr [][]int
-   type OptionIntArr []OptionInt
+case class ArrayType(override val underlined: Type) extends MonadType {
 
- cons:
-   var a IntArr = []int { 1,2,3 }
-   var a IntArrArr = [][]int { []int{1,2,3}, []int{4,5,6} }
-   var a OptionIntArr = []OptionInt { Int(1), Int(2), Int(3) }
-
- usage:
-   func <view>ToString
-   func IntArrToString(e []int) string
-   func IntArrArrToString(e [][]int) string
-   func OptionIntArrToString(e []OptionInt)
-
-   func IntArrEquals(a, b []int) bool
-   func IntArrArrEquals(a, b [][]int) bool
-   func OptionIntArrEquals(a, b []OptionInt) bool
-*/
-case class ArrayType(underlined: Type) extends TraversableType {
   override def raw: String = s"[]${underlined.raw}"
 
-  override def rawFrom(t: Type): String = s"[]${t.raw}"
+  override def emptyName: String = ""
 
-  override def nilNameFrom(t: Type): String = rawFrom(t)
+  override def view: String = s"${underlined.view}Array"
 
-  override def alias: String = underlined match {
-    case _: BaseType => s"${underlined.view}Arr"
-    case _ => s"${underlined.alias}Arr"
+  override def alias: String = raw
+
+  override def declaration: String = ""
+
+  override def consView: String = ""
+
+  override def funcCons: String = ""
+
+  override def emptyDeclaration: String = ""
+
+  override def funcHead: String =
+    s"""
+       |func (m $alias) Head() ${underlined.raw} { if m.Size() > 0 { return m[0] } else { panic("can't get head from empty $raw slice") } }""".stripMargin
+
+  override def funcHeadOption: String = {
+    val opt = OptionType(underlined)
+    s"""
+       |func (m $alias) HeadOption() ${opt.raw} { if m.Size() > 0 { return ${opt.consView}(m[0]) } else { return ${opt.emptyName} } }""".stripMargin
   }
 
-  override def declaration: String = s"type $alias $raw"
+  override def funcTail: String =
+    s"""
+       |func (m $alias) Tail() $raw { s := len(m); if s > 0 { return m[1:s-1] } else {return []${underlined.raw}{} } }""".stripMargin
+
+  override def funcSize: String =
+    s"""
+       |func (m $alias) Size() int { return len(m) }
+       |""".stripMargin
+
+  override def funcForeach: String =
+    s"""
+       |func (m $alias) Foreach(f func(${underlined.raw})) { for _, e := range m { f(e) } }""".stripMargin
+
+  override def funcFilter: String =
+    s"""
+       |func (m $alias) Filter(p ${Predicate(underlined).name}) $raw {
+       |  l := len(m)
+       |  acc := make($raw, l)
+       |  i := 0
+       |  for _, e := range m {
+       |    if p(e) { acc[i] = e; i ++ }
+       |  }
+       |  return acc[0:i]
+       |}""".stripMargin
+
+  override def funcMap(out: Type): String = {
+    val a2 = ArrayType(out)
+    s"""
+       |func (m $alias) Map${out.view}(f ${Transformer.name(underlined, out)}) ${a2.raw} {
+       |  l := len(m)
+       |  acc := make($raw, l)
+       |  for i, e := range m {
+       |    acc[i] = f(e)
+       |  }
+       |  return acc
+       |}""".stripMargin
+  }
+
+  override def funcDrop: String =
+    s"""
+       |func (m $alias) Drop(i int) $raw {
+       |  s := len(m)
+       |  if i < 0 || i >= s { panic ("index out of bound") }
+       |  if s > 0 { return m[i:s-1] } else { return make([]${underlined.raw}, 0) } }""".stripMargin
+
+  override def funcToList: String = {
+    val l = ListType(underlined)
+    s"""
+       |func (m $alias) ToList() ${l.raw} {
+       |  acc := ${l.emptyName}
+       |  for _, e := range m {
+       |    acc = acc.Cons(e)
+       |  }
+       |  return acc.Reverse()
+       |}""".stripMargin
+  }
+
+  override def funcEquals: String = ""
+
+  def funcMkString: String =
+    s"""
+       |func ${view}MkString(a $raw, start, sep, end string) string {
+       |	 content := ""
+       |	 for _, e := range a {
+       |	   content = fmt.Sprintf("%v%v%v", content, ${underlined.view}ToString(e), sep)
+       |	 }
+       |	 l := len(content)
+       |	 if l > 0 {
+       |		 content = content[:l-1]
+       |	 }
+       |	 return fmt.Sprintf("%v%v%v", start, content, end)
+       |}""".stripMargin
+
+  override def funcToString: String = ""
 }
 
 object ArrayType {
   def underlinedTypes: Seq[Type] = BaseType.types ++ BaseType.types.map(ArrayType.apply) ++ BaseType.types.map(OptionType.apply)
+
   def types: Seq[ArrayType] = underlinedTypes.map(ArrayType.apply)
+
+  def functionsHead: Seq[String] = types.map(_.funcHead)
+
+  def functionsHeadOption: Seq[String] = types.map(_.funcHeadOption)
+
+  def functionsTail: Seq[String] = types.map(_.funcTail)
+
+  def functionsSize: Seq[String] = types.map(_.funcSize)
+
+  def functionsForeach: Seq[String] = types.map(_.funcForeach)
+
+  def functionsFilter: Seq[String] = types.map(_.funcFilter)
+
+  def functionsMap: Seq[String] = {
+    val inTypes = types
+    val outTypes = types
+    for {
+      in <- inTypes
+      out <- outTypes
+    } yield in.funcMap(out)
+  }
+
+  def functionsDrop: Seq[String] = types.map(_.funcDrop)
+
+  def declarations: Seq[String] = types.map(_.declaration)
+
+  def functionsToList: Seq[String] = types.map(_.funcToList)
+
+  def functionsMkString: Seq[String] = types.map(_.funcMkString)
 }

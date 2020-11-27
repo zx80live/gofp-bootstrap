@@ -1,26 +1,18 @@
 package com.zx80live.gofp.bootstrap.types
 
-/*
- raw:
-   int, string, bool
-
- view:
-   Int, String, Bool
-
- usage:
-   func <view>ToString(e <this.raw>) <TO.raw>
-   func IntToString(e int) string
-
-   func <view>Equals(a, b <raw>) bool
-   func IntEquals(a, b int) bool
- */
 case class BaseType(value: String) extends Type {
-
-  override def underlined: Type = SuperType
 
   override def raw: String = value
 
   override def view: String = raw.capitalize
+
+  override def alias: String = view
+
+  override def declaration: String = ""
+
+  override def funcEquals: String = ""
+
+  override def funcToString: String = ""
 }
 
 object BaseType {
