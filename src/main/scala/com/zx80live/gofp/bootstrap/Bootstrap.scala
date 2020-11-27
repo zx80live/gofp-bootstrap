@@ -27,7 +27,8 @@ object Bootstrap extends App {
   toFile("bootstrap_predicate_xor.go", content = Predicate.functionsXor)
   toFile("bootstrap_predicate_neg.go", content = Predicate.functionsNeg)
 
-  toFile("bootstrap_option.go", content = OptionType.declarations ++ OptionType.emptyDeclarations)
+  toFile("bootstrap_option.go", content = OptionType.declarations)
+  toFile("bootstrap_option_none.go", content =  OptionType.emptyDeclarations)
   toFile("bootstrap_option_cons.go", content = OptionType.functionsCons)
   toFile("bootstrap_option_isdefined.go", content = OptionType.functionsIsDefined)
   toFile("bootstrap_option_isempty.go", content = OptionType.functionsIsEmpty)
@@ -38,7 +39,8 @@ object Bootstrap extends App {
   //  toFile("bootstrap_option_flatmap.go", content = OptionType.functionsFlatMap)
   toFile("bootstrap_option_tostring.go", imports = Seq("fmt"), content = OptionType.functionsToString)
 
-  toFile("bootstrap_list.go", content = ListType.declarations ++ ListType.emptyDeclarations)
+  toFile("bootstrap_list.go", content = ListType.declarations)
+  toFile("bootstrap_list_nil.go", content = ListType.emptyDeclarations)
   toFile("bootstrap_list_prepend.go", content = ListType.functionsPrepend)
   toFile("bootstrap_list_cons.go", content = ListType.functionsCons)
   toFile("bootstrap_list_isempty.go", content = ListType.functionsIsEmpty)
