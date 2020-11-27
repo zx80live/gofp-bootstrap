@@ -22,30 +22,30 @@ case class ArrayType(override val underlined: Type) extends MonadType {
 
   override def funcHead: String =
     s"""
-       |func (m $alias) Head() ${underlined.raw} { if m.Size() > 0 { return m[0] } else { panic("can't get head from empty $raw slice") } }""".stripMargin
+       |func ${view}Head(m $raw) ${underlined.raw} { if len(m) > 0 { return m[0] } else { panic("can't get head from empty $raw slice") } }""".stripMargin
 
   override def funcHeadOption: String = {
     val opt = OptionType(underlined)
     s"""
-       |func (m $alias) HeadOption() ${opt.raw} { if m.Size() > 0 { return ${opt.consView}(m[0]) } else { return ${opt.emptyName} } }""".stripMargin
+       |func ${view}HeadOption(m $raw) ${opt.raw} { if len(m) > 0 { return ${opt.consView}(m[0]) } else { return ${opt.emptyName} } }""".stripMargin
   }
 
   override def funcTail: String =
     s"""
-       |func (m $alias) Tail() $raw { s := len(m); if s > 0 { return m[1:s-1] } else {return []${underlined.raw}{} } }""".stripMargin
+       |func ${view}Tail(m $raw) $raw { s := len(m); if s > 0 { return m[1:s-1] } else {return []${underlined.raw}{} } }""".stripMargin
 
   override def funcSize: String =
     s"""
-       |func (m $alias) Size() int { return len(m) }
+       |func ${view}Size(m $raw) int { return len(m) }
        |""".stripMargin
 
   override def funcForeach: String =
     s"""
-       |func (m $alias) Foreach(f func(${underlined.raw})) { for _, e := range m { f(e) } }""".stripMargin
+       |func ${view}Foreach(m $raw, f func(${underlined.raw})) { for _, e := range m { f(e) } }""".stripMargin
 
   override def funcFilter: String =
     s"""
-       |func (m $alias) Filter(p ${Predicate(underlined).name}) $raw {
+       |func ${view}Filter(m $raw, p ${Predicate(underlined).name}) $raw {
        |  l := len(m)
        |  acc := make($raw, l)
        |  i := 0
@@ -58,9 +58,9 @@ case class ArrayType(override val underlined: Type) extends MonadType {
   override def funcMap(out: Type): String = {
     val a2 = ArrayType(out)
     s"""
-       |func (m $alias) Map${out.view}(f ${Transformer.name(underlined, out)}) ${a2.raw} {
+       |func ${view}Map${out.view}(m $raw, f ${Transformer.name(underlined, out)}) ${a2.raw} {
        |  l := len(m)
-       |  acc := make($raw, l)
+       |  acc := make(${a2.raw}, l)
        |  for i, e := range m {
        |    acc[i] = f(e)
        |  }
@@ -70,7 +70,7 @@ case class ArrayType(override val underlined: Type) extends MonadType {
 
   override def funcDrop: String =
     s"""
-       |func (m $alias) Drop(i int) $raw {
+       |func ${view}Drop(m $raw, i int) $raw {
        |  s := len(m)
        |  if i < 0 || i >= s { panic ("index out of bound") }
        |  if s > 0 { return m[i:s-1] } else { return make([]${underlined.raw}, 0) } }""".stripMargin
@@ -78,7 +78,7 @@ case class ArrayType(override val underlined: Type) extends MonadType {
   override def funcToList: String = {
     val l = ListType(underlined)
     s"""
-       |func (m $alias) ToList() ${l.raw} {
+       |func ${view}ToList(m $raw) ${l.raw} {
        |  acc := ${l.emptyName}
        |  for _, e := range m {
        |    acc = acc.Cons(e)
@@ -125,7 +125,7 @@ object ArrayType {
 
   def functionsMap: Seq[String] = {
     val inTypes = types
-    val outTypes = types
+    val outTypes = underlinedTypes
     for {
       in <- inTypes
       out <- outTypes

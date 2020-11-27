@@ -17,7 +17,7 @@ case class Transformer(in: Type, out: Type) {
 }
 
 object Transformer {
-  def name(in: Type, out: Type): String = s"${in.view}${out.view}Transformer"
+  def name(in: Type, out: Type): String = s"${in.view}To${out.view}Transformer"
 
   def emptyDeclarations: Seq[String] = (BaseType.types ++ OptionType.types ++ ArrayType.types ++ ListType.types).map(t => Transformer(t, t).emptyDeclaration)
 
