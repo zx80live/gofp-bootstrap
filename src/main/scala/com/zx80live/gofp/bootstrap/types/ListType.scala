@@ -1,12 +1,12 @@
 package com.zx80live.gofp.bootstrap.types
 
-import com.zx80live.gofp.bootstrap.functions.FuncEquals
+import com.zx80live.gofp.bootstrap.functions.{FuncEquals, FuncToString}
 
 case class ListType(override val underlined: Type) extends MonadType {
 
   override def raw: String = s"${underlined.view}List"
 
-  override def emptyName: String = s"Nil${underlined.view}s"
+  override def emptyName: String = s"Nil${underlined.view}"
 
   override def alias: String = raw
 
@@ -119,7 +119,7 @@ case class ListType(override val underlined: Type) extends MonadType {
   override def funcMap(out: Type): String = {
     val l = ListType(out)
     s"""
-       |func (l $raw) Map(f func(${underlined.raw}) ${out.raw}) ${l.raw} {
+       |func (l $raw) Map${out.view}(f func(${underlined.raw}) ${out.raw}) ${l.raw} {
        |  acc := ${l.emptyName}
        |  xs := l
        |  for xs.NonEmpty() {
@@ -157,6 +157,21 @@ case class ListType(override val underlined: Type) extends MonadType {
        |  }
        |  return true }""".stripMargin
 
+  def funcMkString: String =
+    s"""
+       |func (l $raw) MkString(start, sep, end string) string {
+       |   content := ""
+       |   xs := l
+       |   for xs.NonEmpty() {
+       |     content = fmt.Sprintf("%v%v%v", content, ${FuncToString.name(underlined)}(*xs.head), sep)
+       |     xs = *xs.tail
+       |   }
+       |	 s := len(content)
+       |	 if s > 0 {
+       |		 content = content[:s-1]
+       |	 }
+       |	 return fmt.Sprintf("%v%v%v", start, content, end)
+       |}""".stripMargin
 
   override def funcToString: String =
     s"""
@@ -202,6 +217,8 @@ object ListType {
     t <- Transformer.types
     if o.underlined == t.in
   } yield o.funcMap(t.out)
+
+  def functionsMkString: Seq[String] = types.map(_.funcMkString)
 
   def functionsToString: Seq[String] = types.map(_.funcToString)
 

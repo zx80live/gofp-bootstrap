@@ -55,6 +55,7 @@ object Bootstrap extends App {
   toFile("bootstrap_list_map.go", content = ListType.functionsMap)
   //  toFile("bootstrap_list_flatmap.go", content = ListType.functionsFlatMap)
   toFile("bootstrap_list_size.go", content = ListType.functionsSize)
+  toFile("bootstrap_list_mkstring.go", imports = Seq("fmt"), content = ListType.functionsMkString)
   toFile("bootstrap_list_tostring.go", imports = Seq("fmt"), content = ListType.functionsToString)
   toFile("bootstrap_list_equals.go", content = ListType.functionsEquals)
   toFile("bootstrap_list_toarray.go", content = ListType.functionsToArray)
