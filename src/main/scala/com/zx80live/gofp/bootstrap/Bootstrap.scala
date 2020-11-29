@@ -35,6 +35,7 @@ object Bootstrap extends App {
   toFile("bootstrap_option.go", content = OptionType.declarations)
   toFile("bootstrap_option_none.go", content =  OptionType.emptyDeclarations)
   toFile("bootstrap_option_cons.go", content = OptionType.functionsCons)
+  toFile("bootstrap_option_shortcons.go", content = OptionType.functionsShortCons)
   toFile("bootstrap_option_isdefined.go", content = OptionType.functionsIsDefined)
   toFile("bootstrap_option_isempty.go", content = OptionType.functionsIsEmpty)
   toFile("bootstrap_option_equals.go", content = OptionType.functionsEquals)

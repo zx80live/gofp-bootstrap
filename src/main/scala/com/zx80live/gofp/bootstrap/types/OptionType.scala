@@ -16,12 +16,7 @@ case class OptionType(override val underlined: Type) extends MonadType {
     s"""
        |type $raw struct { value *${underlined.raw} }""".stripMargin
 
-  override def consView: String = underlined match {
-    case t: BaseType if t == BaseType.GoAny => s"AnyOpt"
-    case _: BaseType => s"${underlined.view}"
-    case u: OptionType => s"${u.consView}${u.core.view}"
-    case _ => s"${underlined.view}Opt"
-  }
+  override def consView: String = s"Make${underlined.view}Option"
 
   override def emptyDeclaration: String =
     s"""
@@ -30,6 +25,16 @@ case class OptionType(override val underlined: Type) extends MonadType {
   override def funcCons: String =
     s"""
        |func $consView(e ${underlined.raw}) $raw { return $raw { &e } }""".stripMargin
+
+  def funcShortCons: String = underlined match {
+    case BaseType.GoAny =>
+      s"""
+         |func ${underlined.view}Opt(e ${underlined.raw}) $raw { return $raw { &e } }""".stripMargin
+    case _: BaseType =>
+      s"""
+         |func ${underlined.view}(e ${underlined.raw}) $raw { return $raw { &e } }""".stripMargin
+    case _ => ""
+  }
 
   def funcIsDefined: String =
     s"""
@@ -116,6 +121,8 @@ object OptionType {
   def emptyDeclarations: Seq[String] = types.map(_.emptyDeclaration)
 
   def functionsCons: Seq[String] = types.map(_.funcCons)
+
+  def functionsShortCons: Seq[String] = types.map(_.funcShortCons)
 
   def functionsIsDefined: Seq[String] = types.map(_.funcIsDefined)
 
