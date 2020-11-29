@@ -1,7 +1,7 @@
 package com.zx80live.gofp.bootstrap
 
 import com.zx80live.gofp.bootstrap.functions._
-import com.zx80live.gofp.bootstrap.types.{BaseType, ListType, OptionType, Predicate, ArrayType, Transformer}
+import com.zx80live.gofp.bootstrap.types._
 
 
 object Bootstrap extends App {
@@ -41,7 +41,7 @@ object Bootstrap extends App {
   toFile("bootstrap_option_foreach.go", content = OptionType.functionsForeach)
   toFile("bootstrap_option_filter.go", content = OptionType.functionsFilter)
   toFile("bootstrap_option_map.go", content = OptionType.functionsMap)
-  //  toFile("bootstrap_option_flatmap.go", content = OptionType.functionsFlatMap)
+  toFile("bootstrap_option_flatmap.go", content = OptionType.functionsFlatMap)
   toFile("bootstrap_option_tostring.go", imports = Seq("fmt"), content = OptionType.functionsToString)
 
   toFile("bootstrap_list.go", content = ListType.declarations)
@@ -58,7 +58,7 @@ object Bootstrap extends App {
   toFile("bootstrap_list_copy.go", content = ListType.functionsCopy)
   toFile("bootstrap_list_filter.go", content = ListType.functionsFilter)
   toFile("bootstrap_list_map.go", content = ListType.functionsMap)
-  //  toFile("bootstrap_list_flatmap.go", content = ListType.functionsFlatMap)
+  toFile("bootstrap_list_flatmap.go", content = ListType.functionsFlatMap)
   toFile("bootstrap_list_size.go", content = ListType.functionsSize)
   toFile("bootstrap_list_mkstring.go", imports = Seq("fmt"), content = ListType.functionsMkString)
   toFile("bootstrap_list_tostring.go", content = ListType.functionsToString)

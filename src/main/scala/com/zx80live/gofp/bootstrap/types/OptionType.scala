@@ -95,6 +95,15 @@ case class OptionType(override val underlined: Type) extends MonadType {
        |func (o $raw) ToString() string { if o.IsDefined() { return fmt.Sprintf("Some(%v)", ${FuncToString.name(underlined)}) } else { return "None" } }""".stripMargin
 
   override def setUnderlined(t: Type): MonadType = OptionType(t)
+
+  override def funcFlatMap(out: MonadType): String = out match {
+    case o: OptionType =>
+      s"""
+         |func (m $raw) FlatMap${out.underlined.view}(f func(${underlined.raw}) ${out.raw}) ${out.raw} {
+         |  if m.IsDefined() { return f(*m.value) } else { return ${o.emptyName} }
+         |}""".stripMargin
+    case _ => ???
+  }
 }
 
 object OptionType {
@@ -126,36 +135,12 @@ object OptionType {
 
   def functionsToString: Seq[String] = types.map(_.funcToString)
 
-  //  def functionsFlatMap: Seq[String] = {
-  //    val baseTypes = Seq(
-  //      BaseType.GoBool,
-  //      BaseType.GoAny,
-  //      BaseType.GoByte,
-  //      BaseType.GoInt,
-  //      BaseType.GoInt32,
-  //      BaseType.GoInt64,
-  //      BaseType.GoUInt,
-  //      BaseType.GoUInt64,
-  //      BaseType.GoUIntPtr,
-  //      BaseType.GoFloat32,
-  //      BaseType.GoFloat64,
-  //      BaseType.GoRune,
-  //      BaseType.GoString
-  //    )
-  //
-  //    val inTypes = (baseTypes ++ baseTypes.map(SliceType.apply) ++ baseTypes.map(ListType.apply) ++ baseTypes.map(OptionType.apply)).map(OptionType.apply)
-  //    val outTypes = inTypes
-  //
-  //    _functionsFlatMap(
-  //      inTypes = inTypes,
-  //      outTypes = outTypes)
-  //  }
-  //
-  //  private def _functionsFlatMap(inTypes: Seq[MonadType], outTypes: Seq[MonadType]) = {
-  //    for {
-  //      o1 <- inTypes
-  //      o2 <- outTypes
-  //    } yield o1.funcFlatMap(o2)
-  //  }
+  def functionsFlatMap: Seq[String] = {
+    val outTypes = BaseType.types.map(OptionType.apply)
+    for {
+      o1 <- types
+      o2 <- outTypes
+    } yield o1.funcFlatMap(o2)
+  }
 
 }

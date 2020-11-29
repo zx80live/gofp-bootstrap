@@ -1,7 +1,5 @@
 package com.zx80live.gofp.bootstrap.types
 
-import com.zx80live.gofp.bootstrap.functions.FuncEquals
-
 case class ArrayType(override val underlined: Type) extends MonadType {
 
   override def raw: String = s"[]${underlined.raw}"
@@ -106,6 +104,8 @@ case class ArrayType(override val underlined: Type) extends MonadType {
   override def funcToString: String = ""
 
   override def setUnderlined(t: Type): MonadType = ArrayType(t)
+
+  override def funcFlatMap(out: MonadType): String = ""
 }
 
 object ArrayType {

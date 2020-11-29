@@ -49,18 +49,28 @@ trait MonadType extends Type {
 
   def funcToList: String
 
-  //  def flatMapDeclaration(out: MonadType): String = s"func (m $raw) FlatMap${out.view}(f func(${underlined.raw}) ${out.raw}) ${rawFrom(out.underlined)}"
-  //
-  //  def funcFlatMap(out: MonadType): String = (this, out) match {
-  //    case (_ : OptionType, o2: OptionType) =>
-  //      s"""
-  //         |${flatMapDeclaration(out)} { if m.IsDefined() { return f(*m.value) } else { return ${o2.emptyName} } }""".stripMargin
-  //    case (_ : ListType, l2: ListType) =>
-  //      s"""
-  //         |${flatMapDeclaration(out)} { if m.IsEmpty() { return ${l2.emptyName} } else { acc := ${l2.emptyName}; xs := m; for xs.NonEmpty() { exs := f(*xs.head); for exs.NonEmpty() { acc = acc.Cons(*exs.head); exs = *exs.tail }; xs = *xs.tail }; return acc.Reverse() } }""".stripMargin
-  //    case _ =>
-  //      s"""
-  //         |${flatMapDeclaration(out)} { panic("does not supported: $raw.FlatMap(${out.raw})") } }
-  //         |""".stripMargin
-  //  }
+  // Monad[A].flatMap(A => Monad[B]): Monad[B]
+  def funcFlatMap(out: MonadType): String
+
+
+//  def funcFlatMap(out: MonadType): String = {
+//
+//    def flatMapDeclaration(out: MonadType): String = s"func (m $raw) FlatMap${out.view}(f func(${underlined.raw}) ${out.underlined.raw}) ${out.raw}"
+//
+//    (this, out) match {
+//      case (_: OptionType, o2: OptionType) =>
+//        s"""
+//           |${flatMapDeclaration(out)} { if m.IsDefined() { return f(*m.value) } else { return ${o2.emptyName} } }""".stripMargin
+//      case (_: ListType, l2: ListType) =>
+//        s"""
+//           |${flatMapDeclaration(out)} { if m.IsEmpty() { return ${l2.emptyName} } else { acc := ${l2.emptyName}; xs := m; for xs.NonEmpty() { exs := f(*xs.head); for exs.NonEmpty() { acc = acc.Cons(*exs.head); exs = *exs.tail }; xs = *xs.tail }; return acc.Reverse() } }""".stripMargin
+//      case (_: ListType, o2: OptionType) =>
+//        s"""
+//           |${flatMapDeclaration(out)} { if m.IsEmpty() { return ${o2.emptyName} } else { acc := ${o2.emptyName}; xs := m; for xs.NonEmpty() { exs := f(*xs.head); for exs.NonEmpty() { acc = acc.Cons(*exs.head); exs = *exs.tail }; xs = *xs.tail }; return acc.Reverse() } }""".stripMargin
+//      case _ =>
+//        s"""
+//           |${flatMapDeclaration(out)} { panic("does not supported: $raw.FlatMap(${out.raw})") } }
+//           |""".stripMargin
+//    }
+//  }
 }
