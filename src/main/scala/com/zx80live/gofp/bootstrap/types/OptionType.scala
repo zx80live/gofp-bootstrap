@@ -150,4 +150,8 @@ object OptionType {
     } yield o1.funcFlatMap(o2)
   }
 
+  def functionsFlatten: Seq[String] = {
+    val inTypes = BaseType.types.map(OptionType.apply).map(OptionType.apply)
+    inTypes.map(_.funcFlatten)
+  }
 }

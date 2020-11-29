@@ -242,4 +242,9 @@ object ListType {
       o2 <- outTypes
     } yield o1.funcFlatMap(o2)
   }
+
+  def functionsFlatten: Seq[String] = {
+    val inTypes = BaseType.types.map(ListType.apply).map(ListType.apply)
+    inTypes.map(_.funcFlatten)
+  }
 }

@@ -43,6 +43,7 @@ object Bootstrap extends App {
   toFile("bootstrap_option_filter.go", content = OptionType.functionsFilter)
   toFile("bootstrap_option_map.go", content = OptionType.functionsMap)
   toFile("bootstrap_option_flatmap.go", content = OptionType.functionsFlatMap)
+  toFile("bootstrap_option_flatten.go", content = OptionType.functionsFlatten)
   toFile("bootstrap_option_tostring.go", imports = Seq("fmt"), content = OptionType.functionsToString)
 
   toFile("bootstrap_list.go", content = ListType.declarations)
@@ -60,6 +61,7 @@ object Bootstrap extends App {
   toFile("bootstrap_list_filter.go", content = ListType.functionsFilter)
   toFile("bootstrap_list_map.go", content = ListType.functionsMap)
   toFile("bootstrap_list_flatmap.go", content = ListType.functionsFlatMap)
+  toFile("bootstrap_list_flatten.go", content = ListType.functionsFlatten)
   toFile("bootstrap_list_size.go", content = ListType.functionsSize)
   toFile("bootstrap_list_mkstring.go", imports = Seq("fmt"), content = ListType.functionsMkString)
   toFile("bootstrap_list_tostring.go", content = ListType.functionsToString)
