@@ -185,6 +185,11 @@ case class ListType(override val underlined: Type) extends MonadType {
          |func (m $raw) FlatMap${out.underlined.view}(f func(${underlined.raw}) ${out.raw}) ${out.raw} { if m.IsEmpty() { return ${l.emptyName} } else { acc := ${l.emptyName}; xs := m; for xs.NonEmpty() { exs := f(*xs.head); for exs.NonEmpty() { acc = acc.Cons(*exs.head); exs = *exs.tail }; xs = *xs.tail }; return acc.Reverse() } }""".stripMargin
     case _ => ???
   }
+
+  override def funcReduce: String =
+    s"""
+       |func (l $raw) Reduce(f func(${underlined.raw}, ${underlined.raw}) ${underlined.raw}) ${underlined.raw} {
+       |  if l.IsEmpty() { panic("Can't reduce empty list") } else if l.tail.IsEmpty() { return *l.head } else { return f(*l.head, l.tail.Reduce(f) ) } }""".stripMargin
 }
 
 object ListType {
@@ -247,4 +252,6 @@ object ListType {
     val inTypes = BaseType.types.map(ListType.apply).map(ListType.apply)
     inTypes.map(_.funcFlatten)
   }
+
+  def functionsReduce: Seq[String] = types.map(_.funcReduce)
 }

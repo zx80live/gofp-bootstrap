@@ -108,6 +108,8 @@ case class ArrayType(override val underlined: Type) extends MonadType {
   override def funcFlatMap(out: MonadType): String = ""
 
   override def funcFlatten: String = ""
+
+  override def funcReduce: String = ""
 }
 
 object ArrayType {

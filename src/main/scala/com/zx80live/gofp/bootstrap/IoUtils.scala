@@ -23,6 +23,7 @@ object IoUtils {
       )
       content foreach writer.write
     } finally {
+      writer.flush()
       writer.close()
     }
   }

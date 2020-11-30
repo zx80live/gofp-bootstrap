@@ -109,6 +109,8 @@ case class OptionType(override val underlined: Type) extends MonadType {
          |}""".stripMargin
     case _ => ???
   }
+
+  override def funcReduce: String = ""
 }
 
 object OptionType {

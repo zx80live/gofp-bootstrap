@@ -49,6 +49,8 @@ trait MonadType extends Type {
 
   def funcToList: String
 
+  def funcReduce: String
+
   // Monad[A].flatMap(A => Monad[B]): Monad[B]
   def funcFlatMap(out: MonadType): String
 

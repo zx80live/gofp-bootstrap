@@ -3,7 +3,14 @@ package com.zx80live.gofp.bootstrap
 import com.zx80live.gofp.bootstrap.functions._
 import com.zx80live.gofp.bootstrap.types._
 
-
+//TODO reduce
+//TODO foldLeft
+//TODO zipWithIndex
+//TODO zip
+//TODO zipWith
+//TODO count, take, dropRight
+//TODO base predicates (find by regexp)
+//TODO base transformers (String->Int)
 object Bootstrap extends App {
 
   import IoUtils._
@@ -67,5 +74,6 @@ object Bootstrap extends App {
   toFile("bootstrap_list_tostring.go", content = ListType.functionsToString)
   toFile("bootstrap_list_equals.go", content = ListType.functionsEquals)
   toFile("bootstrap_list_toarray.go", content = ListType.functionsToArray)
+  toFile("bootstrap_list_reduce.go", content = ListType.functionsReduce)
 
 }
