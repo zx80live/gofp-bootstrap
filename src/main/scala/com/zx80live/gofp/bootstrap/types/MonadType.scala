@@ -61,4 +61,6 @@ trait MonadType extends Type {
          |  return m.FlatMap${u.underlined.view}(func(e ${u.raw}) ${u.raw} { return e }) }""".stripMargin
     case _ => ""
   }
+
+  def funcFoldLeft(out: Type): String
 }

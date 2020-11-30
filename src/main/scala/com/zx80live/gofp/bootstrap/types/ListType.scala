@@ -190,6 +190,13 @@ case class ListType(override val underlined: Type) extends MonadType {
     s"""
        |func (l $raw) Reduce(f func(${underlined.raw}, ${underlined.raw}) ${underlined.raw}) ${underlined.raw} {
        |  if l.IsEmpty() { panic("Can't reduce empty list") } else if l.tail.IsEmpty() { return *l.head } else { return f(*l.head, l.tail.Reduce(f) ) } }""".stripMargin
+
+  override def funcFoldLeft(out: Type): String =
+    s"""
+       |func (l $raw) FoldLeft${out.view}(z ${out.raw}, f func(${out.raw}, ${underlined.raw}) ${out.raw}) ${out.raw} {
+       |  acc := z
+       |  l.Foreach(func (e ${underlined.raw}) { acc = f(acc, e) })
+       |  return acc}""".stripMargin
 }
 
 object ListType {
@@ -254,4 +261,13 @@ object ListType {
   }
 
   def functionsReduce: Seq[String] = types.map(_.funcReduce)
+
+  def functionsFoldLeft: Seq[String] = {
+    val inTypes = BaseType.reducedTypes.map(ListType.apply) ++ BaseType.reducedTypes.map(OptionType.apply).map(ListType.apply)
+    val outTypes = BaseType.reducedTypes ++ BaseType.reducedTypes.map(ListType.apply)
+    for {
+      t <- inTypes
+      out <- outTypes
+    } yield t.funcFoldLeft(out)
+  }
 }

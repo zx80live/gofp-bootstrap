@@ -58,4 +58,16 @@ object BaseType {
     GoComplex64,
     GoComplex128,
     GoAny)
+
+  def reducedTypes: Seq[BaseType] = Seq(
+    GoBool,
+    GoString,
+    GoInt,
+    GoInt64,
+    GoByte,
+    GoRune,
+    GoFloat32,
+    GoFloat64,
+    GoAny
+  )
 }

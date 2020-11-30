@@ -111,6 +111,11 @@ case class OptionType(override val underlined: Type) extends MonadType {
   }
 
   override def funcReduce: String = ""
+
+  override def funcFoldLeft(out: Type): String =
+    s"""
+       |func (o $raw) FoldLeft${out.view}(z ${out.raw}, f func(${out.raw}, ${underlined.raw}) ${out.raw}) ${out.raw} {
+       |  if o.IsDefined() { return f(z, *o.value) } else { return z }}""".stripMargin
 }
 
 object OptionType {
@@ -155,5 +160,14 @@ object OptionType {
   def functionsFlatten: Seq[String] = {
     val inTypes = BaseType.types.map(OptionType.apply).map(OptionType.apply)
     inTypes.map(_.funcFlatten)
+  }
+
+  def functionsFoldLeft: Seq[String] = {
+    val inTypes = BaseType.types.map(OptionType.apply)
+    val outTypes = BaseType.reducedTypes
+    for {
+      in <- inTypes
+      out <- outTypes
+    } yield in.funcFoldLeft(out)
   }
 }

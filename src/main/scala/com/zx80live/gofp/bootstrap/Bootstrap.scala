@@ -3,7 +3,6 @@ package com.zx80live.gofp.bootstrap
 import com.zx80live.gofp.bootstrap.functions._
 import com.zx80live.gofp.bootstrap.types._
 
-//TODO foldLeft
 //TODO zipWithIndex
 //TODO zip
 //TODO zipWith
@@ -51,6 +50,7 @@ object Bootstrap extends App {
   toFile("bootstrap_option_flatmap.go", content = OptionType.functionsFlatMap)
   toFile("bootstrap_option_flatten.go", content = OptionType.functionsFlatten)
   toFile("bootstrap_option_tostring.go", imports = Seq("fmt"), content = OptionType.functionsToString)
+  toFile("bootstrap_option_foldleft.go", content = OptionType.functionsFoldLeft)
 
   toFile("bootstrap_list.go", content = ListType.declarations)
   toFile("bootstrap_list_nil.go", content = ListType.emptyDeclarations)
@@ -74,5 +74,6 @@ object Bootstrap extends App {
   toFile("bootstrap_list_equals.go", content = ListType.functionsEquals)
   toFile("bootstrap_list_toarray.go", content = ListType.functionsToArray)
   toFile("bootstrap_list_reduce.go", content = ListType.functionsReduce)
+  toFile("bootstrap_list_foldleft.go", content = ListType.functionsFoldLeft)
 
 }
