@@ -1,6 +1,6 @@
 package com.zx80live.gofp.bootstrap.types
 
-import com.zx80live.gofp.bootstrap.types.BaseType.{GoAny, GoString}
+import com.zx80live.gofp.bootstrap.types.BaseType.{GoAny, GoInt, GoInt16, GoInt32, GoInt8, GoString}
 
 case class BaseType(value: String) extends Type {
 
@@ -58,6 +58,16 @@ case class BaseType(value: String) extends Type {
          |func (a $boxedRaw) Cons(b $boxedRaw) ${ListType(this).raw} {
          |  return ${ListType(this).emptyName}.Cons(a.Underlined()).Cons(b.Underlined()) }""".stripMargin
   }
+
+  def funcMin: String = if (BaseType.numericTypes.contains(this)) {
+    s"""
+       |func (a $boxedRaw) Min(b $boxedRaw) $boxedRaw {if a <= b { return a } else { return b}}""".stripMargin
+  } else ""
+
+  def funcMax: String = if (BaseType.numericTypes.contains(this)) {
+    s"""
+       |func (a $boxedRaw) Max(b $boxedRaw) $boxedRaw {if a > b { return a } else { return b}}""".stripMargin
+  } else ""
 }
 
 object BaseType {
@@ -81,6 +91,10 @@ object BaseType {
   val GoComplex64: BaseType = BaseType("complex64")
   val GoComplex128: BaseType = BaseType("complex128")
   val GoAny: BaseType = BaseType("Any")
+
+  def numericTypes: Seq[BaseType] = Seq(
+    GoInt, GoInt8, GoInt16, GoInt32, GoInt64, GoUInt, GoUInt8, GoUInt16, GoUInt32, GoUInt64, GoUIntPtr, GoByte, GoRune, GoFloat32, GoFloat64
+  )
 
   def types: Seq[BaseType] = Seq(
     GoBool,
@@ -123,4 +137,6 @@ object BaseType {
   def functionsConverters: Seq[String] = types.map(_.funcToInt) ++ types.map(_.funcToIntOption)
 
   def functionsCons: Seq[String] = reducedTypes.map(_.funcCons)
+
+  def functionsMath: Seq[String] = reducedTypes.map(_.funcMin) ++ reducedTypes.map(_.funcMax)
 }
