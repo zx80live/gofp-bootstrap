@@ -1,5 +1,7 @@
 package com.zx80live.gofp.bootstrap.types
 
+import com.zx80live.gofp.bootstrap.types.BaseType.{GoAny, GoString}
+
 case class BaseType(value: String) extends Type {
 
   override def raw: String = value
@@ -13,6 +15,30 @@ case class BaseType(value: String) extends Type {
   override def funcEquals: String = ""
 
   override def funcToString: String = ""
+
+  def boxedRaw: String = view
+
+  def boxedView: String = boxedRaw
+
+  def boxedDeclaration: String = if (this != GoAny) {
+    s"""
+       |type $boxedRaw $raw""".stripMargin
+  } else ""
+
+  def funcUnderlined: String = this match {
+    case GoAny => ""
+    case _ =>
+      s"""
+         |func (e $boxedRaw) Underlined() $raw { return $raw(e) }""".stripMargin
+  }
+
+  def funcToInt: String = this match {
+    case GoString =>
+      s"""
+         |func (e ${boxedRaw}) ToInt() Int
+         |""".stripMargin
+    case _ => ""
+  }
 }
 
 object BaseType {
@@ -70,4 +96,8 @@ object BaseType {
     GoFloat64,
     GoAny
   )
+
+  def boxedDeclarations: Seq[String] = types.map(_.boxedDeclaration)
+
+  def functionsUnderlined: Seq[String] = types.map(_.funcUnderlined)
 }

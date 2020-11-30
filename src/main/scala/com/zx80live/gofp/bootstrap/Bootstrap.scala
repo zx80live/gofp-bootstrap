@@ -13,6 +13,9 @@ object Bootstrap extends App {
 
   import IoUtils._
 
+  toFile("bootstrap_base.go", content = BaseType.boxedDeclarations)
+  toFile("bootstrap_base_underlined.go", content = BaseType.functionsUnderlined)
+
   toFile("bootstrap_func_equal.go", content = FuncEquals.functions)
   toFile("bootstrap_func_tostring.go", imports = Seq("fmt"), content = FuncToString.functions)
 
@@ -23,8 +26,8 @@ object Bootstrap extends App {
   toFile("bootstrap_predicate_xor.go", content = Predicate.functionsXor)
   toFile("bootstrap_predicate_neg.go", content = Predicate.functionsNeg)
 
-//  toFile("bootstrap_transformer.go", content = Transformer.declarations)
-//  toFile("bootstrap_transformer_empty.go", content = Transformer.emptyDeclarations)
+  //  toFile("bootstrap_transformer.go", content = Transformer.declarations)
+  //  toFile("bootstrap_transformer_empty.go", content = Transformer.emptyDeclarations)
 
   toFile("bootstrap_array_drop.go", content = ArrayType.functionsDrop)
   toFile("bootstrap_array_filter.go", content = ArrayType.functionsFilter)
@@ -38,7 +41,7 @@ object Bootstrap extends App {
   toFile("bootstrap_array_mkstring.go", imports = Seq("fmt"), content = ArrayType.functionsMkString)
 
   toFile("bootstrap_option.go", content = OptionType.declarations)
-  toFile("bootstrap_option_none.go", content =  OptionType.emptyDeclarations)
+  toFile("bootstrap_option_none.go", content = OptionType.emptyDeclarations)
   toFile("bootstrap_option_cons.go", content = OptionType.functionsCons)
   toFile("bootstrap_option_shortcons.go", content = OptionType.functionsShortCons)
   toFile("bootstrap_option_isdefined.go", content = OptionType.functionsIsDefined)

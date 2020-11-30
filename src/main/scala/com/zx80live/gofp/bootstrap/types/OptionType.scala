@@ -26,15 +26,9 @@ case class OptionType(override val underlined: Type) extends MonadType {
     s"""
        |func $consView(e ${underlined.raw}) $raw { return $raw { &e } }""".stripMargin
 
-  def funcShortCons: String = underlined match {
-    case BaseType.GoAny =>
-      s"""
-         |func ${underlined.view}Opt(e ${underlined.raw}) $raw { return $raw { &e } }""".stripMargin
-    case _: BaseType =>
-      s"""
-         |func ${underlined.view}(e ${underlined.raw}) $raw { return $raw { &e } }""".stripMargin
-    case _ => ""
-  }
+  def funcShortCons: String =
+    s"""
+       |func ${underlined.view}Opt(e ${underlined.raw}) $raw { return $raw { &e } }""".stripMargin
 
   def funcIsDefined: String =
     s"""
