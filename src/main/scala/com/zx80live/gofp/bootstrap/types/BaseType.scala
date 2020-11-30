@@ -68,6 +68,28 @@ case class BaseType(value: String) extends Type {
     s"""
        |func (a $boxedRaw) Max(b $boxedRaw) $boxedRaw {if a > b { return a } else { return b}}""".stripMargin
   } else ""
+
+  //TODO optimize: create RangeType with step instead of ListType
+  def funcTo: String = if (BaseType.integerTypes.contains(this)) {
+    s"""
+       |func (n $boxedRaw) To(t $boxedRaw) ${ListType(this).raw} {
+       |  acc := ${ListType(this).emptyName}
+       |  for i := n.Underlined(); i <= t.Underlined(); i++ {
+       |    acc = acc.Cons(i)
+       |  }
+       |  return acc.Reverse() }""".stripMargin
+  } else ""
+
+  //TODO optimize: create RangeType with step instead of ListType
+  def funcUntil: String = if (BaseType.integerTypes.contains(this)) {
+    s"""
+       |func (n $boxedRaw) Until(t $boxedRaw) ${ListType(this).raw} {
+       |  acc := ${ListType(this).emptyName}
+       |  for i := n.Underlined(); i < t.Underlined(); i++ {
+       |    acc = acc.Cons(i)
+       |  }
+       |  return acc.Reverse() }""".stripMargin
+  } else ""
 }
 
 object BaseType {
@@ -94,6 +116,10 @@ object BaseType {
 
   def numericTypes: Seq[BaseType] = Seq(
     GoInt, GoInt8, GoInt16, GoInt32, GoInt64, GoUInt, GoUInt8, GoUInt16, GoUInt32, GoUInt64, GoUIntPtr, GoByte, GoRune, GoFloat32, GoFloat64
+  )
+
+  def integerTypes: Seq[BaseType] = Seq(
+    GoInt, GoInt8, GoInt16, GoInt32, GoInt64, GoUInt, GoUInt8, GoUInt16, GoUInt32, GoUInt64, GoUIntPtr, GoByte, GoRune
   )
 
   def types: Seq[BaseType] = Seq(
@@ -139,4 +165,9 @@ object BaseType {
   def functionsCons: Seq[String] = reducedTypes.map(_.funcCons)
 
   def functionsMath: Seq[String] = reducedTypes.map(_.funcMin) ++ reducedTypes.map(_.funcMax)
+
+  def functionsRange: Seq[String] = {
+    val types = Seq(GoInt, GoByte)
+    types.map(_.funcTo) ++ types.map(_.funcUntil)
+  }
 }

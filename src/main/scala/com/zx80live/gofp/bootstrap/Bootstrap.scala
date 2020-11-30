@@ -18,6 +18,7 @@ object Bootstrap extends App {
   toFile("bootstrap_base_underlined.go", content = BaseType.functionsUnderlined)
   toFile("bootstrap_base_converters.go", imports = Seq("fmt", "strconv"), content = BaseType.functionsConverters)
   toFile("bootstrap_base_math.go", content = BaseType.functionsMath)
+  toFile("bootstrap_base_range.go", content = BaseType.functionsRange)
 
   toFile("bootstrap_func_equal.go", content = FuncEquals.functions)
   toFile("bootstrap_func_tostring.go", imports = Seq("fmt"), content = FuncToString.functions)
