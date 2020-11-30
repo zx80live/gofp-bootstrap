@@ -3,7 +3,6 @@ package com.zx80live.gofp.bootstrap
 import com.zx80live.gofp.bootstrap.functions._
 import com.zx80live.gofp.bootstrap.types._
 
-//TODO reduce
 //TODO foldLeft
 //TODO zipWithIndex
 //TODO zip
