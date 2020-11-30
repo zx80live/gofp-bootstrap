@@ -32,6 +32,7 @@ object Bootstrap extends App {
   //  toFile("bootstrap_transformer.go", content = Transformer.declarations)
   //  toFile("bootstrap_transformer_empty.go", content = Transformer.emptyDeclarations)
 
+  toFile("bootstrap_array.go", content = ArrayType.declarations)
   toFile("bootstrap_array_drop.go", content = ArrayType.functionsDrop)
   toFile("bootstrap_array_filter.go", content = ArrayType.functionsFilter)
   toFile("bootstrap_array_foreach.go", content = ArrayType.functionsForeach)
@@ -82,5 +83,6 @@ object Bootstrap extends App {
   toFile("bootstrap_list_reduce.go", content = ListType.functionsReduce)
   toFile("bootstrap_list_foldleft.go", content = ListType.functionsFoldLeft)
   toFile("bootstrap_list_find.go", content = ListType.functionsFind)
+  toFile("bootstrap_list_groupby.go", content = ListType.functionsGroupBy)
 
 }

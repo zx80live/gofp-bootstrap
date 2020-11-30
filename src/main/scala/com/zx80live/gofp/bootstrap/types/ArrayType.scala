@@ -8,9 +8,11 @@ case class ArrayType(override val underlined: Type) extends MonadType {
 
   override def view: String = s"${underlined.view}Array"
 
-  override def alias: String = raw
+  override def alias: String = view
 
-  override def declaration: String = ""
+  override def declaration: String =
+    s"""
+       |type $alias $raw""".stripMargin
 
   override def consView: String = ""
 

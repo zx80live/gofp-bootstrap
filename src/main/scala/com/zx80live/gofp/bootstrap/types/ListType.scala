@@ -207,6 +207,31 @@ case class ListType(override val underlined: Type) extends MonadType {
        |    xs = *xs.tail
        |  }
        |  return ${OptionType(underlined).emptyName}}""".stripMargin
+
+
+  def funcGroupBy(out: Type): String = out match {
+    case _: ArrayType =>
+      ""
+    case _ =>
+      s"""
+         |func (l $raw) GroupBy${out.view}(f func(${underlined.raw}) ${out.raw}) map[${out.raw}]${ListType(underlined).raw} {
+         |	m := make(map[${out.raw}]${ListType(underlined).raw})
+         |
+         |	l.Foreach(func(e ${underlined.raw}) {
+         |		key := f(e)
+         |		var group ${ListType(underlined).raw}
+         |
+         |		if value, found := m[key]; found {
+         |			group = value
+         |		} else {
+         |			group = ${ListType(underlined).emptyName}
+         |		}
+         |		group = group.Cons(e)
+         |		m[key] = group
+         |	})
+         |
+         |	return m }""".stripMargin
+  }
 }
 
 object ListType {
@@ -291,4 +316,16 @@ object ListType {
   }
 
   def functionsFind: Seq[String] = types.map(_.funcFind)
+
+  def functionsGroupBy: Seq[String] = {
+    types.map(t => t.funcGroupBy(t.underlined))
+    //  {
+    //    val inTypes = types
+    //    val outTypes = types.map(_.underlined)
+    //    for {
+    //      in <- inTypes
+    //      out <- outTypes
+    //    } yield in.funcGroupBy(out)
+    //  }
+  }
 }
