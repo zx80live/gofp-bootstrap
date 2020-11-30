@@ -14,6 +14,7 @@ object Bootstrap extends App {
   import IoUtils._
 
   toFile("bootstrap_base.go", content = BaseType.boxedDeclarations)
+  toFile("bootstrap_base_cons.go", content = BaseType.functionsCons)
   toFile("bootstrap_base_underlined.go", content = BaseType.functionsUnderlined)
   toFile("bootstrap_base_converters.go", imports = Seq("fmt", "strconv"), content = BaseType.functionsConverters)
 

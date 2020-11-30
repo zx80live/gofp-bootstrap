@@ -49,6 +49,15 @@ case class BaseType(value: String) extends Type {
          |  if err != nil { return NoneInt } else { return IntOpt(i) } }""".stripMargin
     case _ => ""
   }
+
+  def funcCons: String = this match {
+    case GoAny =>
+      ""
+    case _ =>
+      s"""
+         |func (a $boxedRaw) Cons(b $boxedRaw) ${ListType(this).raw} {
+         |  return ${ListType(this).emptyName}.Cons(a.Underlined()).Cons(b.Underlined()) }""".stripMargin
+  }
 }
 
 object BaseType {
@@ -112,4 +121,6 @@ object BaseType {
   def functionsUnderlined: Seq[String] = types.map(_.funcUnderlined)
 
   def functionsConverters: Seq[String] = types.map(_.funcToInt) ++ types.map(_.funcToIntOption)
+
+  def functionsCons: Seq[String] = reducedTypes.map(_.funcCons)
 }
