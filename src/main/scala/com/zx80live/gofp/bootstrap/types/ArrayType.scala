@@ -56,7 +56,7 @@ case class ArrayType(override val underlined: Type) extends MonadType {
   override def funcMap(out: Type): String = {
     val a2 = ArrayType(out)
     s"""
-       |func ${view}Map${out.view}(m $raw, f ${Transformer.name(underlined, out)}) ${a2.raw} {
+       |func ${view}Map${out.view}(m $raw, f func(${underlined.raw}) ${out.raw}) ${a2.raw} {
        |  l := len(m)
        |  acc := make(${a2.raw}, l)
        |  for i, e := range m {
@@ -115,9 +115,21 @@ case class ArrayType(override val underlined: Type) extends MonadType {
 }
 
 object ArrayType {
-  def underlinedTypes: Seq[Type] = BaseType.types ++ BaseType.types.map(ArrayType.apply) ++ BaseType.types.map(OptionType.apply)
 
-  def types: Seq[ArrayType] = underlinedTypes.map(ArrayType.apply)
+  def allowedBaseTypes: Seq[BaseType] = BaseType.reducedTypes
+
+  def types: Seq[ArrayType] =
+    allowedBaseTypes.map(ArrayType.apply) ++ // Array[T]
+      allowedBaseTypes.map(ArrayType.apply).map(ArrayType.apply) // Array[Array[T]]
+
+  def transformers: Seq[Transformer] = {
+    val inTypes = types.map(_.underlined).distinct
+    val outTypes = inTypes
+    for {
+      in <- inTypes
+      out <- outTypes
+    } yield Transformer(in, out)
+  }
 
   def functionsHead: Seq[String] = types.map(_.funcHead)
 
@@ -131,14 +143,7 @@ object ArrayType {
 
   def functionsFilter: Seq[String] = types.map(_.funcFilter)
 
-  def functionsMap: Seq[String] = {
-    val inTypes = types
-    val outTypes = underlinedTypes
-    for {
-      in <- inTypes
-      out <- outTypes
-    } yield in.funcMap(out)
-  }
+  def functionsMap: Seq[String] = transformers.map(t => ArrayType(t.in).funcMap(t.out))
 
   def functionsDrop: Seq[String] = types.map(_.funcDrop)
 

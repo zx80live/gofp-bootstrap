@@ -200,10 +200,23 @@ case class ListType(override val underlined: Type) extends MonadType {
 }
 
 object ListType {
-  def underlinedTypes: Seq[Type] = BaseType.types ++ OptionType.types ++ ArrayType.types
 
-  //TODO reduce list types
-  def types: Seq[ListType] = (BaseType.types ++ OptionType.types ++ ArrayType.types ++ BaseType.types.map(ListType.apply)).map(ListType.apply)
+  def allowedBaseTypes: Seq[BaseType] = BaseType.reducedTypes
+
+  def types: Seq[ListType] =
+    allowedBaseTypes.map(ListType.apply) ++ // List[T]
+      allowedBaseTypes.map(ArrayType.apply).map(ListType.apply) ++ // List[Array[T]]
+      allowedBaseTypes.map(OptionType.apply).map(ListType.apply) ++ // List[Option[T]]
+      allowedBaseTypes.map(ListType.apply).map(ListType.apply) // List[List[T]]
+
+  def transformers: Seq[Transformer] = {
+    val inTypes = types.map(_.underlined).distinct
+    val outTypes = inTypes
+    for {
+      in <- inTypes
+      out <- outTypes
+    } yield Transformer(in, out)
+  }
 
   def declarations: Seq[String] = types.map(_.declaration)
 
@@ -233,11 +246,7 @@ object ListType {
 
   def functionsSize: Seq[String] = types.map(_.funcSize)
 
-  def functionsMap: Seq[String] = for {
-    o <- types
-    t <- Transformer.types
-    if o.underlined == t.in
-  } yield o.funcMap(t.out)
+  def functionsMap: Seq[String] = transformers.map(t => ListType(t.in).funcMap(t.out))
 
   def functionsMkString: Seq[String] = types.map(_.funcMkString)
 
@@ -248,7 +257,7 @@ object ListType {
   def functionsToArray: Seq[String] = types.map(_.funcToArray)
 
   def functionsFlatMap: Seq[String] = {
-    val outTypes = BaseType.types.map(ListType.apply)
+    val outTypes = allowedBaseTypes.map(ListType.apply)
     for {
       o1 <- types
       o2 <- outTypes
@@ -256,15 +265,15 @@ object ListType {
   }
 
   def functionsFlatten: Seq[String] = {
-    val inTypes = BaseType.types.map(ListType.apply).map(ListType.apply)
+    val inTypes = allowedBaseTypes.map(ListType.apply).map(ListType.apply)
     inTypes.map(_.funcFlatten)
   }
 
   def functionsReduce: Seq[String] = types.map(_.funcReduce)
 
   def functionsFoldLeft: Seq[String] = {
-    val inTypes = BaseType.reducedTypes.map(ListType.apply) ++ BaseType.reducedTypes.map(OptionType.apply).map(ListType.apply)
-    val outTypes = BaseType.reducedTypes ++ BaseType.reducedTypes.map(ListType.apply)
+    val inTypes = allowedBaseTypes.map(ListType.apply) ++ allowedBaseTypes.map(OptionType.apply).map(ListType.apply)
+    val outTypes = allowedBaseTypes ++ allowedBaseTypes.map(ListType.apply)
     for {
       t <- inTypes
       out <- outTypes

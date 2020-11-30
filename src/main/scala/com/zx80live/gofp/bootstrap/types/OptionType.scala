@@ -71,7 +71,7 @@ case class OptionType(override val underlined: Type) extends MonadType {
   override def funcMap(out: Type): String = {
     val o = OptionType(out)
     s"""
-       |func (m $raw) Map${out.view}(f ${Transformer.name(underlined, out)}) ${o.raw} {
+       |func (m $raw) Map${out.view}(f func(${underlined.raw}) ${out.raw}) ${o.raw} {
        |  if m.IsDefined() { return ${o.consView}(f(*m.value)) } else { return ${o.emptyName} } }""".stripMargin
   }
 
@@ -119,9 +119,23 @@ case class OptionType(override val underlined: Type) extends MonadType {
 }
 
 object OptionType {
-  def underlinedTypes: Seq[Type] = BaseType.types ++ ArrayType.types ++ BaseType.types.map(ListType.apply)
 
-  def types: Seq[OptionType] = (underlinedTypes ++ underlinedTypes.map(OptionType.apply) ++ underlinedTypes.map(OptionType.apply).map(OptionType.apply)).map(OptionType.apply)
+  def allowedBaseTypes: Seq[BaseType] = BaseType.reducedTypes
+
+  def types: Seq[OptionType] =
+    allowedBaseTypes.map(OptionType.apply) ++ // Option[T]
+      allowedBaseTypes.map(OptionType.apply).map(OptionType.apply) ++ // Option[Option[T]]
+      allowedBaseTypes.map(ArrayType.apply).map(OptionType.apply) ++ // Option[Array[T]]
+      allowedBaseTypes.map(ListType.apply).map(OptionType.apply) // Option[List[T]]
+
+  def transformers: Seq[Transformer] = {
+    val inTypes = types.map(_.underlined).distinct
+    val outTypes = inTypes
+    for {
+      in <- inTypes
+      out <- outTypes
+    } yield Transformer(in, out)
+  }
 
   def declarations: Seq[String] = types.map(_.declaration)
 
@@ -141,16 +155,12 @@ object OptionType {
 
   def functionsFilter: Seq[String] = types.map(_.funcFilter)
 
-  def functionsMap: Seq[String] = for {
-    o <- types
-    t <- Transformer.types
-    if o.underlined == t.in
-  } yield o.funcMap(t.out)
+  def functionsMap: Seq[String] = transformers.map(t => OptionType(t.in).funcMap(t.out))
 
   def functionsToString: Seq[String] = types.map(_.funcToString)
 
   def functionsFlatMap: Seq[String] = {
-    val outTypes = BaseType.types.map(OptionType.apply)
+    val outTypes = allowedBaseTypes.map(OptionType.apply)
     for {
       o1 <- types
       o2 <- outTypes
@@ -158,13 +168,13 @@ object OptionType {
   }
 
   def functionsFlatten: Seq[String] = {
-    val inTypes = BaseType.types.map(OptionType.apply).map(OptionType.apply)
+    val inTypes = allowedBaseTypes.map(OptionType.apply).map(OptionType.apply)
     inTypes.map(_.funcFlatten)
   }
 
   def functionsFoldLeft: Seq[String] = {
-    val inTypes = BaseType.types.map(OptionType.apply)
-    val outTypes = BaseType.reducedTypes
+    val inTypes = allowedBaseTypes.map(OptionType.apply)
+    val outTypes = allowedBaseTypes
     for {
       in <- inTypes
       out <- outTypes

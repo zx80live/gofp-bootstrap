@@ -1,19 +1,24 @@
 package com.zx80live.gofp.bootstrap.types
 
 case class Transformer(in: Type, out: Type) {
+  @deprecated
   def raw: String = Transformer.name(in, out)
 
+  @deprecated
   def name: String = raw
 
+  @deprecated
   def declaration: String =
     s"""
        |type $name func(in ${in.raw}) ${out.raw}""".stripMargin
 
-  def emptyName: String = s"${in.view}EmptyTransformer"
+  @deprecated
+  def emptyName: String = s"Empty${in.view}To${out.view}"
 
+  @deprecated
   def emptyDeclaration: String =
     s"""
-       |var $emptyName func(${in.raw}) ${in.raw} = func(in ${in.raw}) ${in.raw} { return in }""".stripMargin
+       |var $emptyName func(${in.raw}) ${out.raw} = func(in ${in.raw}) ${out.raw} { return in }""".stripMargin
 }
 
 object Transformer {

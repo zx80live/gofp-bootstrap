@@ -23,8 +23,8 @@ object Bootstrap extends App {
   toFile("bootstrap_predicate_xor.go", content = Predicate.functionsXor)
   toFile("bootstrap_predicate_neg.go", content = Predicate.functionsNeg)
 
-  toFile("bootstrap_transformer.go", content = Transformer.declarations)
-  toFile("bootstrap_transformer_empty.go", content = Transformer.emptyDeclarations)
+//  toFile("bootstrap_transformer.go", content = Transformer.declarations)
+//  toFile("bootstrap_transformer_empty.go", content = Transformer.emptyDeclarations)
 
   toFile("bootstrap_array_drop.go", content = ArrayType.functionsDrop)
   toFile("bootstrap_array_filter.go", content = ArrayType.functionsFilter)
