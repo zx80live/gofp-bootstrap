@@ -91,7 +91,7 @@ case class OptionType(override val underlined: Type) extends MonadType {
 
   override def funcToString: String =
     s"""
-       |func (o $raw) ToString() string { if o.IsDefined() { return fmt.Sprintf("Some(%v)", ${FuncToString.name(underlined)}) } else { return "None" } }""".stripMargin
+       |func (o $raw) ToString() string { if o.IsDefined() { return fmt.Sprintf("Some(%v)", ${FuncToString.name(underlined)}(*o.value)) } else { return "None" } }""".stripMargin
 
   override def setUnderlined(t: Type): MonadType = OptionType(t)
 

@@ -35,8 +35,18 @@ case class BaseType(value: String) extends Type {
   def funcToInt: String = this match {
     case GoString =>
       s"""
-         |func (e ${boxedRaw}) ToInt() Int
-         |""".stripMargin
+         |func (s $boxedRaw) ToInt() Int {
+         |  i, err := strconv.Atoi(s.Underlined())
+         |  if err != nil { panic(fmt.Sprintf("%v to Int parse error", s)) } else { return Int(i) } }""".stripMargin
+    case _ => ""
+  }
+
+  def funcToIntOption: String = this match {
+    case GoString =>
+      s"""
+         |func (s $boxedRaw) ToIntOption() IntOption {
+         |  i, err := strconv.Atoi(s.Underlined())
+         |  if err != nil { return NoneInt } else { return IntOpt(i) } }""".stripMargin
     case _ => ""
   }
 }
@@ -100,4 +110,6 @@ object BaseType {
   def boxedDeclarations: Seq[String] = types.map(_.boxedDeclaration)
 
   def functionsUnderlined: Seq[String] = types.map(_.funcUnderlined)
+
+  def functionsConverters: Seq[String] = types.map(_.funcToInt) ++ types.map(_.funcToIntOption)
 }
