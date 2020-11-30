@@ -1,24 +1,25 @@
 package com.zx80live.gofp.bootstrap.types
 
 case class Transformer(in: Type, out: Type) {
-  @deprecated
   def raw: String = Transformer.name(in, out)
 
-  @deprecated
   def name: String = raw
 
-  @deprecated
   def declaration: String =
     s"""
        |type $name func(in ${in.raw}) ${out.raw}""".stripMargin
 
-  @deprecated
   def emptyName: String = s"Empty${in.view}To${out.view}"
 
-  @deprecated
+  def identityName: String = s"${in.view}Identity"
+
   def emptyDeclaration: String =
     s"""
        |var $emptyName func(${in.raw}) ${out.raw} = func(in ${in.raw}) ${out.raw} { return in }""".stripMargin
+
+  def identity: String =
+    s"""
+       |var $identityName func(${in.raw}) ${in.raw} = func(in ${in.raw}) ${in.raw} { return in }""".stripMargin
 }
 
 object Transformer {
@@ -52,4 +53,10 @@ object Transformer {
   private def inTypes: Seq[Type] = allowedTypes ++ allowedTypes.map(OptionType.apply) ++ allowedTypes.map(ArrayType.apply) ++ allowedTypes.map(ListType.apply)
 
   private def outTypes: Seq[Type] = inTypes
+
+
+  def identities: Seq[String] = {
+    val types = BaseType.reducedTypes ++ BaseType.reducedTypes.map(OptionType.apply) ++ BaseType.reducedTypes.map(ListType.apply)
+    types.map(t => Transformer(t, t)).map(_.identity)
+  }
 }
