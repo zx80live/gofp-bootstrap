@@ -110,6 +110,8 @@ case class OptionType(override val underlined: Type) extends MonadType {
     s"""
        |func (o $raw) FoldLeft${out.view}(z ${out.raw}, f func(${out.raw}, ${underlined.raw}) ${out.raw}) ${out.raw} {
        |  if o.IsDefined() { return f(z, *o.value) } else { return z }}""".stripMargin
+
+  override def funcFind: String = ???
 }
 
 object OptionType {

@@ -112,6 +112,8 @@ case class ArrayType(override val underlined: Type) extends MonadType {
   override def funcReduce: String = ""
 
   override def funcFoldLeft(out: Type): String = ""
+
+  override def funcFind: String = ""
 }
 
 object ArrayType {

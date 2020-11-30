@@ -8,7 +8,6 @@ import com.zx80live.gofp.bootstrap.types._
 //TODO zipWith
 //TODO count, take, dropRight
 //TODO base predicates (find by regexp)
-//TODO base transformers (String->Int)
 object Bootstrap extends App {
 
   import IoUtils._
@@ -82,5 +81,6 @@ object Bootstrap extends App {
   toFile("bootstrap_list_toarray.go", content = ListType.functionsToArray)
   toFile("bootstrap_list_reduce.go", content = ListType.functionsReduce)
   toFile("bootstrap_list_foldleft.go", content = ListType.functionsFoldLeft)
+  toFile("bootstrap_list_find.go", content = ListType.functionsFind)
 
 }

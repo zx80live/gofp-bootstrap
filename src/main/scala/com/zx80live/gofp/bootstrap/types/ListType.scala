@@ -197,6 +197,16 @@ case class ListType(override val underlined: Type) extends MonadType {
        |  acc := z
        |  l.Foreach(func (e ${underlined.raw}) { acc = f(acc, e) })
        |  return acc}""".stripMargin
+
+  override def funcFind: String =
+    s"""
+       |func (l $raw) Find(p func(${underlined.raw}) bool) ${OptionType(underlined).raw} {
+       |  xs := l
+       |  for xs.NonEmpty() {
+       |    if p(*xs.head) { return ${OptionType(underlined).consView}(*xs.head) }
+       |    xs = *xs.tail
+       |  }
+       |  return ${OptionType(underlined).emptyName}}""".stripMargin
 }
 
 object ListType {
@@ -279,4 +289,6 @@ object ListType {
       out <- outTypes
     } yield t.funcFoldLeft(out)
   }
+
+  def functionsFind: Seq[String] = types.map(_.funcFind)
 }
