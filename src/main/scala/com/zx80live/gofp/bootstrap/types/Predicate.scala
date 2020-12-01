@@ -15,6 +15,7 @@ case class Predicate(t: Type) {
     s"""
        |var $emptyName $name = func(t ${t.raw}) bool { return true }""".stripMargin
 
+  // predicate composition
   def funcAnd: String =
     s"""
        |func (p1 $name) And(p2 $name) $name { return func(e ${t.raw}) bool {  return p1(e) && p2(e)  } }""".stripMargin
@@ -31,6 +32,7 @@ case class Predicate(t: Type) {
     s"""
        |func (p $name) Neg() $name { return func(e ${t.raw}) bool { return !p(e) } }""".stripMargin
 
+  // numeric predicates
   def funcEven: String = if (t.isInteger) {
     s"""
        |var Even${t.view} $name = func(t ${t.raw}) bool { return t % 2 == 0 }""".stripMargin
@@ -60,6 +62,23 @@ case class Predicate(t: Type) {
     s"""
        |var One${t.view} $name = func(t ${t.raw}) bool { return t == 1 }""".stripMargin
   } else ""
+
+  // string predicates
+  def funcMatchRegex: String = if (t == GoString) {
+    s"""
+       |func MatchRegexp(r *regexp.Regexp) StringPredicate {
+       |	return func(s string) bool {
+       |		return r.MatchString(s)
+       |	}
+       |}""".stripMargin
+  } else ""
+
+  def funcMatchRegexString: String = if (t == GoString) {
+    s"""
+       |func MatchRegexpString(pattern string) StringPredicate {
+       |	return MatchRegexp(regexp.MustCompile(pattern))
+       |}""".stripMargin
+  } else ""
 }
 
 
@@ -88,5 +107,8 @@ object Predicate {
       BaseType.integerTypes.map(Predicate.apply).map(_.funcZeroNum) ++
       BaseType.integerTypes.map(Predicate.apply).map(_.funcOneNum)
 
-
+  def stringPredicates: Seq[String] = Seq(
+    Predicate(GoString).funcMatchRegex,
+    Predicate(GoString).funcMatchRegexString
+  )
 }
