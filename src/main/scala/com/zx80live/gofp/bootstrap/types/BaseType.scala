@@ -170,4 +170,8 @@ object BaseType {
     val types = Seq(GoInt, GoByte)
     types.map(_.funcTo) ++ types.map(_.funcUntil)
   }
+
+  implicit class TypeOps(val t: Type) extends AnyVal {
+    def isInteger: Boolean = integerTypes.contains(t)
+  }
 }

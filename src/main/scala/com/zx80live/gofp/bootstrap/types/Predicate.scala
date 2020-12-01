@@ -1,5 +1,7 @@
 package com.zx80live.gofp.bootstrap.types
 
+import BaseType._
+
 case class Predicate(t: Type) {
   def name: String = Predicate.name(t)
 
@@ -28,6 +30,36 @@ case class Predicate(t: Type) {
   def funcNeg: String =
     s"""
        |func (p $name) Neg() $name { return func(e ${t.raw}) bool { return !p(e) } }""".stripMargin
+
+  def funcEven: String = if (t.isInteger) {
+    s"""
+       |var Even${t.view} $name = func(t ${t.raw}) bool { return t % 2 == 0 }""".stripMargin
+  } else ""
+
+  def funcOdd: String = if (t.isInteger) {
+    s"""
+       |var Odd${t.view} $name = func(t ${t.raw}) bool { return t % 2 != 0 }""".stripMargin
+  } else ""
+
+  def funcNegNum: String = if (t.isInteger) {
+    s"""
+       |var Neg${t.view} $name = func(t ${t.raw}) bool { return t < 0 }""".stripMargin
+  } else ""
+
+  def funcPosNum: String = if (t.isInteger) {
+    s"""
+       |var Pos${t.view} $name = func(t ${t.raw}) bool { return t >= 0 }""".stripMargin
+  } else ""
+
+  def funcZeroNum: String = if (t.isInteger) {
+    s"""
+       |var Zero${t.view} $name = func(t ${t.raw}) bool { return t == 0 }""".stripMargin
+  } else ""
+
+  def funcOneNum: String = if (t.isInteger) {
+    s"""
+       |var One${t.view} $name = func(t ${t.raw}) bool { return t == 1 }""".stripMargin
+  } else ""
 }
 
 
@@ -37,9 +69,24 @@ object Predicate {
   def underlinedTypes: Seq[Type] = BaseType.types ++ ArrayType.types ++ OptionType.types ++ ListType.types
 
   def declarations: Seq[String] = underlinedTypes.map(Predicate.apply).map(_.declaration)
+
   def emptyDeclarations: Seq[String] = underlinedTypes.map(Predicate.apply).map(_.emptyDeclaration)
+
   def functionsAnd: Seq[String] = underlinedTypes.map(Predicate.apply).map(_.funcAnd)
+
   def functionsOr: Seq[String] = underlinedTypes.map(Predicate.apply).map(_.funcOr)
+
   def functionsXor: Seq[String] = underlinedTypes.map(Predicate.apply).map(_.funcXor)
+
   def functionsNeg: Seq[String] = underlinedTypes.map(Predicate.apply).map(_.funcNeg)
+
+  def mathPredicates: Seq[String] =
+    BaseType.integerTypes.map(Predicate.apply).map(_.funcEven) ++
+      BaseType.integerTypes.map(Predicate.apply).map(_.funcOdd) ++
+      BaseType.integerTypes.map(Predicate.apply).map(_.funcNegNum) ++
+      BaseType.integerTypes.map(Predicate.apply).map(_.funcPosNum) ++
+      BaseType.integerTypes.map(Predicate.apply).map(_.funcZeroNum) ++
+      BaseType.integerTypes.map(Predicate.apply).map(_.funcOneNum)
+
+
 }

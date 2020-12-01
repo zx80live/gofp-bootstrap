@@ -28,6 +28,7 @@ object Bootstrap extends App {
   toFile("bootstrap_predicate_or.go", content = Predicate.functionsOr)
   toFile("bootstrap_predicate_xor.go", content = Predicate.functionsXor)
   toFile("bootstrap_predicate_neg.go", content = Predicate.functionsNeg)
+  toFile("bootstrap_predicate_math.go", content = Predicate.mathPredicates)
 
   //  toFile("bootstrap_transformer.go", content = Transformer.declarations)
   //  toFile("bootstrap_transformer_empty.go", content = Transformer.emptyDeclarations)
