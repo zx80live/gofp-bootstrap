@@ -90,6 +90,17 @@ case class BaseType(value: String) extends Type {
        |  }
        |  return acc.Reverse() }""".stripMargin
   } else ""
+
+  def funcStringToArray: String = if (this == GoString) {
+    s"""
+       |func (s $alias) ToArray() RuneArray { return RuneArray([]rune(s)) }
+       |""".stripMargin
+  } else ""
+
+  def funcStringToLetterArray: String = if (this == GoString) {
+    s"""
+       |func (s $alias) ToLetterArray() StringArray { return RuneArray([]rune(s)).MapString(func(r rune) string { return fmt.Sprintf("%c", r) } ) }""".stripMargin
+  } else ""
 }
 
 object BaseType {
@@ -164,14 +175,19 @@ object BaseType {
 
   def functionsCons: Seq[String] = reducedTypes.map(_.funcCons)
 
-  def functionsMath: Seq[String] = reducedTypes.map(_.funcMin) ++ reducedTypes.map(_.funcMax)
+  private def functionsMath: Seq[String] = reducedTypes.map(_.funcMin) ++ reducedTypes.map(_.funcMax)
 
-  def functionsRange: Seq[String] = {
+  private def functionsRange: Seq[String] = {
     val types = Seq(GoInt, GoByte)
     types.map(_.funcTo) ++ types.map(_.funcUntil)
   }
 
+  def functionsNumeric: Seq[String] = functionsMath ++ functionsRange
+
+  def functionsString: Seq[String] = Seq(GoString).map(_.funcStringToArray) ++ Seq(GoString).map(_.funcStringToLetterArray)
+
   implicit class TypeOps(val t: Type) extends AnyVal {
     def isInteger: Boolean = integerTypes.contains(t)
   }
+
 }
