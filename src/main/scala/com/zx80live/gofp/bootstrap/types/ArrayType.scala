@@ -1,5 +1,7 @@
 package com.zx80live.gofp.bootstrap.types
 
+import com.zx80live.gofp.bootstrap.functions.FuncEquals
+
 case class ArrayType(override val underlined: Type) extends MonadType {
 
   override def raw: String = s"[]${underlined.raw}"
@@ -86,7 +88,15 @@ case class ArrayType(override val underlined: Type) extends MonadType {
        |}""".stripMargin
   }
 
-  override def funcEquals: String = ""
+  override def funcEquals: String =
+    s"""
+       |func (a $alias) Equals(b $alias) bool {
+       |  len1 := a.Size()
+       |  if len1 != b.Size() { return false }
+       |  for i, e := range a {
+       |    if ${FuncEquals.name(underlined)}(${underlined.alias}(e), ${underlined.alias}(b[i])) { return false }
+       |  }
+       |  return true}""".stripMargin
 
   def funcMkString: String =
     s"""
@@ -161,4 +171,6 @@ object ArrayType {
   def functionsMkString: Seq[String] = types.map(_.funcMkString)
 
   def functionsToString: Seq[String] = types.map(_.funcToString)
+
+  def functionsEquals: Seq[String] = types.map(_.funcEquals)
 }

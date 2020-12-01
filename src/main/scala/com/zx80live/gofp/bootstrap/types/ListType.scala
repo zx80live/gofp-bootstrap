@@ -151,7 +151,7 @@ case class ListType(override val underlined: Type) extends MonadType {
        |  xs1 := a
        |  xs2 := b
        |  for xs1.NonEmpty() {
-       |    if !${FuncEquals.name(underlined)}(*xs1.head, *xs2.head) { return false }
+       |    if !${FuncEquals.name(underlined)}(${underlined.alias}(*xs1.head), ${underlined.alias}(*xs2.head)) { return false }
        |    xs1 = *xs1.tail
        |    xs2 = *xs2.tail
        |  }

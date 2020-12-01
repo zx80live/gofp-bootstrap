@@ -84,7 +84,7 @@ case class OptionType(override val underlined: Type) extends MonadType {
        |func (a $raw) Equals(b $raw) bool {
        |  if a.IsDefined() {
        |    if b.IsDefined() {
-       |      return ${FuncEquals.name(underlined)}(*a.value, *b.value)
+       |      return ${FuncEquals.name(underlined)}(${underlined.alias}(*a.value), ${underlined.alias}(*b.value))
        |    } else { return false}
        |  } else if b.IsDefined() { return false } else { return true } }""".stripMargin
 

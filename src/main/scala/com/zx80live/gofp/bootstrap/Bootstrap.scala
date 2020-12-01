@@ -45,6 +45,7 @@ object Bootstrap extends App {
   toFile("bootstrap_array_tolist.go", content = ArrayType.functionsToList)
   toFile("bootstrap_array_mkstring.go", imports = Seq("fmt"), content = ArrayType.functionsMkString)
   toFile("bootstrap_array_tostring.go", content = ArrayType.functionsToString)
+  toFile("bootstrap_array_euals.go", content = ArrayType.functionsEquals)
 
   toFile("bootstrap_option.go", content = OptionType.declarations)
   toFile("bootstrap_option_none.go", content = OptionType.emptyDeclarations)
