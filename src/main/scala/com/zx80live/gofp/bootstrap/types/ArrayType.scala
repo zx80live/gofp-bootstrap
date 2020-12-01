@@ -22,30 +22,29 @@ case class ArrayType(override val underlined: Type) extends MonadType {
 
   override def funcHead: String =
     s"""
-       |func ${view}Head(m $raw) ${underlined.raw} { if len(m) > 0 { return m[0] } else { panic("can't get head from empty $raw slice") } }""".stripMargin
+       |func(m $alias) Head() ${underlined.raw} { if len(m) > 0 { return m[0] } else { panic("can't get head from empty $raw slice") } }""".stripMargin
 
   override def funcHeadOption: String = {
     val opt = OptionType(underlined)
     s"""
-       |func ${view}HeadOption(m $raw) ${opt.raw} { if len(m) > 0 { return ${opt.consView}(m[0]) } else { return ${opt.emptyName} } }""".stripMargin
+       |func (m $alias) HeadOption() ${opt.raw} { if len(m) > 0 { return ${opt.consView}(m[0]) } else { return ${opt.emptyName} } }""".stripMargin
   }
 
   override def funcTail: String =
     s"""
-       |func ${view}Tail(m $raw) $raw { s := len(m); if s > 0 { return m[1:s-1] } else {return []${underlined.raw}{} } }""".stripMargin
+       |func (m $alias) Tail() $alias { s := len(m); if s > 0 { return m[1:s-1] } else {return []${underlined.raw}{} } }""".stripMargin
 
   override def funcSize: String =
     s"""
-       |func ${view}Size(m $raw) int { return len(m) }
-       |""".stripMargin
+       |func (m $alias) Size() Int { return Int(len(${raw}(m))) }""".stripMargin
 
   override def funcForeach: String =
     s"""
-       |func ${view}Foreach(m $raw, f func(${underlined.raw})) { for _, e := range m { f(e) } }""".stripMargin
+       |func (m $alias) Foreach(f func(${underlined.raw})) { for _, e := range m { f(e) } }""".stripMargin
 
   override def funcFilter: String =
     s"""
-       |func ${view}Filter(m $raw, p ${Predicate(underlined).name}) $raw {
+       |func (m $alias) Filter(p ${Predicate(underlined).name}) $alias {
        |  l := len(m)
        |  acc := make($raw, l)
        |  i := 0
@@ -58,7 +57,7 @@ case class ArrayType(override val underlined: Type) extends MonadType {
   override def funcMap(out: Type): String = {
     val a2 = ArrayType(out)
     s"""
-       |func ${view}Map${out.view}(m $raw, f func(${underlined.raw}) ${out.raw}) ${a2.raw} {
+       |func (m $alias) Map${out.view}(f func(${underlined.raw}) ${out.raw}) ${a2.raw} {
        |  l := len(m)
        |  acc := make(${a2.raw}, l)
        |  for i, e := range m {
@@ -70,7 +69,7 @@ case class ArrayType(override val underlined: Type) extends MonadType {
 
   override def funcDrop: String =
     s"""
-       |func ${view}Drop(m $raw, i int) $raw {
+       |func (m $alias) Drop(i int) $raw {
        |  s := len(m)
        |  if i < 0 || i >= s { panic ("index out of bound") }
        |  if s > 0 { return m[i:s-1] } else { return make([]${underlined.raw}, 0) } }""".stripMargin
@@ -78,7 +77,7 @@ case class ArrayType(override val underlined: Type) extends MonadType {
   override def funcToList: String = {
     val l = ListType(underlined)
     s"""
-       |func ${view}ToList(m $raw) ${l.raw} {
+       |func (m $alias) ToList() ${l.raw} {
        |  acc := ${l.emptyName}
        |  for _, e := range m {
        |    acc = acc.Cons(e)
@@ -91,19 +90,23 @@ case class ArrayType(override val underlined: Type) extends MonadType {
 
   def funcMkString: String =
     s"""
-       |func ${view}MkString(a $raw, start, sep, end string) string {
+       |func (a $alias) MkString(start, sep, end string) String {
        |	 content := ""
        |	 for _, e := range a {
-       |	   content = fmt.Sprintf("%v%v%v", content, ${underlined.view}ToString(e), sep)
+       |	   content = fmt.Sprintf("%v%v%v", content, ${underlined.view}ToString(${underlined.alias}(e)), sep)
        |	 }
        |	 l := len(content)
        |	 if l > 0 {
        |		 content = content[:l-1]
        |	 }
-       |	 return fmt.Sprintf("%v%v%v", start, content, end)
+       |	 return String(fmt.Sprintf("%v%v%v", start, content, end))
        |}""".stripMargin
 
-  override def funcToString: String = ""
+  override def funcToString: String =
+    s"""
+       |func (a $alias) ToString() String {
+       |  return a.MkString("[", ",", "]")
+       |}""".stripMargin
 
   override def setUnderlined(t: Type): MonadType = ArrayType(t)
 
@@ -156,4 +159,6 @@ object ArrayType {
   def functionsToList: Seq[String] = types.map(_.funcToList)
 
   def functionsMkString: Seq[String] = types.map(_.funcMkString)
+
+  def functionsToString: Seq[String] = types.map(_.funcToString)
 }

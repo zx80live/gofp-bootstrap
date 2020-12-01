@@ -159,23 +159,23 @@ case class ListType(override val underlined: Type) extends MonadType {
 
   def funcMkString: String =
     s"""
-       |func (l $raw) MkString(start, sep, end string) string {
+       |func (l $raw) MkString(start, sep, end string) String {
        |   content := ""
        |   xs := l
        |   for xs.NonEmpty() {
-       |     content = fmt.Sprintf("%v%v%v", content, ${FuncToString.name(underlined)}(*xs.head), sep)
+       |     content = fmt.Sprintf("%v%v%v", content, ${FuncToString.name(underlined)}(${underlined.alias}(*xs.head)), sep)
        |     xs = *xs.tail
        |   }
        |	 s := len(content)
        |	 if s > 0 {
        |		 content = content[:s-1]
        |	 }
-       |	 return fmt.Sprintf("%v%v%v", start, content, end)
+       |	 return String(fmt.Sprintf("%v%v%v", start, content, end))
        |}""".stripMargin
 
   override def funcToString: String =
     s"""
-       |func (l $raw) ToString() string { return l.MkString("List(", ",", ")") }""".stripMargin
+       |func (l $raw) ToString() String { return l.MkString("List(", ",", ")") }""".stripMargin
 
   override def setUnderlined(t: Type): MonadType = ListType(t)
 
