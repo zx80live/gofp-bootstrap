@@ -10,9 +10,6 @@ object FuncToString {
 
   def body(t: Type): String = t match {
     case _: BaseType  => s""" return String(fmt.Sprintf("%v", o)) """
-//    case a: ArrayType =>
-//      s"""
-//         |return ${a.view}MkString(o, "[", ",", "]")""".stripMargin
     case _ => s""" return o.ToString() """
   }
 
