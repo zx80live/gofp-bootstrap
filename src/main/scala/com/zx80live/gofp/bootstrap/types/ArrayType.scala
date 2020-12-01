@@ -128,7 +128,13 @@ case class ArrayType(override val underlined: Type) extends MonadType {
 
   override def funcFoldLeft(out: Type): String = ""
 
-  override def funcFind: String = ""
+  override def funcFind: String =
+    s"""
+       |func (a $alias) Find(p func(${underlined.raw}) bool) ${OptionType(underlined).raw} {
+       |  for _, e := range a {
+       |    if p(e) { return ${OptionType(underlined).consView}(e) }
+       |  }
+       |  return ${OptionType(underlined).emptyName}}""".stripMargin
 }
 
 object ArrayType {
@@ -173,4 +179,6 @@ object ArrayType {
   def functionsToString: Seq[String] = types.map(_.funcToString)
 
   def functionsEquals: Seq[String] = types.map(_.funcEquals)
+
+  def functionsFind: Seq[String] = types.map(_.funcFind)
 }
