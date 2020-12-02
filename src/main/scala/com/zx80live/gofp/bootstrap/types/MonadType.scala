@@ -31,19 +31,7 @@ trait MonadType extends Type {
 
   def funcCons: String
 
-  def funcHead: String
-
-  def funcHeadOption: String
-
-  def funcTail: String
-
-  def funcSize: String
-
-  def funcForeach: String
-
   def funcFilter: String
-
-  def funcDrop: String
 
   def funcMap(out: Type): String
 

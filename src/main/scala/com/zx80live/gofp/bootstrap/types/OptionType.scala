@@ -40,23 +40,21 @@ case class OptionType(override val underlined: Type) extends MonadType {
        |func (o $raw) IsEmpty() bool { return o == $emptyName }
        |""".stripMargin
 
-  override def funcForeach: String =
+  def funcForeach: String =
     s"""
        |func (o $raw) Foreach(f func(${underlined.raw})) { if o.IsDefined() { f(*o.value) } }""".stripMargin
 
-  override def funcHead: String =
+  def funcHead: String =
     s"""
        |func (o $raw) Head() ${underlined.raw} { if o.IsDefined() { return *o.head } else { panic("can't get head from None") } }""".stripMargin
 
-  override def funcHeadOption: String =
+  def funcHeadOption: String =
     s"""
        |func (o $raw) HeadOption() $raw { return o }""".stripMargin
 
-  override def funcTail: String =
+  def funcTail: String =
     s"""
        |func (m $raw) ${ListType(underlined)} { return m.ToList().Tail() }""".stripMargin
-
-  override def funcSize: String = ""
 
   override def funcFilter: String =
     s"""
@@ -69,7 +67,7 @@ case class OptionType(override val underlined: Type) extends MonadType {
        |  if m.IsDefined() { return ${o.consView}(f(*m.value)) } else { return ${o.emptyName} } }""".stripMargin
   }
 
-  override def funcDrop: String =
+  def funcDrop: String =
     s"""
        |func (m $raw) Drop(i int) ${ListType(underlined)} { return m.ToList().Drop(i) }""".stripMargin
 

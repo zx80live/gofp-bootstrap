@@ -2,7 +2,7 @@ package com.zx80live.gofp.bootstrap.types
 
 import com.zx80live.gofp.bootstrap.functions.{FuncEquals, FuncToString}
 
-case class ListType(override val underlined: Type) extends MonadType {
+case class ListType(override val underlined: Type) extends MonadType with Traversable {
 
   override def raw: String = s"${underlined.view}List"
 
@@ -62,16 +62,6 @@ case class ListType(override val underlined: Type) extends MonadType {
     s"""
        |func (l $raw) Tail() $raw { return l.tail.Copy() }""".stripMargin
 
-  override def funcForeach: String =
-    s"""
-       |func (l $raw) Foreach(f func(${underlined.raw})) {
-       |  xs := l
-       |  for xs.NonEmpty() {
-       |    f(*xs.head)
-       |    xs = *xs.tail
-       |  }
-       |}""".stripMargin
-
   def funcReverse: String =
     s"""
        |func (l $raw) Reverse() $raw {
@@ -96,9 +86,6 @@ case class ListType(override val underlined: Type) extends MonadType {
        |  return acc.Reverse()
        |}""".stripMargin
 
-  override def funcSize: String =
-    s"""
-       |func (l $raw) Size() int { count := 0; xs := l; for xs.NonEmpty() { count ++; xs = *xs.tail }; return count }""".stripMargin
 
   def funcToArray: String =
     s"""
@@ -128,16 +115,6 @@ case class ListType(override val underlined: Type) extends MonadType {
        |  }
        |  return acc.Reverse() }""".stripMargin
   }
-
-  override def funcDrop: String =
-    s"""
-       |func (l $raw) Drop(n int) $raw {
-       |  acc := l
-       |  for i := 0; acc.NonEmpty() && i < n; i ++ {
-       |    acc = *acc.tail
-       |  }
-       |  return acc
-       |}""".stripMargin
 
   override def funcToList: String = ""
 
@@ -243,6 +220,20 @@ case class ListType(override val underlined: Type) extends MonadType {
        |  }
        |  return i}""".stripMargin
 
+  override def funcSize: String =
+    s"""
+       |func (l $raw) Size() int { count := 0; xs := l; for xs.NonEmpty() { count ++; xs = *xs.tail }; return count }""".stripMargin
+
+  override def funcForeach: String =
+    s"""
+       |func (l $raw) Foreach(f func(${underlined.raw})) {
+       |  xs := l
+       |  for xs.NonEmpty() {
+       |    f(*xs.head)
+       |    xs = *xs.tail
+       |  }
+       |}""".stripMargin
+
   def funcTake: String =
     s"""
        |func (l $raw) Take(n int) $raw {
@@ -255,6 +246,10 @@ case class ListType(override val underlined: Type) extends MonadType {
        |  return acc.Reverse()}
        |""".stripMargin
 
+  def funcTakeRight: String =
+    s"""
+       |func (l $raw) TakeRight(n int) $raw { return l.Reverse().Take(n).Reverse() }""".stripMargin
+
   def funcTakeWhile: String =
     s"""
        |func (l $raw) TakeWhile(p func(${underlined.raw}) bool) $raw {
@@ -266,10 +261,16 @@ case class ListType(override val underlined: Type) extends MonadType {
        |  }
        |  return acc.Reverse()}""".stripMargin
 
-  def funcTakeRight: String =
-    s"""
-       |func (l $raw) TakeRight(n int) $raw { return l.Reverse().Take(n).Reverse() }""".stripMargin
 
+  override def funcDrop: String =
+    s"""
+       |func (l $raw) Drop(n int) $raw {
+       |  acc := l
+       |  for i := 0; acc.NonEmpty() && i < n; i ++ {
+       |    acc = *acc.tail
+       |  }
+       |  return acc
+       |}""".stripMargin
 
   def funcDropRight: String =
     s"""
