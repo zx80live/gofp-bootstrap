@@ -92,5 +92,6 @@ object Bootstrap extends App {
   toFile("bootstrap_list_groupby.go", content = ListType.functionsGroupBy)
   toFile("bootstrap_list_count.go", content = ListType.functionsCount)
   toFile("bootstrap_list_take.go", content = ListType.functionsTake)
+  toFile("bootstrap_list_takewhile.go", content = ListType.functionsTakeWhile)
 
 }
