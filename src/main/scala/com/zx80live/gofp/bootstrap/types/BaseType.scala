@@ -23,7 +23,9 @@ case class BaseType(value: String) extends Type {
   def boxedDeclaration: String = if (this != GoAny) {
     s"""
        |type $boxedRaw $raw""".stripMargin
-  } else ""
+  } else
+    s"""
+       |type $boxedRaw interface{}""".stripMargin
 
   def funcUnderlined: String = this match {
     case GoAny => ""
