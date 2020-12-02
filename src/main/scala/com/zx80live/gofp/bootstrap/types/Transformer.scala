@@ -1,5 +1,7 @@
 package com.zx80live.gofp.bootstrap.types
 
+import com.zx80live.gofp.bootstrap.types.BaseType.GoString
+
 //TODO refactoring
 case class Transformer(in: Type, out: Type) {
   def raw: String = Transformer.name(in, out)
@@ -21,6 +23,20 @@ case class Transformer(in: Type, out: Type) {
   def identity: String =
     s"""
        |var $identityName func(${in.raw}) ${in.raw} = func(in ${in.raw}) ${in.raw} { return in }""".stripMargin
+
+  def funcToRegexGroups: String =
+    s"""
+       |func RegexGroups(r *regexp.Regexp) func(string) ${ArrayType(GoString).raw} {
+       |  return func(s string) ${ArrayType(GoString).raw} {
+       |     return (r.FindStringSubmatch(s))
+       |  }
+       |}""".stripMargin
+
+  def funcToStringRegexGroups: String =
+    s"""
+       |func StringRegexGroups(s string) func(string) ${ArrayType(GoString).raw} {
+       |  return RegexGroups(regexp.MustCompile(s))
+       |}""".stripMargin
 }
 
 object Transformer {
@@ -60,4 +76,6 @@ object Transformer {
     val types = BaseType.reducedTypes ++ BaseType.reducedTypes.map(OptionType.apply) ++ BaseType.reducedTypes.map(ListType.apply)
     types.map(t => Transformer(t, t)).map(_.identity)
   }
+
+  def stringTransformers: Seq[String] = Seq(Transformer(GoString, GoString).funcToRegexGroups) ++ Seq(Transformer(GoString, GoString).funcToStringRegexGroups)
 }

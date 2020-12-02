@@ -34,7 +34,8 @@ object Bootstrap extends App {
 
   //  toFile("bootstrap_transformer.go", content = Transformer.declarations)
   //  toFile("bootstrap_transformer_empty.go", content = Transformer.emptyDeclarations)
-  toFile("bootstrap_identity.go", content = Transformer.identities)
+  toFile("bootstrap_transformer_identity.go", content = Transformer.identities)
+  toFile("bootstrap_transformer_string.go", imports = Seq("regexp"), content = Transformer.stringTransformers)
 
   toFile("bootstrap_array.go", content = ArrayType.declarations)
   toFile("bootstrap_array_count.go", content = ArrayType.functionsCount)
