@@ -267,7 +267,9 @@ case class ListType(override val underlined: Type) extends MonadType {
        |  }
        |  return acc.Reverse()}""".stripMargin
 
-  def funcTakeRight: String = ???
+  def funcTakeRight: String =
+    s"""
+       |func (l $raw) TakeRight(n int) $raw { return l.Reverse().Take(n).Reverse() }""".stripMargin
 
   def funcDropRight: String = ???
 
@@ -372,4 +374,5 @@ object ListType {
   def functionsCount: Seq[String] = types.map(_.funcCount)
   def functionsTake: Seq[String] = types.map(_.funcTake)
   def functionsTakeWhile: Seq[String] = types.map(_.funcTakeWhile)
+  def functionsTakeRight: Seq[String] = types.map(_.funcTakeRight)
 }
