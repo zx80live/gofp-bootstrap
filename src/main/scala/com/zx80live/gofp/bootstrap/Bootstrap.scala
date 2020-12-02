@@ -6,11 +6,11 @@ import com.zx80live.gofp.bootstrap.types._
 //TODO zipWithIndex
 //TODO zip
 //TODO zipWith
-//TODO count, take, dropRight
-//TODO base predicates (find by regexp)
 object Bootstrap extends App {
 
   import IoUtils._
+
+  toFile("bootstrap_predef.go", imports = Seq("fmt"), content = Seq(FuncPredef.funcRequire))
 
   toFile("bootstrap_base.go", content = BaseType.boxedDeclarations)
   toFile("bootstrap_base_cons.go", content = BaseType.functionsCons)
@@ -36,7 +36,13 @@ object Bootstrap extends App {
   toFile("bootstrap_identity.go", content = Transformer.identities)
 
   toFile("bootstrap_array.go", content = ArrayType.declarations)
+  toFile("bootstrap_array_count.go", content = ArrayType.functionsCount)
   toFile("bootstrap_array_drop.go", content = ArrayType.functionsDrop)
+  toFile("bootstrap_array_dropright.go", content = ArrayType.functionsDropRight)
+  toFile("bootstrap_array_dropwhile.go", content = ArrayType.functionsDropWhile)
+  toFile("bootstrap_array_take.go", content = ArrayType.functionsTake)
+  toFile("bootstrap_array_takewhile.go", content = ArrayType.functionsTakeWhile)
+  toFile("bootstrap_array_takeright.go", content = ArrayType.functionsTakeRight)
   toFile("bootstrap_array_filter.go", content = ArrayType.functionsFilter)
   toFile("bootstrap_array_foreach.go", content = ArrayType.functionsForeach)
   toFile("bootstrap_array_head.go", content = ArrayType.functionsHead)

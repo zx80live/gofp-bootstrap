@@ -59,6 +59,16 @@ case class BaseType(value: String) extends Type {
          |  return ${ListType(this).emptyName}.Cons(a.Underlined()).Cons(b.Underlined()) }""".stripMargin
   }
 
+  def funcIsBetween: String = if (BaseType.numericTypes.contains(this)) {
+    s"""
+       |func (a $boxedRaw) IsBetween(left, right $raw) bool { return $raw(a) > left && $raw(a) < right }""".stripMargin
+  } else ""
+
+  def funcIsBetweenInclusive: String = if (BaseType.numericTypes.contains(this)) {
+    s"""
+       |func (a $boxedRaw) IsBetweenInclusive(left, right $raw) bool { return $raw(a) >= left && $raw(a) <= right }""".stripMargin
+  } else ""
+
   def funcMin: String = if (BaseType.numericTypes.contains(this)) {
     s"""
        |func (a $boxedRaw) Min(b $boxedRaw) $boxedRaw {if a <= b { return a } else { return b}}""".stripMargin
@@ -182,7 +192,11 @@ object BaseType {
     types.map(_.funcTo) ++ types.map(_.funcUntil)
   }
 
-  def functionsNumeric: Seq[String] = functionsMath ++ functionsRange
+  private def functionsBetween: Seq[String] = numericTypes.map(_.funcIsBetween)
+
+  private def functionsBetweenInclusive: Seq[String] = numericTypes.map(_.funcIsBetweenInclusive)
+
+  def functionsNumeric: Seq[String] = functionsMath ++ functionsRange ++ functionsBetween ++ functionsBetweenInclusive
 
   def functionsString: Seq[String] = Seq(GoString).map(_.funcStringToArray) ++ Seq(GoString).map(_.funcStringToLetterArray)
 

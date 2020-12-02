@@ -73,6 +73,7 @@ case class ArrayType(override val underlined: Type) extends MonadType {
     s"""
        |func (m $alias) Drop(i int) $raw {
        |  s := len(m)
+       |  Require(Int(i).IsBetweenInclusive(0, s - 1), "index out of bound")
        |  if i < 0 || i >= s { panic ("index out of bound") }
        |  if s > 0 { return m[i:s-1] } else { return make([]${underlined.raw}, 0) } }""".stripMargin
 
@@ -136,17 +137,69 @@ case class ArrayType(override val underlined: Type) extends MonadType {
        |  }
        |  return ${OptionType(underlined).emptyName}}""".stripMargin
 
-  def funcCount: String = ???
+  def funcCount: String =
+    s"""
+       |func (l $alias) Count(p func(${underlined.raw}) bool) int {
+       |  c := 0
+       |  for _, e := range l {
+       |    if p(e) { c++ }
+       |  }
+       |  return c } """.stripMargin
 
-  def funcTake: String = ???
+  def funcTake: String =
+    s"""
+       |func (l $alias) Take(n int) $alias {
+       |  size := len(l)
+       |  Require(n >= 0, "index should be >= 0")
+       |  if n >= size { n = size }
+       |  acc := make($raw, n)
+       |  copy(acc, l[0: n])
+       |  return acc }""".stripMargin
 
-  def funcTakeWhile: String = ???
+  def funcTakeWhile: String =
+    s"""
+       |func (l $alias) TakeWhile(p func(${underlined.raw}) bool) $alias {
+       |  var n int
+       |  size := len(l)
+       |  for n = 0; n < size && p(l[n]); n ++ {}
+       |  acc := make($raw, n)
+       |  copy(acc, l)
+       |  return acc
+       |}""".stripMargin
 
-  def funcTakeRight: String = ???
+  def funcTakeRight: String =
+    s"""
+       |func (l $alias) TakeRight(n int) $alias {
+       |  size := len(l)
+       |  Require(n >= 0, "index should be >= 0")
+       |  if n >= size { n = size }
+       |  acc := make($raw, n)
+       |  copy(acc, l[size - n: size])
+       |  return acc
+       |}""".stripMargin
 
-  def funcDropRight: String = ???
+  def funcDropRight: String =
+    s"""
+       |func (l $alias) DropRight(n int) $alias {
+       |  size := len(l)
+       |  Require(n >= 0, "index should be >= 0")
+       |  if n >= size { n = size }
+       |  to := size - n
+       |  acc := make($raw, to)
+       |  copy(acc, l[0: to])
+       |  return acc
+       |}""".stripMargin
 
-  def funcDropWhile: String = ???
+  def funcDropWhile: String =
+    s"""
+       |func (l $alias) DropWhile(p func(${underlined.raw}) bool) $alias {
+       |  size := len(l)
+       |  var n int
+       |  for n = 0; n < size && p(l[n]); n ++ {}
+       |  acc := make($raw, size - n)
+       |  copy(acc, l[n: size])
+       |  return acc
+       |}""".stripMargin
 }
 
 object ArrayType {
@@ -193,4 +246,16 @@ object ArrayType {
   def functionsEquals: Seq[String] = types.map(_.funcEquals)
 
   def functionsFind: Seq[String] = types.map(_.funcFind)
+
+  def functionsCount: Seq[String] = types.map(_.funcCount)
+
+  def functionsTake: Seq[String] = types.map(_.funcTake)
+
+  def functionsTakeWhile: Seq[String] = types.map(_.funcTakeWhile)
+
+  def functionsTakeRight: Seq[String] = types.map(_.funcTakeRight)
+
+  def functionsDropRight: Seq[String] = types.map(_.funcDropRight)
+
+  def functionsDropWhile: Seq[String] = types.map(_.funcDropWhile)
 }
