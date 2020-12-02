@@ -135,6 +135,18 @@ case class ArrayType(override val underlined: Type) extends MonadType {
        |    if p(e) { return ${OptionType(underlined).consView}(e) }
        |  }
        |  return ${OptionType(underlined).emptyName}}""".stripMargin
+
+  def funcCount: String = ???
+
+  def funcTake: String = ???
+
+  def funcTakeWhile: String = ???
+
+  def funcTakeRight: String = ???
+
+  def funcDropRight: String = ???
+
+  def funcDropWhile: String = ???
 }
 
 object ArrayType {

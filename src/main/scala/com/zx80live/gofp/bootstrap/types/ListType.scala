@@ -232,6 +232,37 @@ case class ListType(override val underlined: Type) extends MonadType {
          |
          |	return m }""".stripMargin
   }
+
+  def funcCount: String =
+    s"""
+       |func (l $raw) Count(p func(${underlined.raw}) bool) int {
+       |  i := 0
+       |  xs := l
+       |  for xs.NonEmpty() {
+       |    if p(*xs.head) { i ++ }
+       |    xs = *xs.tail
+       |  }
+       |  return i}""".stripMargin
+
+  def funcTake: String =
+    s"""
+       |func (l $raw) Take(n int) $raw {
+       |  acc := $emptyName
+       |  xs := l
+       |  for i := 0;  xs.NonEmpty() && i < n; i ++ {
+       |    acc = acc.Cons(*xs.head)
+       |    xs = *xs.tail
+       |  }
+       |  return acc.Reverse()}
+       |""".stripMargin
+
+  def funcTakeWhile: String = ???
+
+  def funcTakeRight: String = ???
+
+  def funcDropRight: String = ???
+
+  def funcDropWhile: String = ???
 }
 
 object ListType {
@@ -328,4 +359,7 @@ object ListType {
     //    } yield in.funcGroupBy(out)
     //  }
   }
+
+  def functionsCount: Seq[String] = types.map(_.funcCount)
+  def functionsTake: Seq[String] = types.map(_.funcTake)
 }

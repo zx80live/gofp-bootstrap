@@ -90,5 +90,7 @@ object Bootstrap extends App {
   toFile("bootstrap_list_foldleft.go", content = ListType.functionsFoldLeft)
   toFile("bootstrap_list_find.go", content = ListType.functionsFind)
   toFile("bootstrap_list_groupby.go", content = ListType.functionsGroupBy)
+  toFile("bootstrap_list_count.go", content = ListType.functionsCount)
+  toFile("bootstrap_list_take.go", content = ListType.functionsTake)
 
 }
