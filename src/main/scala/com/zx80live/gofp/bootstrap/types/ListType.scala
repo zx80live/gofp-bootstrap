@@ -132,13 +132,12 @@ case class ListType(override val underlined: Type) extends MonadType {
   override def funcDrop: String =
     s"""
        |func (l $raw) Drop(n int) $raw {
-       |  acc = l
-       |  for i = 0; i < n; i ++ {
+       |  acc := l
+       |  for i := 0; acc.NonEmpty() && i < n; i ++ {
        |    acc = *acc.tail
        |  }
        |  return acc
-       |}
-       |""".stripMargin
+       |}""".stripMargin
 
   override def funcToList: String = ""
 
@@ -271,9 +270,20 @@ case class ListType(override val underlined: Type) extends MonadType {
     s"""
        |func (l $raw) TakeRight(n int) $raw { return l.Reverse().Take(n).Reverse() }""".stripMargin
 
-  def funcDropRight: String = ???
 
-  def funcDropWhile: String = ???
+  def funcDropRight: String =
+    s"""
+       |func (l $raw) DropRight(n int) $raw { return l.Reverse().Drop(n).Reverse() }""".stripMargin
+
+  def funcDropWhile: String =
+    s"""
+       |func (l $raw) DropWhile(p func(${underlined.raw}) bool) $raw {
+       |  xs := l
+       |  for xs.NonEmpty() && p(*xs.head) {
+       |    xs = *xs.tail
+       |  }
+       |  return xs
+       |}""".stripMargin
 }
 
 object ListType {
@@ -375,4 +385,7 @@ object ListType {
   def functionsTake: Seq[String] = types.map(_.funcTake)
   def functionsTakeWhile: Seq[String] = types.map(_.funcTakeWhile)
   def functionsTakeRight: Seq[String] = types.map(_.funcTakeRight)
+  def functionsDrop: Seq[String] = types.map(_.funcDrop)
+  def functionsDropRight: Seq[String] = types.map(_.funcDropRight)
+  def functionsDropWhile: Seq[String] = types.map(_.funcDropWhile)
 }

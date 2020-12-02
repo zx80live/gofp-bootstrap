@@ -94,5 +94,9 @@ object Bootstrap extends App {
   toFile("bootstrap_list_take.go", content = ListType.functionsTake)
   toFile("bootstrap_list_takewhile.go", content = ListType.functionsTakeWhile)
   toFile("bootstrap_list_takeright.go", content = ListType.functionsTakeRight)
+  toFile("bootstrap_list_drop.go", content = ListType.functionsDrop)
+  toFile("bootstrap_list_dropright.go", content = ListType.functionsDropRight)
+  toFile("bootstrap_list_dropwhile.go", content = ListType.functionsDropWhile)
+
 
 }
