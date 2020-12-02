@@ -21,6 +21,7 @@ object Bootstrap extends App {
 
   toFile("bootstrap_func_equal.go", content = FuncEquals.functions)
   toFile("bootstrap_func_tostring.go", imports = Seq("fmt"), content = FuncToString.functions)
+  toFile("bootstrap_func_println.go", imports = Seq("fmt"), content = FuncPrintln.functionsPrintln)
 
   toFile("bootstrap_predicate.go", content = Predicate.declarations)
   toFile("bootstrap_predicate_empty.go", content = Predicate.emptyDeclarations)
