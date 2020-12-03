@@ -106,5 +106,10 @@ object Bootstrap extends App {
   toFile("bootstrap_list_dropright.go", content = ListType.functionsDropRight)
   toFile("bootstrap_list_dropwhile.go", content = ListType.functionsDropWhile)
 
-
+  toFile(dir = "concurrent", filename = "bootstrap_future.go", pack = "concurrent", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = FutureType.declarations)
+  toFile(dir = "concurrent", filename = "bootstrap_future_cons.go", pack = "concurrent", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = FutureType.functionsCons)
+  toFile(dir = "concurrent", filename = "bootstrap_future_success.go", pack = "concurrent", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = FutureType.functionsSuccess)
+  toFile(dir = "concurrent", filename = "bootstrap_future_map.go", pack = "concurrent", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = FutureType.functionsMap)
+  toFile(dir = "concurrent", filename = "bootstrap_future_flatmap.go", pack = "concurrent", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = FutureType.functionsFlatMap)
+  toFile(dir = "concurrent", filename = "bootstrap_future_result.go", pack = "concurrent", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = FutureType.functionsResult)
 }

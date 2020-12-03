@@ -7,10 +7,13 @@ object IoUtils {
   val root = "/home/work/gofp/fp/"
 
   def toFile(filename: String,
+             dir: String = "",
              pack: String = "fp",
              imports: Seq[String] = Nil,
              content: Seq[String] = Nil): Unit = {
-    val writer = new BufferedWriter(new FileWriter(new File(root + "/" + filename)))
+    new File(root + "/" + dir).mkdirs()
+    val file = new File(root + "/" + dir + "/" + filename)
+    val writer = new BufferedWriter(new FileWriter(file))
 
     try {
       writer.write(
@@ -19,7 +22,7 @@ object IoUtils {
            |
            |package $pack
            |
-           |${imports.map(i => "import \"" + i + "\"").mkString("", "\n", "")}""".stripMargin
+           |${imports.map { i => if(i.startsWith(".")) "import " + i else { "import \"" + i + "\""} }.mkString("", "\n", "")}""".stripMargin
       )
       content foreach writer.write
     } finally {
