@@ -5,7 +5,7 @@ import BaseType._
 case class Predicate(t: Type) {
   def name: String = Predicate.name(t)
 
-  def emptyName: String = s"${t.view}EmptyPredicate"
+  def emptyName: String = s"Empty${t.view}Predicate"
 
   def declaration: String =
     s"""
@@ -85,7 +85,7 @@ case class Predicate(t: Type) {
 object Predicate {
   def name(t: Type): String = s"${t.view}Predicate"
 
-  def underlinedTypes: Seq[Type] = BaseType.types ++ ArrayType.types ++ OptionType.types ++ ListType.types
+  def underlinedTypes: Seq[Type] = BaseType.reducedTypes ++ ArrayType.types ++ OptionType.types ++ ListType.types
 
   def declarations: Seq[String] = underlinedTypes.map(Predicate.apply).map(_.declaration)
 
@@ -100,12 +100,12 @@ object Predicate {
   def functionsNeg: Seq[String] = underlinedTypes.map(Predicate.apply).map(_.funcNeg)
 
   def mathPredicates: Seq[String] =
-    BaseType.integerTypes.map(Predicate.apply).map(_.funcEven) ++
-      BaseType.integerTypes.map(Predicate.apply).map(_.funcOdd) ++
-      BaseType.integerTypes.map(Predicate.apply).map(_.funcNegNum) ++
-      BaseType.integerTypes.map(Predicate.apply).map(_.funcPosNum) ++
-      BaseType.integerTypes.map(Predicate.apply).map(_.funcZeroNum) ++
-      BaseType.integerTypes.map(Predicate.apply).map(_.funcOneNum)
+    BaseType.reducedIntegerTypes.map(Predicate.apply).map(_.funcEven) ++
+      BaseType.reducedIntegerTypes.map(Predicate.apply).map(_.funcOdd) ++
+      BaseType.reducedIntegerTypes.map(Predicate.apply).map(_.funcNegNum) ++
+      BaseType.reducedIntegerTypes.map(Predicate.apply).map(_.funcPosNum) ++
+      BaseType.reducedIntegerTypes.map(Predicate.apply).map(_.funcZeroNum) ++
+      BaseType.reducedIntegerTypes.map(Predicate.apply).map(_.funcOneNum)
 
   def stringPredicates: Seq[String] = Seq(
     Predicate(GoString).funcMatchRegex,

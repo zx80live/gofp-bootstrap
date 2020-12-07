@@ -145,6 +145,10 @@ object BaseType {
     GoInt, GoInt8, GoInt16, GoInt32, GoInt64, GoUInt, GoUInt8, GoUInt16, GoUInt32, GoUInt64, GoUIntPtr, GoByte, GoRune
   )
 
+  def reducedIntegerTypes: Seq[BaseType] = Seq(
+    GoInt, GoInt64, GoByte, GoRune
+  )
+
   def types: Seq[BaseType] = Seq(
     GoBool,
     GoString,
