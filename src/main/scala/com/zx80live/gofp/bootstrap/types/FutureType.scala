@@ -73,7 +73,14 @@ case class FutureType(override val underlined: Type) extends MonadType {
 
 object FutureType {
 
-  def types: Seq[FutureType] = (BaseType.reducedTypes ++ OptionType.types ++ ArrayType.types ++ ListType.types).map(FutureType.apply)
+  def types: Seq[FutureType] = (
+    BaseType.reducedTypes ++ // Future[T]
+      BaseType.reducedTypes.map(OptionType.apply) ++ // Future[Option[T]]
+      BaseType.reducedTypes.map(ListType.apply).map(OptionType.apply) ++ // Future[Option[List[T]]]
+      BaseType.reducedTypes.map(ArrayType.apply).map(OptionType.apply) ++ // Future[Option[Array[T]]]
+      BaseType.reducedTypes.map(ListType.apply) ++ // Future[List[T]]
+      BaseType.reducedTypes.map(ArrayType.apply) // Future[Array[T]]
+    ).map(FutureType.apply)
 
   def declarations: Seq[String] = types.map(_.declaration)
 
