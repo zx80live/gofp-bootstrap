@@ -58,6 +58,7 @@ object Bootstrap extends App {
   toFile("bootstrap_array_tostring.go", content = ArrayType.functionsToString)
   toFile("bootstrap_array_equals.go", content = ArrayType.functionsEquals)
   toFile("bootstrap_array_find.go", content = ArrayType.functionsFind)
+  toFile("bootstrap_array_zipwithindex.go", content = ArrayType.functionsZipWithIndex)
 
   toFile("bootstrap_option.go", content = OptionType.declarations)
   toFile("bootstrap_option_none.go", content = OptionType.emptyDeclarations)

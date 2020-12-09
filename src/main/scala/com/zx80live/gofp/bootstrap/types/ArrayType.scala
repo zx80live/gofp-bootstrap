@@ -203,11 +203,20 @@ case class ArrayType(override val underlined: Type) extends MonadType with Trave
        |  }
        |  return c } """.stripMargin
 
-  override def funcZipWithIndex: String = ???
+  override def funcZip(m: MonadType): String = ???
 
   override def funcZipAll(m: MonadType): String = ???
 
-  override def funcZip(m: MonadType): String = ???
+  override def funcZipWithIndex: String = {
+    val a2 = ArrayType(Tuple2Type(underlined, BaseType.GoInt))
+    s"""
+       |func(l $alias) ZipWithIndex() ${a2.alias} {
+       |  zipped := make(${a2.raw}, len(l))
+       |  for i, e := range l {
+       |    zipped[i] = Tuple2 { e, i }
+       |  }
+       |  return zipped }""".stripMargin
+  }
 }
 
 object ArrayType {
@@ -266,4 +275,6 @@ object ArrayType {
   def functionsDropRight: Seq[String] = types.map(_.funcDropRight)
 
   def functionsDropWhile: Seq[String] = types.map(_.funcDropWhile)
+
+  def functionsZipWithIndex: Seq[String] = types.map(_.funcZipWithIndex)
 }
