@@ -478,7 +478,7 @@ object ListType {
 
   def functionsZip: Seq[String] = {
     val inTypes = allowedBaseTypes.map(ListType.apply)
-    val outTypes = types ++ ArrayType.allowedBaseTypes.map(ArrayType.apply)
+    val outTypes = inTypes ++ ArrayType.allowedBaseTypes.map(ArrayType.apply)
     for {
       in <- inTypes
       out <- outTypes
@@ -487,7 +487,7 @@ object ListType {
 
   def functionsZipAll: Seq[String] = {
     val inTypes = allowedBaseTypes.map(ListType.apply)
-    val outTypes = types ++ ArrayType.allowedBaseTypes.map(ArrayType.apply)
+    val outTypes = inTypes ++ ArrayType.allowedBaseTypes.map(ArrayType.apply)
     for {
       in <- inTypes
       out <- outTypes
