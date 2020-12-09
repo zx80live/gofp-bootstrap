@@ -232,7 +232,39 @@ case class ArrayType(override val underlined: Type) extends MonadType with Trave
     }
   }
 
-  override def funcZipAll(m: MonadType): String = ???
+  override def funcZipAll(m: MonadType): String = {
+    val a2 = ArrayType(Tuple2Type(underlined, BaseType.GoInt))
+    m match {
+      case _: ArrayType =>
+        s"""
+           |func (a $alias) ZipAll${m.view}(a2 ${m.alias}, thisDefault ${underlined.alias}, thatDefault ${m.underlined.alias}) ${a2.alias} {
+           |  len1 := len(a); len2 := len(a2); maxLen := int(Int(len1).Max(Int(len2)))
+           |  zipped := make(${a2.raw}, maxLen)
+           |  var e1, e2 Any
+           |  for i := 0; i < maxLen; i ++ {
+           |    if i < len1 { e1 = a[i] } else { e1 = thisDefault }
+           |    if i < len2 { e2 = a2[i] } else { e2 = thatDefault }
+           |    zipped[i] = Tuple2 { e1, e2 }
+           |  }
+           |  return zipped
+           |}""".stripMargin
+      case _ : ListType =>
+        s"""
+           |func (a $alias) ZipAll${m.view}(l2 ${m.alias}, thisDefault ${underlined.alias}, thatDefault ${m.underlined.alias}) ${a2.alias} {
+           |  len1 := len(a); maxLen := int(Int(len1).Max(Int(l2.Size())))
+           |  zipped := make(${a2.raw}, maxLen)
+           |  var e1, e2 Any
+           |  xs := l2
+           |  for i := 0; i < maxLen && xs.NonEmpty(); i ++ {
+           |    if i < len1 { e1 = a[i] } else { e1 = thisDefault }
+           |    if xs.NonEmpty() { e2 = *xs.head; xs = *xs.tail } else { e2 = thatDefault }
+           |    zipped[i] = Tuple2 { e1, e2 }
+           |  }
+           |  return zipped
+           |}""".stripMargin
+      case _ => ""
+    }
+  }
 
   override def funcZipWithIndex: String = {
     val a2 = ArrayType(Tuple2Type(underlined, BaseType.GoInt))
@@ -312,5 +344,14 @@ object ArrayType {
       in <- inTypes
       out <- outTypes
     } yield in.funcZip(out)
+  }
+
+  def functionsZipAll: Seq[String] = {
+    val inTypes = allowedBaseTypes.map(ArrayType.apply)
+    val outTypes = types ++ ListType.allowedBaseTypes.map(ListType.apply)
+    for {
+      in <- inTypes
+      out <- outTypes
+    } yield in.funcZipAll(out)
   }
 }
