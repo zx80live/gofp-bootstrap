@@ -9,7 +9,7 @@ object FuncToString {
   def contract(t: Type): String = s"func ${name(t)}(o ${t.alias}) String"
 
   def body(t: Type): String = t match {
-    case BaseType.GoAny => equalsAny
+    case BaseType.GoAny => toStringAny
     case _: BaseType => s""" return String(fmt.Sprintf("%v", o)) """
     case _ => s""" return o.ToString() """
   }
@@ -22,7 +22,7 @@ object FuncToString {
 
   def functions: Seq[String] = (BaseType.types ++ OptionType.types ++ ArrayType.types ++ ListType.types ++ Tuple2Type.types).map(func)
 
-  private def equalsAny: String = {
+  private def toStringAny: String = {
     val conditions = FuncPredef.underlinedTypes.map { t =>
       s"""
          |if reflect.TypeOf(o) == ${FuncPredef.reflectTypeName(t)} { s1 = ${FuncToString.name(t)}(o.(${t.alias})) }""".stripMargin
