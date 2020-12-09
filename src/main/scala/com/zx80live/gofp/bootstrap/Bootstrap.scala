@@ -3,9 +3,6 @@ package com.zx80live.gofp.bootstrap
 import com.zx80live.gofp.bootstrap.functions._
 import com.zx80live.gofp.bootstrap.types._
 
-//TODO zipWithIndex
-//TODO zip
-//TODO zipWith
 object Bootstrap extends App {
 
   import IoUtils._
