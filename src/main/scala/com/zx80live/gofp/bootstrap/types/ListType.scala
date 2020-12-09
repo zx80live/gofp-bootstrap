@@ -289,7 +289,7 @@ case class ListType(override val underlined: Type) extends MonadType with Traver
 
 object ListType {
 
-  def allowedBaseTypes: Seq[BaseType] = BaseType.reducedTypes
+  def allowedBaseTypes: Seq[Type] = BaseType.reducedTypes ++ Seq(Tuple2Type.defaultType)
 
   def types: Seq[ListType] =
     allowedBaseTypes.map(ListType.apply) ++ // List[T]

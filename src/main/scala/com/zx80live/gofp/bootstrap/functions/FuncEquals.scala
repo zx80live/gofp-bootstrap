@@ -1,6 +1,6 @@
 package com.zx80live.gofp.bootstrap.functions
 
-import com.zx80live.gofp.bootstrap.types.{ArrayType, BaseType, ListType, OptionType, Type}
+import com.zx80live.gofp.bootstrap.types.{ArrayType, BaseType, ListType, OptionType, Tuple2Type, Type}
 
 object FuncEquals {
   def name(t: Type): String = s"${t.view}Equals"
@@ -18,5 +18,5 @@ object FuncEquals {
     s"""
        |${contract(t)} { ${body(t)} }""".stripMargin
 
-  def functions: Seq[String] = (BaseType.types ++ OptionType.types ++ ArrayType.types ++ ListType.types).map(func)
+  def functions: Seq[String] = (BaseType.types ++ OptionType.types ++ ArrayType.types ++ ListType.types ++ Tuple2Type.types).map(func)
 }

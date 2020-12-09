@@ -114,7 +114,7 @@ case class OptionType(override val underlined: Type) extends MonadType {
 
 object OptionType {
 
-  def allowedBaseTypes: Seq[BaseType] = BaseType.reducedTypes
+  def allowedBaseTypes: Seq[Type] = BaseType.reducedTypes ++ Seq(Tuple2Type.defaultType)
 
   def types: Seq[OptionType] =
     allowedBaseTypes.map(OptionType.apply) ++ // Option[T]

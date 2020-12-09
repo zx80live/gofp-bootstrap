@@ -11,6 +11,7 @@ object Bootstrap extends App {
   import IoUtils._
 
   toFile("bootstrap_predef.go", imports = Seq("fmt"), content = Seq(FuncPredef.funcRequire))
+  toFile("bootstrap_predef_reflect.go", imports = Seq("reflect"), content = FuncPredef.funcReflectTypes)
 
   toFile("bootstrap_base.go", content = BaseType.boxedDeclarations)
   toFile("bootstrap_base_cons.go", content = BaseType.functionsCons)
@@ -20,7 +21,7 @@ object Bootstrap extends App {
   toFile("bootstrap_base_string.go", imports = Seq("fmt"), content = BaseType.functionsString)
 
   toFile("bootstrap_func_equal.go", content = FuncEquals.functions)
-  toFile("bootstrap_func_tostring.go", imports = Seq("fmt"), content = FuncToString.functions)
+  toFile("bootstrap_func_tostring.go", imports = Seq("fmt", "reflect"), content = FuncToString.functions)
   toFile("bootstrap_func_println.go", imports = Seq("fmt"), content = FuncPrintln.functionsPrintln)
 
   toFile("bootstrap_predicate.go", content = Predicate.declarations)
@@ -106,10 +107,17 @@ object Bootstrap extends App {
   toFile("bootstrap_list_dropright.go", content = ListType.functionsDropRight)
   toFile("bootstrap_list_dropwhile.go", content = ListType.functionsDropWhile)
 
+  toFile("bootstrap_tuple2.go", content = Tuple2Type.declarations)
+  toFile("bootstrap_tuple2_cons.go", content = Tuple2Type.functionsCons)
+  toFile("bootstrap_tuple2_equals.go", content = Tuple2Type.functionsEquals)
+  toFile("bootstrap_tuple2_tostring.go", imports = Seq("fmt"), content = Tuple2Type.functionsToString)
+
   toFile(dir = "concurrent", filename = "bootstrap_future.go", pack = "concurrent", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = FutureType.declarations)
   toFile(dir = "concurrent", filename = "bootstrap_future_cons.go", pack = "concurrent", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = FutureType.functionsCons)
   toFile(dir = "concurrent", filename = "bootstrap_future_success.go", pack = "concurrent", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = FutureType.functionsSuccess)
   toFile(dir = "concurrent", filename = "bootstrap_future_map.go", pack = "concurrent", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = FutureType.functionsMap)
   toFile(dir = "concurrent", filename = "bootstrap_future_flatmap.go", pack = "concurrent", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = FutureType.functionsFlatMap)
   toFile(dir = "concurrent", filename = "bootstrap_future_result.go", pack = "concurrent", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = FutureType.functionsResult)
+
+
 }

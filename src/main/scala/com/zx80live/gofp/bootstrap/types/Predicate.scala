@@ -85,7 +85,7 @@ case class Predicate(t: Type) {
 object Predicate {
   def name(t: Type): String = s"${t.view}Predicate"
 
-  def underlinedTypes: Seq[Type] = BaseType.reducedTypes ++ ArrayType.types ++ OptionType.types ++ ListType.types
+  def underlinedTypes: Seq[Type] = BaseType.reducedTypes ++ ArrayType.types ++ OptionType.types ++ ListType.types ++ Tuple2Type.types
 
   def declarations: Seq[String] = underlinedTypes.map(Predicate.apply).map(_.declaration)
 

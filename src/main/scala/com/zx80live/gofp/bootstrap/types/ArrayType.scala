@@ -207,7 +207,7 @@ case class ArrayType(override val underlined: Type) extends MonadType with Trave
 
 object ArrayType {
 
-  def allowedBaseTypes: Seq[BaseType] = BaseType.reducedTypes
+  def allowedBaseTypes: Seq[Type] = BaseType.reducedTypes ++ Seq(Tuple2Type.defaultType)
 
   def types: Seq[ArrayType] =
     allowedBaseTypes.map(ArrayType.apply) ++ // Array[T]

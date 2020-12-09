@@ -67,7 +67,7 @@ object Transformer {
 //      BaseType.GoAny
 //    )
 
-  private def inTypes: Seq[Type] = allowedTypes ++ allowedTypes.map(OptionType.apply) ++ allowedTypes.map(ArrayType.apply) ++ allowedTypes.map(ListType.apply)
+  private def inTypes: Seq[Type] = allowedTypes ++ allowedTypes.map(OptionType.apply) ++ allowedTypes.map(ArrayType.apply) ++ allowedTypes.map(ListType.apply) ++ Tuple2Type.types
 
   private def outTypes: Seq[Type] = inTypes
 
