@@ -203,7 +203,34 @@ case class ArrayType(override val underlined: Type) extends MonadType with Trave
        |  }
        |  return c } """.stripMargin
 
-  override def funcZip(m: MonadType): String = ???
+  override def funcZip(m: MonadType): String = {
+    val a2 = ArrayType(Tuple2Type(underlined, BaseType.GoInt))
+    m match {
+      case _ : ArrayType =>
+        s"""
+           |func (a $alias) Zip${m.view}(a2 ${m.alias}) ${a2.alias} {
+           |  minLen := int(Int(len(a)).Min(Int(len(a2))))
+           |  zipped := make(${a2.raw}, minLen)
+           |  for i := 0; i < minLen; i++ {
+           |    zipped[i] = Tuple2 { a[i], a2[i] }
+           |  }
+           |  return zipped
+           |}""".stripMargin
+      case _ : ListType =>
+        s"""
+           |func (a $alias) Zip${m.view}(l2 ${m.alias}) ${a2.alias} {
+           |  minLen := int(Int(len(a)).Min(Int(l2.Size())))
+           |  zipped := make(${a2.raw}, minLen)
+           |  xs := l2
+           |  for i := 0; xs.NonEmpty() && i < minLen; i ++ {
+           |    zipped[i] = Tuple2 { a[i], *xs.head }
+           |    xs = *xs.tail
+           |  }
+           |  return zipped
+           |}""".stripMargin
+      case _ => ""
+    }
+  }
 
   override def funcZipAll(m: MonadType): String = ???
 
@@ -277,4 +304,13 @@ object ArrayType {
   def functionsDropWhile: Seq[String] = types.map(_.funcDropWhile)
 
   def functionsZipWithIndex: Seq[String] = types.map(_.funcZipWithIndex)
+
+  def functionsZip: Seq[String] = {
+    val inTypes = allowedBaseTypes.map(ArrayType.apply)
+    val outTypes = types ++ ListType.allowedBaseTypes.map(ListType.apply)
+    for {
+      in <- inTypes
+      out <- outTypes
+    } yield in.funcZip(out)
+  }
 }
