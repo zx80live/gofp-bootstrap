@@ -69,6 +69,12 @@ case class FutureType(override val underlined: Type) extends MonadType {
   def funcResult: String =
     s"""
        |func (f $alias) Result() ${underlined.alias} { return <-f.ch }""".stripMargin
+
+  override def funcZipWithIndex: String = ???
+
+  override def funcZipWith: String = ???
+
+  override def funcZip: String = ???
 }
 
 object FutureType {

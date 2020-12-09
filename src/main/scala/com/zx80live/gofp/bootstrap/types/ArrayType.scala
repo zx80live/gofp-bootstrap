@@ -203,6 +203,11 @@ case class ArrayType(override val underlined: Type) extends MonadType with Trave
        |  }
        |  return c } """.stripMargin
 
+  override def funcZipWithIndex: String = ???
+
+  override def funcZipWith: String = ???
+
+  override def funcZip: String = ???
 }
 
 object ArrayType {

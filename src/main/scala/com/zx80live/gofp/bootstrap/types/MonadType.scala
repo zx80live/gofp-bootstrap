@@ -53,4 +53,8 @@ trait MonadType extends Type {
   def funcFoldLeft(out: Type): String
 
   def funcFind: String
+
+  def funcZipWithIndex: String
+  def funcZipWith: String
+  def funcZip: String
 }

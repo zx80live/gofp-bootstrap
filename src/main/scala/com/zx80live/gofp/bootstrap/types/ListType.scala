@@ -285,6 +285,43 @@ case class ListType(override val underlined: Type) extends MonadType with Traver
        |  }
        |  return xs
        |}""".stripMargin
+
+
+  //func (l List) ZipWithIndex() List {
+  //	//zipped := Nil
+  //	//i := 0
+  //	//it := &l
+  //	//
+  //	//for {
+  //	//	if it.head != nil {
+  //	//		zipped = zipped.Cons(Tuple2{it.head, i})
+  //	//		it = it.tail
+  //	//		i = i + 1
+  //	//	} else {
+  //	//		break
+  //	//	}
+  //	//}
+  //	//
+  //	//return zipped.Reverse()
+  //	return Nil
+  //}
+  //
+  override def funcZipWithIndex: String = {
+    val l2 = ListType(Tuple2Type(underlined, BaseType.GoInt))
+    s"""
+       |func (l $alias) ZipWithIndex() ${l2.raw} {
+       |  zipped := ${l2.emptyName}; xs := l
+       |  for i := 0; xs.NonEmpty(); i ++ {
+       |    zipped = zipped.Cons(Tuple2 { *xs.head, i } )
+       |    xs = *xs.tail
+       |  }
+       |  return zipped.Reverse() }""".stripMargin
+
+  }
+
+  override def funcZipWith: String = ???
+
+  override def funcZip: String = ???
 }
 
 object ListType {
@@ -383,10 +420,18 @@ object ListType {
   }
 
   def functionsCount: Seq[String] = types.map(_.funcCount)
+
   def functionsTake: Seq[String] = types.map(_.funcTake)
+
   def functionsTakeWhile: Seq[String] = types.map(_.funcTakeWhile)
+
   def functionsTakeRight: Seq[String] = types.map(_.funcTakeRight)
+
   def functionsDrop: Seq[String] = types.map(_.funcDrop)
+
   def functionsDropRight: Seq[String] = types.map(_.funcDropRight)
+
   def functionsDropWhile: Seq[String] = types.map(_.funcDropWhile)
+
+  def functionsZipWithIndex: Seq[String] = types.map(_.funcZipWithIndex)
 }

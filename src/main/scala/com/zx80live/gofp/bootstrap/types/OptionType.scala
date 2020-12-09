@@ -110,6 +110,12 @@ case class OptionType(override val underlined: Type) extends MonadType {
        |  if o.IsDefined() { return f(z, *o.value) } else { return z }}""".stripMargin
 
   override def funcFind: String = ???
+
+  override def funcZipWithIndex: String = ???
+
+  override def funcZipWith: String = ???
+
+  override def funcZip: String = ???
 }
 
 object OptionType {
