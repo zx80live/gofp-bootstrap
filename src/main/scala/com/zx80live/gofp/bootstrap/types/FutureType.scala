@@ -72,9 +72,9 @@ case class FutureType(override val underlined: Type) extends MonadType {
 
   override def funcZipWithIndex: String = ???
 
-  override def funcZipWith: String = ???
+  override def funcZipWith(m: MonadType): String = ???
 
-  override def funcZip: String = ???
+  override def funcZip(m: MonadType): String = ???
 }
 
 object FutureType {
