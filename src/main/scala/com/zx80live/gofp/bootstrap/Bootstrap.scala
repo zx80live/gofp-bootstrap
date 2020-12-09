@@ -106,8 +106,9 @@ object Bootstrap extends App {
   toFile("bootstrap_list_drop.go", content = ListType.functionsDrop)
   toFile("bootstrap_list_dropright.go", content = ListType.functionsDropRight)
   toFile("bootstrap_list_dropwhile.go", content = ListType.functionsDropWhile)
-  toFile("bootstrap_list_zipwithindex.go", content = ListType.functionsZipWithIndex)
   toFile("bootstrap_list_zip.go", content = ListType.functionsZip)
+  toFile("bootstrap_list_zipall.go", content = ListType.functionsZipAll)
+  toFile("bootstrap_list_zipwithindex.go", content = ListType.functionsZipWithIndex)
 
   toFile("bootstrap_tuple2.go", content = Tuple2Type.declarations)
   toFile("bootstrap_tuple2_cons.go", content = Tuple2Type.functionsCons)

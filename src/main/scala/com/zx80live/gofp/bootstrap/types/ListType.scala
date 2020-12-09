@@ -287,42 +287,6 @@ case class ListType(override val underlined: Type) extends MonadType with Traver
        |}""".stripMargin
 
 
-  //func (l List) ZipWithIndex() List {
-  //	//zipped := Nil
-  //	//i := 0
-  //	//it := &l
-  //	//
-  //	//for {
-  //	//	if it.head != nil {
-  //	//		zipped = zipped.Cons(Tuple2{it.head, i})
-  //	//		it = it.tail
-  //	//		i = i + 1
-  //	//	} else {
-  //	//		break
-  //	//	}
-  //	//}
-  //	//
-  //	//return zipped.Reverse()
-  //	return Nil
-  //}
-  //
-  override def funcZipWithIndex: String = {
-    val l2 = ListType(Tuple2Type(underlined, BaseType.GoInt))
-    s"""
-       |func (l $alias) ZipWithIndex() ${l2.raw} {
-       |  zipped := ${l2.emptyName}; xs := l
-       |  for i := 0; xs.NonEmpty(); i ++ {
-       |    zipped = zipped.Cons(Tuple2 { *xs.head, i } )
-       |    xs = *xs.tail
-       |  }
-       |  return zipped.Reverse() }""".stripMargin
-
-  }
-
-  override def funcZipWith(m: MonadType): String = {
-    ???
-  }
-
   override def funcZip(m: MonadType): String = {
     val l2 = ListType(Tuple2Type(underlined, m.underlined))
 
@@ -351,6 +315,54 @@ case class ListType(override val underlined: Type) extends MonadType with Traver
     }
   }
 
+  override def funcZipAll(m: MonadType): String = {
+    val l2 = ListType(Tuple2Type(underlined, BaseType.GoInt))
+    m match {
+      case _: ListType =>
+        s"""
+           |func (l $alias) ZipAll${m.view}(l2 ${m.alias}, thisDefault ${underlined.alias}, thatDefault ${m.underlined.alias}) ${l2.alias} {
+           |  zipped := ${l2.emptyName}; xs1 := l; xs2 := l2
+           |  maxLen := int(Int(l.Size()).Max(Int(l2.Size())))
+           |
+           |  var e1, e2 Any
+           |  for i := 0; i < maxLen; i++ {
+           |    if xs1.NonEmpty() { e1 = *xs1.head; xs1 = *xs1.tail } else { e1 = thisDefault }
+           |    if xs2.NonEmpty() { e2 = *xs2.head; xs2 = *xs2.tail } else { e2 = thatDefault }
+           |
+           |    zipped = zipped.Cons( Tuple2 { e1, e2 } )
+           |  }
+           |  return zipped.Reverse() }""".stripMargin
+      case _: ArrayType =>
+        s"""
+           |func (l $alias) ZipAll${m.view}(l2 ${m.alias}, thisDefault ${underlined.alias}, thatDefault ${m.underlined.alias}) ${l2.alias} {
+           |  zipped := ${l2.emptyName}; xs1 := l
+           |  len1 := l.Size(); len2 := len(l2)
+           |  maxLen := int(Int(len1).Max(Int(len2)))
+           |
+           |  var e1, e2 Any
+           |  for i := 0; i < maxLen; i++ {
+           |    if xs1.NonEmpty() { e1 = *xs1.head; xs1 = *xs1.tail } else { e1 = thisDefault }
+           |    if i < len2 { e2 = l2[i] } else { e2 = thatDefault }
+           |
+           |    zipped = zipped.Cons( Tuple2 { e1, e2 } )
+           |  }
+           |  return zipped.Reverse() }""".stripMargin
+      case _ => ""
+    }
+  }
+
+  override def funcZipWithIndex: String = {
+    val l2 = ListType(Tuple2Type(underlined, BaseType.GoInt))
+    s"""
+       |func (l $alias) ZipWithIndex() ${l2.raw} {
+       |  zipped := ${l2.emptyName}; xs := l
+       |  for i := 0; xs.NonEmpty(); i ++ {
+       |    zipped = zipped.Cons(Tuple2 { *xs.head, i } )
+       |    xs = *xs.tail
+       |  }
+       |  return zipped.Reverse() }""".stripMargin
+
+  }
 }
 
 object ListType {
@@ -471,5 +483,14 @@ object ListType {
       in <- inTypes
       out <- outTypes
     } yield in.funcZip(out)
+  }
+
+  def functionsZipAll: Seq[String] = {
+    val inTypes = allowedBaseTypes.map(ListType.apply)
+    val outTypes = types ++ ArrayType.allowedBaseTypes.map(ArrayType.apply)
+    for {
+      in <- inTypes
+      out <- outTypes
+    } yield in.funcZipAll(out)
   }
 }

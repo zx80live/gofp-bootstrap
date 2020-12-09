@@ -54,9 +54,9 @@ trait MonadType extends Type {
 
   def funcFind: String
 
-  def funcZipWithIndex: String
-
-  def funcZipWith(m: MonadType): String
-
   def funcZip(m: MonadType): String
+
+  def funcZipAll(m: MonadType): String
+
+  def funcZipWithIndex: String
 }
