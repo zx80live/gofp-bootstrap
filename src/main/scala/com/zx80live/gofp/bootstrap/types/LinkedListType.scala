@@ -34,7 +34,15 @@ case class LinkedListType(override val underlined: Type) extends MonadType with 
 
   override def funcMap(out: Type): String = ???
 
-  override def funcToList: String = ???
+  override def funcToList: String = {
+    val l2 = ListType(underlined)
+    s"""
+       |func (l $raw) ToList() ${l2.raw} {
+       |  acc := ${l2.emptyName}
+       |  l.ForeachRight(func (e ${underlined.raw}) { acc = acc.Cons(e) })
+       |  return acc
+       |}""".stripMargin
+  }
 
   override def funcReduce: String = ???
 
@@ -129,6 +137,7 @@ case class LinkedListType(override val underlined: Type) extends MonadType with 
 
   override def funcToString: String = ???
 
+
 }
 
 object LinkedListType {
@@ -140,7 +149,7 @@ object LinkedListType {
     allowedBaseTypes.map(LinkedListType.apply) ++ // List[T]
       allowedBaseTypes.map(ArrayType.apply).map(LinkedListType.apply) ++ // List[Array[T]]
       allowedBaseTypes.map(OptionType.apply).map(LinkedListType.apply) ++ // List[Option[T]]
-      allowedBaseTypes.map(LinkedListType.apply).map(LinkedListType.apply) // List[List[T]]
+      allowedBaseTypes.map(ListType.apply).map(LinkedListType.apply) // List[List[T]]
 
   def declarations: Seq[String] = types.map(_.declaration)
 
@@ -155,4 +164,6 @@ object LinkedListType {
   def functionsForeachRight: Seq[String] = types.map(_.funcForeachRight)
 
   def functionsAppend: Seq[String] = types.map(_.funcAppend)
+
+  def functionsToList: Seq[String] = types.map(_.funcToList)
 }

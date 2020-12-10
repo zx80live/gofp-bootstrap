@@ -116,6 +116,7 @@ object Bootstrap extends App {
   toFile(dir = "mutable", filename = "bootstrap_linkedlist_foreach.go", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LinkedListType.functionsForeach)
   toFile(dir = "mutable", filename = "bootstrap_linkedlist_foreachright.go", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LinkedListType.functionsForeachRight)
   toFile(dir = "mutable", filename = "bootstrap_linkedlist_append.go", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LinkedListType.functionsAppend)
+  toFile(dir = "mutable", filename = "bootstrap_linkedlist_tolist.go", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LinkedListType.functionsToList)
 
   toFile(dir = "", filename = "bootstrap_tuple2.go", content = Tuple2Type.declarations)
   toFile(dir = "", filename = "bootstrap_tuple2_cons.go", content = Tuple2Type.functionsCons)
