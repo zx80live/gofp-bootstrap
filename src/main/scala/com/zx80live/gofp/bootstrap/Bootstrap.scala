@@ -110,6 +110,13 @@ object Bootstrap extends App {
   toFile(dir = "", filename = "bootstrap_list_zipall.go", content = ListType.functionsZipAll)
   toFile(dir = "", filename = "bootstrap_list_zipwithindex.go", content = ListType.functionsZipWithIndex)
 
+  toFile(dir = "mutable", filename = "bootstrap_linkedlist.go", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LinkedListType.declarations)
+  toFile(dir = "mutable", filename = "bootstrap_linkedlist_empty.go", content = LinkedListType.emptyDeclarations)
+  toFile(dir = "mutable", filename = "bootstrap_linkedlist_head.go", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LinkedListType.functionsHead)
+  toFile(dir = "mutable", filename = "bootstrap_linkedlist_foreach.go", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LinkedListType.functionsForeach)
+  toFile(dir = "mutable", filename = "bootstrap_linkedlist_foreachright.go", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LinkedListType.functionsForeachRight)
+  toFile(dir = "mutable", filename = "bootstrap_linkedlist_append.go", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LinkedListType.functionsAppend)
+
   toFile(dir = "", filename = "bootstrap_tuple2.go", content = Tuple2Type.declarations)
   toFile(dir = "", filename = "bootstrap_tuple2_cons.go", content = Tuple2Type.functionsCons)
   toFile(dir = "", filename = "bootstrap_tuple2_equals.go", content = Tuple2Type.functionsEquals)
