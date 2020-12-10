@@ -19,7 +19,7 @@ case class FutureType(override val underlined: Type) extends MonadType {
 
   override def emptyDeclaration: String = ???
 
-  override def consView: String = s"""Make$view"""
+  override def consView: String = s"""Mk$view"""
 
   override def funcCons: String =
     s"""

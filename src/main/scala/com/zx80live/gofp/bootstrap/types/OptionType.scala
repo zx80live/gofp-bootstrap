@@ -16,7 +16,7 @@ case class OptionType(override val underlined: Type) extends MonadType {
     s"""
        |type $raw struct { value *${underlined.raw} }""".stripMargin
 
-  override def consView: String = s"Make${underlined.view}Option"
+  override def consView: String = s"Mk${underlined.view}Option"
 
   override def emptyDeclaration: String =
     s"""

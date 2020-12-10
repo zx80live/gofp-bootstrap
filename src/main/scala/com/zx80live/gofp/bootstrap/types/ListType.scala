@@ -19,7 +19,7 @@ case class ListType(override val underlined: Type) extends MonadType with Traver
        |  tail *${raw}
        |}""".stripMargin
 
-  override def consView: String = s"Make$raw"
+  override def consView: String = s"Mk$raw"
 
   override def emptyDeclaration: String =
     s"""
