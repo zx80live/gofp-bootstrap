@@ -113,6 +113,10 @@ object Bootstrap extends App {
   toFile(dir = "", filename = "bootstrap_list_zip.go", content = ListType.functionsZip)
   toFile(dir = "", filename = "bootstrap_list_zipall.go", content = ListType.functionsZipAll)
   toFile(dir = "", filename = "bootstrap_list_zipwithindex.go", content = ListType.functionsZipWithIndex)
+  toFile(dir = "", filename = "bootstrap_list_iterator.go", content = ListType.iterators)
+  toFile(dir = "", filename = "bootstrap_list_iterator_iterator.go", content = ListType.functionsIterator)
+  toFile(dir = "", filename = "bootstrap_list_iterator_hasnext.go", content = ListType.functionsHasNext)
+  toFile(dir = "", filename = "bootstrap_list_iterator_next.go", content = ListType.functionsNext)
 
   toFile(dir = "", filename = "bootstrap_queue.go", content = QueueType.declarations)
   toFile(dir = "", filename = "bootstrap_queue_cons.go", content = QueueType.functionsCons)

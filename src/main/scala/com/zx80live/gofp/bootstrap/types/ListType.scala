@@ -364,15 +364,29 @@ case class ListType(override val underlined: Type) extends MonadType with Traver
 
   }
 
-  override def iteratorName: String = ???
+  override def iteratorName: String = s"${view}Iterator"
 
-  override def iteratorDeclaration: String = ???
+  override def iteratorDeclaration: String =
+    s"""
+       |type $iteratorName struct {
+       |  xs *$raw
+       |}""".stripMargin
 
-  override def funcIterator: String = ???
+  override def funcIterator: String =
+    s"""
+       |func (l $raw) Iterator() $iteratorName { return $iteratorName { &l } }""".stripMargin
 
-  override def funcHasNext: String = ???
+  override def funcHasNext: String =
+    s"""
+       |func (it *$iteratorName) HasNext() bool { return it.xs.NonEmpty() }""".stripMargin
 
-  override def funcNext: String = ???
+  override def funcNext: String =
+    s"""
+       |func (it *$iteratorName) Next() ${underlined.raw} {
+       |  next := *it.xs.head
+       |  it.xs = it.xs.tail
+       |  return next
+       |}""".stripMargin
 }
 
 object ListType {
@@ -503,4 +517,9 @@ object ListType {
       out <- outTypes
     } yield in.funcZipAll(out)
   }
+
+  def iterators: Seq[String] = types.map(_.iteratorDeclaration)
+  def functionsIterator: Seq[String] = types.map(_.funcIterator)
+  def functionsHasNext: Seq[String] = types.map(_.funcHasNext)
+  def functionsNext: Seq[String] = types.map(_.funcNext)
 }
