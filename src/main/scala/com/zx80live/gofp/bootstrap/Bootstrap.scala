@@ -111,6 +111,7 @@ object Bootstrap extends App {
   toFile(dir = "", filename = "bootstrap_list_zipwithindex.go", content = ListType.functionsZipWithIndex)
 
   toFile(dir = "", filename = "bootstrap_queue.go", content = QueueType.declarations)
+  toFile(dir = "", filename = "bootstrap_queue_cons.go", content = QueueType.functionsCons)
   toFile(dir = "", filename = "bootstrap_queue_nil.go", content = QueueType.emptyDeclarations)
   toFile(dir = "", filename = "bootstrap_queue_enqueue.go", content = QueueType.functionsEnqueue)
   toFile(dir = "", filename = "bootstrap_queue_swap.go", content = QueueType.functionsSwap)
@@ -123,6 +124,7 @@ object Bootstrap extends App {
   toFile(dir = "", filename = "bootstrap_queue_isempty.go", content = QueueType.functionsIsEmpty)
   toFile(dir = "", filename = "bootstrap_queue_foreach.go", content = QueueType.functionsForeach)
   toFile(dir = "", filename = "bootstrap_queue_tolist.go", content = QueueType.functionsToList)
+  toFile(dir = "", filename = "bootstrap_queue_filter.go", content = QueueType.functionsFilter)
 
   toFile(dir = "mutable", filename = "bootstrap_linkedlist.go", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LinkedListType.declarations)
   toFile(dir = "mutable", filename = "bootstrap_linkedlist_empty.go", content = LinkedListType.emptyDeclarations)

@@ -9,11 +9,25 @@ case class QueueType(underlined: Type) extends MonadType with Traversable {
     s"""
        |var $emptyName = $raw{ &${ListType(underlined).emptyName}, &${ListType(underlined).emptyName} }""".stripMargin
 
-  override def consView: String = ???
+  override def consView: String = s"Mk${underlined.view}Queue"
 
-  override def funcCons: String = ???
+  override def funcCons: String =
+    s"""
+       |func $consView(elements ...${underlined.raw}) $raw {
+       |  q := $emptyName
+       |  for _, e := range elements {
+       |    q = q.Enqueue(e)
+       |  }
+       |  return q
+       |}""".stripMargin
 
-  override def funcFilter: String = ???
+  override def funcFilter: String =
+    s"""
+       |func (q $raw) Filter(p ${Predicate(underlined).name}) $raw {
+       |  in := (*q.in).Filter(p)
+       |  out := (*q.out).Filter(p)
+       |  return $raw { &in, &out  }
+       |}""".stripMargin
 
   override def funcMap(out: Type): String = ???
 
@@ -190,4 +204,6 @@ object QueueType {
   def functionsIsEmpty: Seq[String] = types.map(_.funcIsEmpty)
   def functionsForeach: Seq[String] = types.map(_.funcForeach)
   def functionsToList: Seq[String] = types.map(_.funcToList)
+  def functionsCons: Seq[String] = types.map(_.funcCons)
+  def functionsFilter: Seq[String] = types.map(_.funcFilter)
 }
