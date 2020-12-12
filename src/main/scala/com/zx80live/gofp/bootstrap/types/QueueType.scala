@@ -29,7 +29,23 @@ case class QueueType(underlined: Type) extends MonadType with Traversable {
        |  return $raw { &in, &out  }
        |}""".stripMargin
 
-  override def funcMap(out: Type): String = ???
+  override def funcMap(out: Type): String = {
+    val q = QueueType(out)
+    s"""
+       |func (q $raw) Map${out.view}(f func( ${underlined.raw} ) ${out.raw}) ${q.raw} {
+       |  acc := ${q.emptyName}
+       |  if q.IsEmpty() { return acc }
+       |  xs := q
+       |  for {
+       |    h, t := xs.Dequeue()
+       |    acc = acc.Enqueue(f(h))
+       |    xs = t
+       |
+       |    if t.IsEmpty() { return acc }
+       |  }
+       |  return acc
+       |}""".stripMargin
+  }
 
   override def funcToList: String = {
     val l = ListType(underlined)
@@ -215,4 +231,5 @@ object QueueType {
   def functionsCons: Seq[String] = types.map(_.funcCons)
   def functionsFilter: Seq[String] = types.map(_.funcFilter)
   def functionsReduce: Seq[String] = types.map(_.funcReduce)
+  def functionsMap: Seq[String] = transformers.map(t => QueueType(t.in).funcMap(t.out))
 }
