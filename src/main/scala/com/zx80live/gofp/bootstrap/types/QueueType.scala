@@ -1,5 +1,7 @@
 package com.zx80live.gofp.bootstrap.types
 
+import com.zx80live.gofp.bootstrap.functions.FuncToString
+
 case class QueueType(underlined: Type) extends MonadType with Traversable {
   override def setUnderlined(t: Type): MonadType = ???
 
@@ -94,7 +96,29 @@ case class QueueType(underlined: Type) extends MonadType with Traversable {
 
   override def funcEquals: String = ???
 
-  override def funcToString: String = ???
+  def funcMkString: String =
+    s"""
+       |func (q $raw) MkString(start, sep, end string) String {
+       |   if q.IsEmpty() { return String(fmt.Sprintf("Queue()")) }
+       |   content := ""
+       |   xs := q
+       |   for {
+       |     h, t := xs.Dequeue()
+       |     content = fmt.Sprintf("%v%v%v", content, ${FuncToString.name(underlined)}(${underlined.alias}(h)), sep)
+       |     if t.IsEmpty() { break }
+       |     xs = t
+       |   }
+       |	 s := len(content)
+       |	 if s > 0 {
+       |		 content = content[:s-1]
+       |	 }
+       |	 return String(fmt.Sprintf("%v%v%v", start, content, end))
+       |}""".stripMargin
+
+  override def funcToString: String =
+    s"""
+       |func (q $raw) ToString() String { return q.MkString("Queue(", ",", ")") }""".stripMargin
+
 
   def funcEnqueue: String =
     s"""
@@ -232,4 +256,6 @@ object QueueType {
   def functionsFilter: Seq[String] = types.map(_.funcFilter)
   def functionsReduce: Seq[String] = types.map(_.funcReduce)
   def functionsMap: Seq[String] = transformers.map(t => QueueType(t.in).funcMap(t.out))
+  def functionsMkString: Seq[String] = types.map(_.funcMkString)
+  def functionsToString: Seq[String] = types.map(_.funcToString)
 }
