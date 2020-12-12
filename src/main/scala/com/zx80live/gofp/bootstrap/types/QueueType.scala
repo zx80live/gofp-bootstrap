@@ -262,11 +262,40 @@ case class QueueType(underlined: Type) extends MonadType with Traversable {
        |}""".stripMargin
 
 
-  override def funcDrop: String = ???
+  override def funcDrop: String =
+    s"""
+       |func (q $raw) Drop(n int) $raw {
+       |  xs := *q.swap().out
+       |
+       |  for i := 0; xs.NonEmpty() && i < n; i ++ {
+       |    xs = *xs.tail
+       |  }
+       |  return $raw { &${ListType(underlined).emptyName}, &xs}
+       |}""".stripMargin
 
-  override def funcDropRight: String = ???
 
-  override def funcDropWhile: String = ???
+  override def funcDropRight: String =
+    s"""
+       |func (q $raw) DropRight(n int) $raw {
+       |  xs := q.swap().out.Reverse()
+       |
+       |  for i := 0; xs.NonEmpty() && i < n; i ++ {
+       |    xs = *xs.tail
+       |  }
+       |  return $raw { &xs, &${ListType(underlined).emptyName}}
+       |}""".stripMargin
+
+
+  override def funcDropWhile: String =
+    s"""
+       |func (q $raw) DropWhile(p func(${underlined.raw}) bool) $raw {
+       |  xs := *q.swap().out
+       |
+       |  for i := 0; xs.NonEmpty() && p(*xs.head); i ++ {
+       |    xs = *xs.tail
+       |  }
+       |  return $raw { &${ListType(underlined).emptyName}, &xs}
+       |}""".stripMargin
 
   override def funcHead: String =
     s"""
@@ -356,4 +385,8 @@ object QueueType {
   def functionsTake: Seq[String] = types.map(_.funcTake)
   def functionsTakeWhile: Seq[String] = types.map(_.funcTakeWhile)
   def functionsTakeRight: Seq[String] = types.map(_.funcTakeRight)
+  def functionsDrop: Seq[String] = types.map(_.funcDrop)
+  def functionsDropRight: Seq[String] = types.map(_.funcDropRight)
+  def functionsDropWhile: Seq[String] = types.map(_.funcDropWhile)
+
 }

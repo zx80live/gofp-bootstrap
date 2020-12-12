@@ -136,6 +136,9 @@ object Bootstrap extends App {
   toFile(dir = "", filename = "bootstrap_queue_take.go", content = QueueType.functionsTake)
   toFile(dir = "", filename = "bootstrap_queue_takewhile.go", content = QueueType.functionsTakeWhile)
   toFile(dir = "", filename = "bootstrap_queue_takeright.go", content = QueueType.functionsTakeRight)
+  toFile(dir = "", filename = "bootstrap_queue_drop.go", content = QueueType.functionsDrop)
+  toFile(dir = "", filename = "bootstrap_queue_dropright.go", content = QueueType.functionsDropRight)
+  toFile(dir = "", filename = "bootstrap_queue_dropwhile.go", content = QueueType.functionsDropWhile)
 
 
   toFile(dir = "mutable", filename = "bootstrap_linkedlist.go", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LinkedListType.declarations)
