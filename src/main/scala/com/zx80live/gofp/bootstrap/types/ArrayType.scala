@@ -276,6 +276,33 @@ case class ArrayType(override val underlined: Type) extends MonadType with Trave
        |  }
        |  return zipped }""".stripMargin
   }
+
+  override def iteratorName: String = s"${alias}Iterator"
+
+  override def iteratorDeclaration: String =
+    s"""
+       |type $iteratorName struct {
+       |  i int
+       |  size int
+       |  arr *$alias
+       |}""".stripMargin
+
+  override def funcHasNext: String =
+    s"""
+       |func (it *$iteratorName) HasNext() bool { return it.i < it.size }""".stripMargin
+
+  override def funcNext: String =
+    s"""
+       |func (it *$iteratorName) Next() ${underlined.raw} {
+       |  arr := *it.arr
+       |  next := arr[it.i]
+       |  it.i ++
+       |  return next
+       |}""".stripMargin
+
+  override def funcIterator: String =
+    s"""
+      |func (a $alias) Iterator() $iteratorName { return $iteratorName { 0, len(a), &a } }""".stripMargin
 }
 
 object ArrayType {
@@ -354,4 +381,9 @@ object ArrayType {
       out <- outTypes
     } yield in.funcZipAll(out)
   }
+
+  def iterators: Seq[String] = types.map(_.iteratorDeclaration)
+  def functionsIterator: Seq[String] = types.map(_.funcIterator)
+  def functionsHasNext: Seq[String] = types.map(_.funcHasNext)
+  def functionsNext: Seq[String] = types.map(_.funcNext)
 }

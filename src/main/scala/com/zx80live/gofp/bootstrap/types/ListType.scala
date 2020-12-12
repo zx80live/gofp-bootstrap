@@ -363,6 +363,16 @@ case class ListType(override val underlined: Type) extends MonadType with Traver
        |  return zipped.Reverse() }""".stripMargin
 
   }
+
+  override def iteratorName: String = ???
+
+  override def iteratorDeclaration: String = ???
+
+  override def funcIterator: String = ???
+
+  override def funcHasNext: String = ???
+
+  override def funcNext: String = ???
 }
 
 object ListType {

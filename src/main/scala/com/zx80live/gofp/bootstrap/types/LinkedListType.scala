@@ -137,7 +137,15 @@ case class LinkedListType(override val underlined: Type) extends MonadType with 
 
   override def funcToString: String = ???
 
+  override def iteratorName: String = ???
 
+  override def iteratorDeclaration: String = ???
+
+  override def funcIterator: String = ???
+
+  override def funcHasNext: String = ???
+
+  override def funcNext: String = ???
 }
 
 object LinkedListType {

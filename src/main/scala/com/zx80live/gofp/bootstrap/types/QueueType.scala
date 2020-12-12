@@ -329,6 +329,16 @@ case class QueueType(underlined: Type) extends MonadType with Traversable {
        |func (q $raw) IsEmpty() bool {
        |	return (*q.in).IsEmpty() && (*q.out).IsEmpty()
        |}""".stripMargin
+
+  override def iteratorName: String = ???
+
+  override def iteratorDeclaration: String = ???
+
+  override def funcIterator: String = ???
+
+  override def funcHasNext: String = ???
+
+  override def funcNext: String = ???
 }
 
 object QueueType {

@@ -23,4 +23,14 @@ trait Traversable {
   def funcHeadOption: String
 
   def funcTail: String
+
+  def iteratorName: String
+
+  def iteratorDeclaration: String
+
+  def funcIterator: String
+
+  def funcHasNext: String
+
+  def funcNext: String
 }

@@ -58,6 +58,10 @@ object Bootstrap extends App {
   toFile(dir = "", filename = "bootstrap_array_zip.go", content = ArrayType.functionsZip)
   toFile(dir = "", filename = "bootstrap_array_zipall.go", content = ArrayType.functionsZipAll)
   toFile(dir = "", filename = "bootstrap_array_zipwithindex.go", content = ArrayType.functionsZipWithIndex)
+  toFile(dir = "", filename = "bootstrap_array_iterator.go", content = ArrayType.iterators)
+  toFile(dir = "", filename = "bootstrap_array_iterator_iterator.go", content = ArrayType.functionsIterator)
+  toFile(dir = "", filename = "bootstrap_array_iterator_hasnext.go", content = ArrayType.functionsHasNext)
+  toFile(dir = "", filename = "bootstrap_array_iterator_next.go", content = ArrayType.functionsNext)
 
   toFile(dir = "", filename = "bootstrap_option.go", content = OptionType.declarations)
   toFile(dir = "", filename = "bootstrap_option_none.go", content = OptionType.emptyDeclarations)
