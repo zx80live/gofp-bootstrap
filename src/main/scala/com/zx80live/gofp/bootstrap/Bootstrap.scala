@@ -151,6 +151,7 @@ object Bootstrap extends App {
   toFile(dir = "", filename = "bootstrap_queue_iterator_iterator.go", content = QueueType.functionsIterator)
   toFile(dir = "", filename = "bootstrap_queue_iterator_hasnext.go", content = QueueType.functionsHasNext)
   toFile(dir = "", filename = "bootstrap_queue_iterator_next.go", content = QueueType.functionsNext)
+  toFile(dir = "", filename = "bootstrap_queue_flatmap.go", content = QueueType.functionsFlatMap)
 
   toFile(dir = "mutable", filename = "bootstrap_linkedlist.go", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LinkedListType.declarations)
   toFile(dir = "mutable", filename = "bootstrap_linkedlist_empty.go", content = LinkedListType.emptyDeclarations)

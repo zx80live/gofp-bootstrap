@@ -67,7 +67,24 @@ case class QueueType(underlined: Type) extends MonadType with Traversable {
        |  }
        |}""".stripMargin
 
-  override def funcFlatMap(out: MonadType): String = ???
+  override def funcFlatMap(out: MonadType): String =
+    s"""
+       |func (m $raw) FlatMap${out.underlined.view}(f func(${underlined.raw}) ${out.raw}) ${out.raw} {
+       |	if m.IsEmpty() {
+       |		return ${out.emptyName}
+       |	} else {
+       |		acc := ${out.emptyName}
+       |		it := m.Iterator()
+       |		for it.HasNext() {
+       |			inner := f(${underlined.raw}(it.Next())).Iterator()
+       |
+       |			for inner.HasNext() {
+       |				acc = acc.Enqueue(${out.underlined.raw}(inner.Next()))
+       |			}
+       |		}
+       |		return acc
+       |	}
+       |}""".stripMargin
 
   override def funcFoldLeft(out: Type): String =
     s"""
@@ -417,4 +434,13 @@ object QueueType {
   def functionsIterator: Seq[String] = types.map(_.funcIterator)
   def functionsHasNext: Seq[String] = types.map(_.funcHasNext)
   def functionsNext: Seq[String] = types.map(_.funcNext)
+
+
+  def functionsFlatMap: Seq[String] = {
+    val outTypes = allowedBaseTypes.map(QueueType.apply)
+    for {
+      o1 <- types
+      o2 <- outTypes
+    } yield o1.funcFlatMap(o2)
+  }
 }
