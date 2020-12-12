@@ -220,11 +220,47 @@ case class QueueType(underlined: Type) extends MonadType with Traversable {
        |	}
        |}""".stripMargin
 
-  override def funcTake: String = ???
+  override def funcTake: String =
+    s"""
+       |func (q $raw) Take(n int) $raw {
+       |  acc := $emptyName
+       |  xs := q
+       |  for i := 0;  xs.NonEmpty() && i < n; i ++ {
+       |    h, t := xs.Dequeue()
+       |    acc = acc.Enqueue(h)
+       |    xs = t
+       |  }
+       |  return acc
+       |}""".stripMargin
 
-  override def funcTakeWhile: String = ???
 
-  override def funcTakeRight: String = ???
+  override def funcTakeWhile: String =
+    s"""
+       |func (q $raw) TakeWhile(p func(${underlined.raw}) bool) $raw {
+       |  acc := $emptyName
+       |  if q.IsEmpty() { return acc }
+       |  xs := q
+       |  for {
+       |    h, t := xs.Dequeue()
+       |    if p(h) && t.NonEmpty() { acc = acc.Enqueue(h); xs = t } else { break }
+       |  }
+       |  return acc
+       |}""".stripMargin
+
+
+  override def funcTakeRight: String =
+    s"""
+       |func (q $raw) TakeRight(n int) $raw {
+       |  acc := ${ListType(underlined).emptyName}
+       |  xs := q.swap().out.Reverse()
+       |
+       |  for i :=0; xs.NonEmpty() && i < n; i ++ {
+       |    acc = acc.Cons(*xs.head)
+       |    xs = *xs.tail
+       |  }
+       |  return $raw { &${ListType(underlined).emptyName}, &acc }
+       |}""".stripMargin
+
 
   override def funcDrop: String = ???
 
@@ -316,4 +352,8 @@ object QueueType {
       out <- outTypes
     } yield t.funcFoldLeft(out)
   }
+
+  def functionsTake: Seq[String] = types.map(_.funcTake)
+  def functionsTakeWhile: Seq[String] = types.map(_.funcTakeWhile)
+  def functionsTakeRight: Seq[String] = types.map(_.funcTakeRight)
 }

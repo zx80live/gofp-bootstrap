@@ -133,6 +133,10 @@ object Bootstrap extends App {
   toFile(dir = "", filename = "bootstrap_queue_size.go", content = QueueType.functionsSize)
   toFile(dir = "", filename = "bootstrap_queue_find.go", content = QueueType.functionsFind)
   toFile(dir = "", filename = "bootstrap_queue_foldleft.go", content = QueueType.functionsFoldLeft)
+  toFile(dir = "", filename = "bootstrap_queue_take.go", content = QueueType.functionsTake)
+  toFile(dir = "", filename = "bootstrap_queue_takewhile.go", content = QueueType.functionsTakeWhile)
+  toFile(dir = "", filename = "bootstrap_queue_takeright.go", content = QueueType.functionsTakeRight)
+
 
   toFile(dir = "mutable", filename = "bootstrap_linkedlist.go", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LinkedListType.declarations)
   toFile(dir = "mutable", filename = "bootstrap_linkedlist_empty.go", content = LinkedListType.emptyDeclarations)
