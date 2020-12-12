@@ -71,7 +71,17 @@ case class QueueType(underlined: Type) extends MonadType with Traversable {
 
   override def funcFoldLeft(out: Type): String = ???
 
-  override def funcFind: String = ???
+  override def funcFind: String =
+    s"""
+       |func (q $raw) Find(p func(${underlined.raw}) bool) ${OptionType(underlined).raw} {
+       |  xs := q
+       |  for xs.NonEmpty() {
+       |    h, t := xs.Dequeue()
+       |    if p(h) { return ${OptionType(underlined).consView}(h) }
+       |    xs = t
+       |  }
+       |  return ${OptionType(underlined).emptyName}}""".stripMargin
+
 
   override def funcZip(m: MonadType): String = ???
 
@@ -290,4 +300,5 @@ object QueueType {
   def functionsToString: Seq[String] = types.map(_.funcToString)
   def functionsEquals: Seq[String] = types.map(_.funcEquals)
   def functionsSize: Seq[String] = types.map(_.funcSize)
+  def functionsFind: Seq[String] = types.map(_.funcFind)
 }

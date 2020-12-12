@@ -131,6 +131,7 @@ object Bootstrap extends App {
   toFile(dir = "", filename = "bootstrap_queue_tostring.go", content = QueueType.functionsToString)
   toFile(dir = "", filename = "bootstrap_queue_equals.go", content = QueueType.functionsEquals)
   toFile(dir = "", filename = "bootstrap_queue_size.go", content = QueueType.functionsSize)
+  toFile(dir = "", filename = "bootstrap_queue_find.go", content = QueueType.functionsFind)
 
   toFile(dir = "mutable", filename = "bootstrap_linkedlist.go", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LinkedListType.declarations)
   toFile(dir = "mutable", filename = "bootstrap_linkedlist_empty.go", content = LinkedListType.emptyDeclarations)
