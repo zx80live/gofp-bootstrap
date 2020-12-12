@@ -39,7 +39,15 @@ case class QueueType(underlined: Type) extends MonadType with Traversable {
        |}""".stripMargin
   }
 
-  override def funcReduce: String = ???
+  override def funcReduce: String =
+    s"""
+       |func (q $raw) Reduce(f func( ${underlined.raw}, ${underlined.raw} ) ${underlined.raw}) ${underlined.raw} {
+       |  if q.IsEmpty() { panic("Can't reduce empty queue") } else {
+       |    h, t := q.Dequeue()
+       |    if t.IsEmpty() { return h }
+       |    return f(h, t.Reduce(f))
+       |  }
+       |}""".stripMargin
 
   override def funcFlatMap(out: MonadType): String = ???
 
@@ -206,4 +214,5 @@ object QueueType {
   def functionsToList: Seq[String] = types.map(_.funcToList)
   def functionsCons: Seq[String] = types.map(_.funcCons)
   def functionsFilter: Seq[String] = types.map(_.funcFilter)
+  def functionsReduce: Seq[String] = types.map(_.funcReduce)
 }
