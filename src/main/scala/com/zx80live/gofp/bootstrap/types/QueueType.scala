@@ -69,7 +69,13 @@ case class QueueType(underlined: Type) extends MonadType with Traversable {
 
   override def funcFlatMap(out: MonadType): String = ???
 
-  override def funcFoldLeft(out: Type): String = ???
+  override def funcFoldLeft(out: Type): String =
+    s"""
+       |func (q $raw) FoldLeft${out.view}(z ${out.raw}, f func(${out.raw}, ${underlined.raw}) ${out.raw}) ${out.raw} {
+       |  acc := z
+       |  q.Foreach(func (e ${underlined.raw}) { acc = f(acc, e) })
+       |  return acc}""".stripMargin
+
 
   override def funcFind: String =
     s"""
@@ -301,4 +307,13 @@ object QueueType {
   def functionsEquals: Seq[String] = types.map(_.funcEquals)
   def functionsSize: Seq[String] = types.map(_.funcSize)
   def functionsFind: Seq[String] = types.map(_.funcFind)
+
+  def functionsFoldLeft: Seq[String] = {
+    val inTypes = allowedBaseTypes.map(QueueType.apply) ++ allowedBaseTypes.map(OptionType.apply).map(QueueType.apply)
+    val outTypes = allowedBaseTypes ++ allowedBaseTypes.map(QueueType.apply)
+    for {
+      t <- inTypes
+      out <- outTypes
+    } yield t.funcFoldLeft(out)
+  }
 }
