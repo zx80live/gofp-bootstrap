@@ -60,7 +60,7 @@ case class ListType(override val underlined: Type) extends MonadType with Traver
 
   override def funcTail: String =
     s"""
-       |func (l $raw) Tail() $raw { return l.tail.Copy() }""".stripMargin
+       |func (l $raw) Tail() $raw { return *l.tail }""".stripMargin
 
   def funcReverse: String =
     s"""
