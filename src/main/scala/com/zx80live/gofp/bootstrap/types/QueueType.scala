@@ -5,7 +5,7 @@ import com.zx80live.gofp.bootstrap.functions.{FuncEquals, FuncToString}
 case class QueueType(underlined: Type) extends MonadType with Traversable {
   override def setUnderlined(t: Type): MonadType = ???
 
-  override def emptyName: String = s"Nil${underlined.view}Queue"
+  override def emptyName: String = s"Nil$view"
 
   override def emptyDeclaration: String =
     s"""

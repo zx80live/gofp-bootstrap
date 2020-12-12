@@ -3,7 +3,7 @@ package com.zx80live.gofp.bootstrap.types
 case class LinkedListType(override val underlined: Type) extends MonadType with Traversable {
   override def setUnderlined(t: Type): MonadType = ???
 
-  override def emptyName: String = s"NilLinked${underlined.view}"
+  override def emptyName: String = s"Nil$view"
 
   override def emptyDeclaration: String =
     s"""

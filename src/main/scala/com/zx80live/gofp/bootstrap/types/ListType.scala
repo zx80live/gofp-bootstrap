@@ -6,7 +6,7 @@ case class ListType(override val underlined: Type) extends MonadType with Traver
 
   override def raw: String = s"${underlined.view}List"
 
-  override def emptyName: String = s"Nil${underlined.view}"
+  override def emptyName: String = s"Nil$view"
 
   override def alias: String = raw
 
