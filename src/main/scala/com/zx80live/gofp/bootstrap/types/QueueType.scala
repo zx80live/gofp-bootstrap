@@ -1,6 +1,6 @@
 package com.zx80live.gofp.bootstrap.types
 
-import com.zx80live.gofp.bootstrap.functions.FuncToString
+import com.zx80live.gofp.bootstrap.functions.{FuncEquals, FuncToString}
 
 case class QueueType(underlined: Type) extends MonadType with Traversable {
   override def setUnderlined(t: Type): MonadType = ???
@@ -94,7 +94,27 @@ case class QueueType(underlined: Type) extends MonadType with Traversable {
        |}""".stripMargin
   }
 
-  override def funcEquals: String = ???
+  override def funcEquals: String =
+    s"""
+       |func (a $raw) Equals(b $raw) bool {
+       |  len1 := a.Size()
+       |  len2 := b.Size()
+       |  if len1 != len2 { return false }
+       |  if len1 == 0 { return true }
+       |  xs1 := a
+       |  xs2 := b
+       |  for {
+       |    h1, t1 := xs1.Dequeue()
+       |    h2, t2 := xs2.Dequeue()
+       |
+       |    if !${FuncEquals.name(underlined)}(${underlined.alias}(h1), ${underlined.alias}(h2)) { return false }
+       |
+       |    if t1.IsEmpty() { break }
+       |    xs1 = t1
+       |    xs2 = t2
+       |  }
+       |  return true }""".stripMargin
+
 
   def funcMkString: String =
     s"""
@@ -162,7 +182,17 @@ case class QueueType(underlined: Type) extends MonadType with Traversable {
        |}""".stripMargin
   }
 
-  override def funcSize: String = ???
+  override def funcSize: String =
+    s"""
+       |func (q $raw) Size() int {
+       |  count := 0
+       |  xs := q
+       |  for xs.NonEmpty() {
+       |    count ++
+       |    _, xs = xs.Dequeue()
+       |  }
+       |  return count
+       |}""".stripMargin
 
   override def funcForeach: String =
     s"""
@@ -258,4 +288,6 @@ object QueueType {
   def functionsMap: Seq[String] = transformers.map(t => QueueType(t.in).funcMap(t.out))
   def functionsMkString: Seq[String] = types.map(_.funcMkString)
   def functionsToString: Seq[String] = types.map(_.funcToString)
+  def functionsEquals: Seq[String] = types.map(_.funcEquals)
+  def functionsSize: Seq[String] = types.map(_.funcSize)
 }
