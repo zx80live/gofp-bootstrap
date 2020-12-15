@@ -77,6 +77,10 @@ object Bootstrap extends App {
   toFile(dir = "", filename = "bootstrap_option_flatten.go", content = OptionType.functionsFlatten)
   toFile(dir = "", filename = "bootstrap_option_tostring.go", imports = Seq("fmt"), content = OptionType.functionsToString)
   toFile(dir = "", filename = "bootstrap_option_foldleft.go", content = OptionType.functionsFoldLeft)
+  toFile(dir = "", filename = "bootstrap_option_iterator.go", content = OptionType.iterators)
+  toFile(dir = "", filename = "bootstrap_option_iterator_iterator.go", content = OptionType.functionsIterator)
+  toFile(dir = "", filename = "bootstrap_option_iterator_hasnext.go", content = OptionType.functionsHasNext)
+  toFile(dir = "", filename = "bootstrap_option_iterator_next.go", content = OptionType.functionsNext)
 
   toFile(dir = "", filename = "bootstrap_list.go", content = ListType.declarations)
   toFile(dir = "", filename = "bootstrap_list_nil.go", content = ListType.emptyDeclarations)

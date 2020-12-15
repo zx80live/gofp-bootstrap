@@ -2,7 +2,7 @@ package com.zx80live.gofp.bootstrap.types
 
 import com.zx80live.gofp.bootstrap.functions.{FuncEquals, FuncToString}
 
-case class OptionType(override val underlined: Type) extends MonadType {
+case class OptionType(override val underlined: Type) extends MonadType with Traversable {
 
   override def raw: String = s"${underlined.view}Option"
 
@@ -116,6 +116,44 @@ case class OptionType(override val underlined: Type) extends MonadType {
   override def funcZipAll(m: MonadType): String = ???
 
   override def funcZip(m: MonadType): String = ???
+
+  override def funcSize: String = ???
+
+  override def funcTake: String = ???
+
+  override def funcTakeWhile: String = ???
+
+  override def funcTakeRight: String = ???
+
+  override def funcDropRight: String = ???
+
+  override def funcDropWhile: String = ???
+
+  override def iteratorName: String = s"${view}Iterator"
+
+  override def iteratorDeclaration: String =
+    s"""
+       |type $iteratorName struct {
+       |  value *${underlined.raw}
+       |}""".stripMargin
+
+  override def funcIterator: String =
+    s"""
+       |func (o $raw) Iterator() $iteratorName { if o.IsDefined() { return $iteratorName { o.value } } else { return $iteratorName { nil } } }
+       |""".stripMargin
+
+  override def funcHasNext: String =
+    s"""
+       |func (it *$iteratorName) HasNext() bool { return it.value != nil }
+       |""".stripMargin
+
+  override def funcNext: String =
+    s"""
+       |func (it *$iteratorName) Next() ${underlined.raw} {
+       |  next := *it.value
+       |  it.value = nil
+       |  return next
+       |}""".stripMargin
 }
 
 object OptionType {
@@ -180,4 +218,9 @@ object OptionType {
       out <- outTypes
     } yield in.funcFoldLeft(out)
   }
+
+  def iterators: Seq[String] = types.map(_.iteratorDeclaration)
+  def functionsIterator: Seq[String] = types.map(_.funcIterator)
+  def functionsHasNext: Seq[String] = types.map(_.funcHasNext)
+  def functionsNext: Seq[String] = types.map(_.funcNext)
 }
