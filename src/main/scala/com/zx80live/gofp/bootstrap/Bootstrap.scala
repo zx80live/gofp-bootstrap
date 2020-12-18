@@ -181,5 +181,10 @@ object Bootstrap extends App {
   toFile(dir = "concurrent", filename = "bootstrap_future_flatmap.go", pack = "concurrent", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = FutureType.functionsFlatMap)
   toFile(dir = "concurrent", filename = "bootstrap_future_result.go", pack = "concurrent", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = FutureType.functionsResult)
 
+  toFile(dir = "lazy", filename = "bootstrap_lazy.go", pack = "lazy", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LazyType.declarations)
+  toFile(dir = "lazy", filename = "bootstrap_lazy_eval.go", pack = "lazy", content = LazyType.functionsEval)
+  toFile(dir = "lazy", filename = "bootstrap_lazy_value.go", pack = "lazy", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LazyType.functionsValue)
+  toFile(dir = "lazy", filename = "bootstrap_lazy_tostring.go", pack = "lazy", imports = Seq("fmt"), content = LazyType.functionsToString)
+  toFile(dir = "lazy", filename = "bootstrap_lazy_cons.go", pack = "lazy", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LazyType.functionsCons)
 
 }
