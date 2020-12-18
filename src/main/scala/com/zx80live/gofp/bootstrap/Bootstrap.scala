@@ -186,5 +186,6 @@ object Bootstrap extends App {
   toFile(dir = "lazy", filename = "bootstrap_lazy_value.go", pack = "lazy", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LazyType.functionsValue)
   toFile(dir = "lazy", filename = "bootstrap_lazy_tostring.go", pack = "lazy", imports = Seq("fmt"), content = LazyType.functionsToString)
   toFile(dir = "lazy", filename = "bootstrap_lazy_cons.go", pack = "lazy", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LazyType.functionsCons)
+  toFile(dir = "lazy", filename = "bootstrap_lazy_cached.go", pack = "lazy", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LazyType.functionsCached)
 
 }

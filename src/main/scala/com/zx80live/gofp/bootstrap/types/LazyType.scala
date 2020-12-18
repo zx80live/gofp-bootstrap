@@ -51,6 +51,11 @@ case class LazyType(t: Type) extends Type {
        |	}
        |}""".stripMargin
 
+  def funcCached: String =
+    s"""
+       |func (n $raw) Cached() ${t.raw} { return *n.cached }
+       |""".stripMargin
+
   def funcCons: String =
     s"""
        |func Mk$view(f func() ${t.raw}) $raw { return $raw { f , nil }}
@@ -70,6 +75,7 @@ object LazyType {
 
   def functionsToString: Seq[String] = types.map(_.funcToString)
 
-  def functionsCons: Seq[String] = types.map(_.funcCons
-  )
+  def functionsCons: Seq[String] = types.map(_.funcCons)
+
+  def functionsCached: Seq[String] = types.map(_.funcCached)
 }
