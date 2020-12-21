@@ -65,11 +65,11 @@ case class LazyListType(underlined: Type) extends MonadType with Traversable {
        |func (l $raw) Map${out.view}(f func(e ${underlined.raw}) ${out.raw}) ${l.raw} {
        |	newState := func() ${l.stateName} {
        |		state := (*l.state)()
-       |		h := *state.head
        |		mappedValue := func() ${out.raw} {
-       |			return f(h.Value())
+       |        h := *state.head
+       |        return f(h.Eval().Cached())
        |		}
-       |		mappedH := ${LazyType(out).consName}(mappedValue)
+       |		mappedH := ${LazyType(out).raw} { mappedValue, nil }
        |		t := state.tail.Map${out.view}(f)
        |
        |		return ${l.stateName}{&mappedH, &t}
