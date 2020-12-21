@@ -188,4 +188,17 @@ object Bootstrap extends App {
   toFile(dir = "lazy", filename = "bootstrap_lazy_cons.go", pack = "lazy", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LazyType.functionsCons)
   toFile(dir = "lazy", filename = "bootstrap_lazy_cached.go", pack = "lazy", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LazyType.functionsCached)
 
+  toFile(dir = "lazy", filename = "bootstrap_lazylist.go", pack = "lazy", content = LazyListType.declarations)
+  toFile(dir = "lazy", filename = "bootstrap_lazylist_cons.go", pack = "lazy", content = LazyListType.functionsCons)
+  toFile(dir = "lazy", filename = "bootstrap_lazylist_nil.go", pack = "lazy", content = LazyListType.emptyDeclarations)
+  toFile(dir = "lazy", filename = "bootstrap_lazylist_prepend.go", pack = "lazy", content = LazyListType.functionsPrepend)
+  toFile(dir = "lazy", filename = "bootstrap_lazylist_filter.go", pack = "lazy", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LazyListType.functionsFilter)
+  toFile(dir = "lazy", filename = "bootstrap_lazylist_map.go", pack = "lazy", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LazyListType.functionsMap)
+  toFile(dir = "lazy", filename = "bootstrap_lazylist_take.go", pack = "lazy", content = LazyListType.functionsTake)
+  toFile(dir = "lazy", filename = "bootstrap_lazylist_head.go", pack = "lazy", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LazyListType.functionsHead)
+  toFile(dir = "lazy", filename = "bootstrap_lazylist_headoption.go", pack = "lazy", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LazyListType.functionsHeadOption)
+  toFile(dir = "lazy", filename = "bootstrap_lazylist_isempty.go", pack = "lazy", content = LazyListType.functionsIsEmpty)
+  toFile(dir = "lazy", filename = "bootstrap_lazylist_nonempty.go", pack = "lazy", content = LazyListType.functionsNonEmpty)
+  toFile(dir = "lazy", filename = "bootstrap_lazylist_tostring.go", pack = "lazy", content = LazyListType.functionsToString)
+
 }

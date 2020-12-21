@@ -14,7 +14,7 @@ case class LazyType(t: Type) extends Type {
        |	cached *${t.raw}
        |}""".stripMargin
 
-  override def funcEquals: String = ???
+  override def funcEquals: String = ""
 
   override def funcToString: String =
     s"""
@@ -56,16 +56,22 @@ case class LazyType(t: Type) extends Type {
        |func (n $raw) Cached() ${t.raw} { return *n.cached }
        |""".stripMargin
 
+  def consName: String = s"Mk$view"
+
   def funcCons: String =
     s"""
-       |func Mk$view(f func() ${t.raw}) $raw { return $raw { f , nil }}
+       |func $consName(f func() ${t.raw}) $raw { return $raw { f , nil }}
        |""".stripMargin
 }
 
 object LazyType {
-  def underlined: Seq[Type] = BaseType.reducedTypes
+  def allowedBaseTypes: Seq[Type] = BaseType.reducedTypes ++ Seq(Tuple2Type.defaultType)
 
-  def types: Seq[LazyType] = underlined.map(LazyType.apply)
+  def types: Seq[LazyType] =
+    allowedBaseTypes.map(LazyType.apply) ++ // List[T]
+      allowedBaseTypes.map(ArrayType.apply).map(LazyType.apply) ++ // List[Array[T]]
+      allowedBaseTypes.map(OptionType.apply).map(LazyType.apply) ++ // List[Option[T]]
+      allowedBaseTypes.map(ListType.apply).map(LazyType.apply) // List[List[T]]
 
   def declarations: Seq[String] = types.map(_.declaration)
 
