@@ -195,6 +195,7 @@ object Bootstrap extends App {
   toFile(dir = "lazy", filename = "bootstrap_lazylist_filter.go", pack = "lazy", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LazyListType.functionsFilter)
   toFile(dir = "lazy", filename = "bootstrap_lazylist_map.go", pack = "lazy", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LazyListType.functionsMap)
   toFile(dir = "lazy", filename = "bootstrap_lazylist_take.go", pack = "lazy", content = LazyListType.functionsTake)
+  toFile(dir = "lazy", filename = "bootstrap_lazylist_takewhile.go", pack = "lazy", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LazyListType.functionsTakeWhile)
   toFile(dir = "lazy", filename = "bootstrap_lazylist_head.go", pack = "lazy", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LazyListType.functionsHead)
   toFile(dir = "lazy", filename = "bootstrap_lazylist_headoption.go", pack = "lazy", imports = Seq(""". "github.com/zx80live/gofp/fp" """), content = LazyListType.functionsHeadOption)
   toFile(dir = "lazy", filename = "bootstrap_lazylist_isempty.go", pack = "lazy", content = LazyListType.functionsIsEmpty)

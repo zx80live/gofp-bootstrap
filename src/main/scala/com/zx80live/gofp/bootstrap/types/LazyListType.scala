@@ -40,7 +40,7 @@ case class LazyListType(underlined: Type) extends MonadType with Traversable {
        |		var h ${LazyType(underlined).raw}
        |		var found = false
        |
-       |		for !found && xs.NonEmpty() {
+       |		for !found && xs != $emptyName {
        |			s := (*xs.state)()
        |			h = (*s.head).Eval()
        |			found = p(h.Value())
@@ -112,7 +112,22 @@ case class LazyListType(underlined: Type) extends MonadType with Traversable {
        |	return $raw{&newState}
        |}""".stripMargin
 
-  override def funcTakeWhile: String = ???
+  override def funcTakeWhile: String =
+    s"""
+       |func (l $raw) TakeWhile(p func(${underlined.raw}) bool) $raw {
+       |	s := func() $stateName {
+       |		if l.state == nil { return $emptyStateName }
+       |
+       |		st := (*l.state)()
+       |		h := st.head.Eval()
+       |		if !p(*h.cached) { return $emptyStateName }
+       |
+       |
+       |		t := st.tail.TakeWhile(p)
+       |		return $stateName {&h , &t  }
+       |	}
+       |	return $raw { &s }
+       |}""".stripMargin
 
   override def funcTakeRight: String = ???
 
@@ -176,7 +191,11 @@ case class LazyListType(underlined: Type) extends MonadType with Traversable {
 
   def funcIsEmpty: String =
     s"""
-       |func (l $raw) IsEmpty() bool { return l == $emptyName }""".stripMargin
+       |func (l $raw) IsEmpty() bool {
+       |  if l == $emptyName { return true }
+       |  s := (*l.state)()
+       |  return s == $emptyStateName
+       |}""".stripMargin
 
   def funcNonEmpty: String =
     s"""
@@ -224,6 +243,8 @@ object LazyListType {
   def functionsMap: Seq[String] = transformers.map(t => LazyListType(t.in).funcMap(t.out))
 
   def functionsTake: Seq[String] = types.map(_.funcTake)
+
+  def functionsTakeWhile: Seq[String] = types.map(_.funcTakeWhile)
 
   def functionsToString: Seq[String] = types.map(_.funcToString)
 }
