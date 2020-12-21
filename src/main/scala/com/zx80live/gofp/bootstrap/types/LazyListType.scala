@@ -144,7 +144,7 @@ case class LazyListType(underlined: Type) extends MonadType with Traversable {
        |		panic("can't get head from empty list")
        |	} else {
        |		s := (*l.state)()
-       |		return s.head.Eval().Value(), *s.tail
+       |		return s.head.Eval().Cached(), *s.tail
        |	}
        |}""".stripMargin
 
@@ -155,7 +155,7 @@ case class LazyListType(underlined: Type) extends MonadType with Traversable {
        |		return ${OptionType(underlined).emptyName}, $emptyName
        |	} else {
        |		s := (*l.state)()
-       |		return ${OptionType(underlined).consView}(s.head.Eval().Value()), *s.tail
+       |		return ${OptionType(underlined).consView}(s.head.Eval().Cached()), *s.tail
        |	}
        |}
        |""".stripMargin
