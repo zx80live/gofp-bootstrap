@@ -2,6 +2,8 @@ package com.zx80live.gofp.bootstrap
 
 import com.zx80live.gofp.bootstrap.functions._
 import com.zx80live.gofp.bootstrap.types._
+import com.zx80live.gofp.bootstrap.types.ops.StringOps
+
 
 object Bootstrap extends App {
 
@@ -15,7 +17,7 @@ object Bootstrap extends App {
   toFile(dir = "", filename = "bootstrap_base_underlined.go", content = BaseType.functionsUnderlined)
   toFile(dir = "", filename = "bootstrap_base_converters.go", imports = Seq("fmt", "strconv"), content = BaseType.functionsConverters)
   toFile(dir = "", filename = "bootstrap_base_numeric.go", content = BaseType.functionsNumeric)
-  toFile(dir = "", filename = "bootstrap_base_string.go", imports = Seq("fmt"), content = BaseType.functionsString)
+  toFile(dir = "", filename = "bootstrap_base_string.go", imports = Seq("fmt", "regexp", "strings"), content = StringOps.functions)
 
   toFile(dir = "", filename = "bootstrap_func_equal.go", content = FuncEquals.functions)
   toFile(dir = "", filename = "bootstrap_func_tostring.go", imports = Seq("fmt", "reflect"), content = FuncToString.functions)

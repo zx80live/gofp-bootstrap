@@ -103,16 +103,6 @@ case class BaseType(value: String) extends Type {
        |  return acc.Reverse() }""".stripMargin
   } else ""
 
-  def funcStringToArray: String = if (this == GoString) {
-    s"""
-       |func (s $alias) ToArray() RuneArray { return RuneArray([]rune(s)) }
-       |""".stripMargin
-  } else ""
-
-  def funcStringToLetterArray: String = if (this == GoString) {
-    s"""
-       |func (s $alias) ToLetterArray() StringArray { return RuneArray([]rune(s)).MapString(func(r rune) string { return fmt.Sprintf("%c", r) } ) }""".stripMargin
-  } else ""
 }
 
 object BaseType {
@@ -203,8 +193,6 @@ object BaseType {
   private def functionsBetweenInclusive: Seq[String] = numericTypes.map(_.funcIsBetweenInclusive)
 
   def functionsNumeric: Seq[String] = functionsMath ++ functionsRange ++ functionsBetween ++ functionsBetweenInclusive
-
-  def functionsString: Seq[String] = Seq(GoString).map(_.funcStringToArray) ++ Seq(GoString).map(_.funcStringToLetterArray)
 
   implicit class TypeOps(val t: Type) extends AnyVal {
     def isInteger: Boolean = integerTypes.contains(t)
